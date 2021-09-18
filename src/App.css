@@ -17,6 +17,7 @@
   height:100%;
   width: calc(100% - 80px);
   margin: 0;
+  /*overflow-y: scroll;*/
 }
 .layout {
   height: 100%;
@@ -28,4 +29,10 @@
   height: 99%;
   width: calc(75% - 10px);
   float: left;
+}
+
+@media only screen and (max-height: 100vh) {
+  .main {
+    overflow-y: auto;
+  }
 }

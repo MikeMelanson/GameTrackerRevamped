@@ -59,7 +59,7 @@
     width: 40%;
     padding-top:5px;
     padding-bottom: 5px;
-    text-align: center;
+    text-align: left;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -67,81 +67,11 @@
 .o1 > * p{
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: left;
     padding-right: 40px;
+    text-align: left;
+    width: 100%;
 }
-.o2 > *{
-    width: 40%;
-    padding-top:5px;
-    padding-bottom: 5px;
-    text-align: center;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-.o2 > * p{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding-right: 40px;
-}
-.o3 > *{
-    width: 40%;
-    padding-top:5px;
-    padding-bottom: 5px;
-    text-align: center;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-.o3 > * p{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding-right: 40px;
-}
-.o4 > *{
-    width: 40%;
-    padding-top:5px;
-    padding-bottom: 5px;
-    text-align: center;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-.o4 > * p{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding-right: 40px;
-}
-.o5 > *{
-    width: 40%;
-    padding-top:5px;
-    padding-bottom: 5px;
-    text-align: center;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-.o5 > * p{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding-right: 40px;
-}
-.o6 > *{
-    width: 40%;
-    padding-top:5px;
-    padding-bottom: 5px;
-    text-align: center;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-.o6 > * p{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding-right: 40px;
+.icon{
+    padding-right: 20px;
 }

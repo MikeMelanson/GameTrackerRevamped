@@ -48,6 +48,18 @@ def select_all_non_wl_systems(conn):
     rows = cur.fetchall()
     return rows
 
+def get_systems_count(conn):
+    cur = conn.cursor()
+    cur.execute("SELECT COUNT(Name) AS total from Systems WHERE Wishlist=0")
+    rows = cur.fetchall()
+    return rows
+
+def get_games_count(conn):
+    cur = conn.cursor()
+    cur.execute("SELECT COUNT(Id) AS total from Games WHERE Wishlist=0")
+    rows = cur.fetchall()
+    return rows
+
 def close_connection(conn):
     conn.close()
 
