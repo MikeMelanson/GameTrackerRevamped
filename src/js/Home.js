@@ -55,23 +55,23 @@ class Home extends React.Component{
                             <div><p><FaPlus className='icon' size={60}/>Add/Edit/Delete allows you to add games/systems, edit them, or delete them.</p></div>
                         </div>
                         <div className='o1'>
-                            <div><p><GiGameConsole className='icon' size={50}/>The Systems module is where you view details on systems and games.</p></div>
-                            <div><p><FaFileImport className='icon' size={50}/>The Import module allows you to import data from another source.</p></div>
+                            <div><p><GiGameConsole className='icon' size={50}/>Systems is where you view details on systems and games.</p></div>
+                            <div><p><FaFileImport className='icon' size={50}/>Import allows you to import data from another source.</p></div>
                         </div>
                         <div className='o1'>
-                            <div><p><AiOutlinePercentage className='icon' size={50}/>The Detailed Statistics module shows you in depth stats about your collection.</p></div>
-                            <div><p><AiFillSetting className='icon' size={50}/>The Options module lets you set options to customize your experience.</p></div>
+                            <div><p><AiOutlinePercentage className='icon' size={50}/>Detailed Statistics shows you in depth stats about your collection.</p></div>
+                            <div><p><AiFillSetting className='icon' size={50}/>Settings lets you set options to customize your experience.</p></div>
                         </div>
                         <div className='o1'>
-                            <div><p><FaHistory className='icon' size={50}/>The Memory Card module shows you recently added games and your added/beaten stats.</p></div>
-                            <div><p><FaHandsHelping className='icon' size={50}/>The help module goes over the other modules in much more detail. Got a question? Head here!</p></div>
+                            <div><p><FaHistory className='icon' size={50}/>Memory Card shows you recently added games and your added/beaten stats.</p></div>
+                            <div><p><FaHandsHelping className='icon' size={50}/>Help goes over the other modules in much more detail. Got a question? Head here!</p></div>
                         </div>
                         <div className='o1'>
-                            <div><p><GiCalendar className='icon' size={50}/>The Planner module allows you to plan out your future gaming.</p></div>
-                            <div><p><FaInfo className='icon' size={30}/>Info about the software can be found here.</p></div>
+                            <div><p><GiCalendar className='icon' size={50}/>Planner allows you to plan out your future gaming.</p></div>
+                            <div><p><FaInfo className='icon' size={30}/>About shows info about the software.</p></div>
                         </div>
                         <div className='o1'>
-                            <div><p><GiChecklist className='icon' size={50}/>The wishlist module allows you to track games and systems you want to acquire.</p></div>
+                            <div><p><GiChecklist className='icon' size={50}/>Wishlist allows you to track games and systems you want to acquire.</p></div>
                             <div><p><FaHome className='icon' size={30}/>TEMP DESCRIPTOR</p></div>
                         </div>
                     </div>
