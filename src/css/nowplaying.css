@@ -1,0 +1,11 @@
+@font-face {
+    font-family: 'airstrike';
+    src: url(../fonts/airstrike.ttf) format('truetype');
+}
+
+.np{
+    border: 3px solid black;
+    height: 100%;
+    width: 100%;
+    text-align: center;
+}

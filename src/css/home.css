@@ -1,0 +1,147 @@
+@font-face {
+    font-family: 'airstrike';
+    src: url(../fonts/airstrike.ttf) format('truetype');
+}
+.div{
+    display: flex;
+    align-items: center;
+}
+.border{
+    border-bottom: 1px solid gray;
+    width: 99%;
+}
+#home{
+    font-family: airstrike;
+    display: flex;
+    flex-direction: column;
+}
+.welcome{
+    text-align: center;
+}
+.welcome_logo{
+    width: 10%;
+    height:10%;
+    padding-top: 20px;
+    padding-bottom: 10px;
+}
+.welcome_main{
+    font-size: 80px;
+    color: rgb(88, 88, 133);
+}
+.welcome_sub{
+    font-size: 30px;
+    color: rgb(88, 88, 133);
+    padding: 10px;
+}
+.totals{
+    font-size: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 20px;
+}
+.game_total{
+    padding-right: 40px;
+}
+.system_total{
+    padding-left: 40px;
+}
+.overview{
+    font-size: 20px;
+}
+.overview > *{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+}
+.o1 > *{
+    width: 40%;
+    padding-top:5px;
+    padding-bottom: 5px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.o1 > * p{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-right: 40px;
+}
+.o2 > *{
+    width: 40%;
+    padding-top:5px;
+    padding-bottom: 5px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.o2 > * p{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-right: 40px;
+}
+.o3 > *{
+    width: 40%;
+    padding-top:5px;
+    padding-bottom: 5px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.o3 > * p{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-right: 40px;
+}
+.o4 > *{
+    width: 40%;
+    padding-top:5px;
+    padding-bottom: 5px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.o4 > * p{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-right: 40px;
+}
+.o5 > *{
+    width: 40%;
+    padding-top:5px;
+    padding-bottom: 5px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.o5 > * p{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-right: 40px;
+}
+.o6 > *{
+    width: 40%;
+    padding-top:5px;
+    padding-bottom: 5px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.o6 > * p{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-right: 40px;
+}
