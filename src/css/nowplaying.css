@@ -8,4 +8,18 @@
     height: 100%;
     width: 100%;
     text-align: center;
+    overflow: auto;
+}
+
+.np_title{
+    font-family: airstrike;
+    font-size: 40px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    color: rgb(88, 88, 133);
+}
+
+.np_border{
+    width: 100%;
+    border-bottom: 1px solid gray;
 }

@@ -34,16 +34,6 @@ class Navbar extends React.Component{
             systemsList: [],
             systemsActive: [],
         }
-
-        fetch('/systems').then(res => res.json()).then(data => {
-            var systems = data.systems
-            this.setState({systemsList:systems});
-            var system=''
-            for (let i=0;i<systems.length;i++){
-              system=systems[i][0];
-              this.updateSystemsActive(system)
-            }
-        });
     }
 
     updateSystemsActive(system){
@@ -51,6 +41,18 @@ class Navbar extends React.Component{
           return{
             systemsActive: [...previousState.systemsActive, {[system]: false}]
           };
+        });
+    }
+
+    componentDidMount(){
+        fetch('/systems').then(res => res.json()).then(data => {
+          var systems = data.systems
+          this.setState({systemsList:systems});
+          var system=''
+          for (let i=0;i<systems.length;i++){
+            system=systems[i][0];
+            this.updateSystemsActive(system)
+          }
         });
     }
 
