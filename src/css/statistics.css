@@ -7,5 +7,72 @@
     border: 3px solid black;
     height: 100%;
     width: 100%;
+    font-family: airstrike;
+}
+.stats_title{
+    font-size: 40px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    color: rgb(88, 88, 133);
     text-align: center;
+}
+.stats_content{
+    display: grid;
+    gap: 0px;
+    grid-template-columns: 15% 5% 60% 20%;
+    align-items: center;
+    font-size: 20px;
+}
+.stats_content img{
+    width: 20px;
+    height: 20px;
+    padding-right: 5px;
+}
+.num{
+    text-align: right;
+    padding-right: 10px;
+}
+.percent{
+    padding-left: 10px;
+    text-align: left;
+}
+/*.status{
+    padding-left: 10px;
+    padding-right: 10px;
+    display: flex;
+    align-items: center;
+    justify-items: left;
+}*/
+progress{
+    width: 100%;
+    height: 30px;
+    border-radius: 10px;
+}
+progress::-webkit-progress-bar{
+    background-color: gray;
+    border-radius: 10px;
+}
+#unplayed::-webkit-progress-value{
+    background-color: rgb(45, 182, 17);
+    border-radius: 10px;
+}
+#unbeaten::-webkit-progress-value{
+    background-color: rgb(255, 82, 82);
+    border-radius: 10px;
+}
+#beaten::-webkit-progress-value{
+    background-color: rgb(192, 192, 192);
+    border-radius: 10px;
+}
+#completed::-webkit-progress-value{
+    background-color: rgb(255, 252, 82);
+    border-radius: 10px;
+}
+#null::-webkit-progress-value{
+    background-color: rgb(58, 58, 58);
+    border-radius: 10px;
+}
+.status p{
+    padding-right: 10px;
+    padding-left: 5px;
 }

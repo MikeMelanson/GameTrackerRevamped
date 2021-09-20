@@ -62,7 +62,37 @@ def get_games_count(conn):
 
 def get_np_games(conn):
     cur = conn.cursor()
-    cur.execute("SELECT Title,System FROM Games WHERE Wishlist=0 AND NowPlaying=1 ORDER BY System")
+    cur.execute("SELECT Title,System,Status FROM Games WHERE Wishlist=0 AND NowPlaying=1 ORDER BY System")
+    rows = cur.fetchall()
+    return rows
+
+def get_unplayed_total(conn):
+    cur = conn.cursor()
+    cur.execute("SELECT COUNT(Id) AS Total FROM Games WHERE Status='Unplayed' and Wishlist=0")
+    rows = cur.fetchall()
+    return rows
+
+def get_unbeaten_total(conn):
+    cur = conn.cursor()
+    cur.execute("SELECT COUNT(Id) AS Total FROM Games WHERE Status='Unbeaten' and Wishlist=0")
+    rows = cur.fetchall()
+    return rows
+
+def get_beaten_total(conn):
+    cur = conn.cursor()
+    cur.execute("SELECT COUNT(Id) AS Total FROM Games WHERE Status='Beaten' and Wishlist=0")
+    rows = cur.fetchall()
+    return rows
+
+def get_completed_total(conn):
+    cur = conn.cursor()
+    cur.execute("SELECT COUNT(Id) AS Total FROM Games WHERE Status='Completed' and Wishlist=0")
+    rows = cur.fetchall()
+    return rows
+
+def get_null_total(conn):
+    cur = conn.cursor()
+    cur.execute("SELECT COUNT(Id) AS Total FROM Games WHERE Status='Null' and Wishlist=0")
     rows = cur.fetchall()
     return rows
 

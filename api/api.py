@@ -32,6 +32,24 @@ def get_np():
     close_connection(connection)
     return {'np':np}
 
+@app.route('/status_totals')
+def get_statuses():
+    connection = create_connection()
+    total = get_games_count(connection)[0][0]
+    unplayed = get_unplayed_total(connection)[0][0]
+    unbeaten = get_unbeaten_total(connection)[0][0]
+    beaten = get_beaten_total(connection)[0][0]
+    completed = get_completed_total(connection)[0][0]
+    nullg = get_null_total(connection)[0][0]
+
+    unplayedPercentage = 0 if total==0 else round(unplayed*100/total,1)
+    unbeatenPercentage = 0 if total==0 else round(unbeaten*100/total,1)
+    beatenPercentage = 0 if total==0 else round(beaten*100/total,1)
+    completedPercentage = 0 if total==0 else round(completed*100/total,1)
+    nullPercentage = 0 if total==0 else round(nullg*100/total,1)
+    return {'unbeaten':unbeaten,'unplayed':unplayed,'beaten':beaten,'completed':completed,'nullg':nullg,
+        'unplayedP':unplayedPercentage,'unbeatenP':unbeatenPercentage,'beatenP':beatenPercentage,'completedP':completedPercentage,'nullP':nullPercentage}
+    
 @app.route('/test')
 def test():
     return {'test' : "test"}
