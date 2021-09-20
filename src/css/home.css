@@ -34,11 +34,15 @@
     padding: 10px;
 }
 .totals{
-    font-size: 40px;
+    font-size: 35px;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 20px;
+}
+.totals > *{
+    display:flex;
+    align-items: center;
+    justify-content: center;
 }
 .game_total{
     padding-right: 40px;
@@ -58,7 +62,7 @@
 .o1 > *{
     width: 40%;
     padding-top:5px;
-    padding-bottom: 5px;
+    padding-bottom: 2px;
     text-align: left;
     display: flex;
     align-items: center;
@@ -74,4 +78,9 @@
 }
 .icon{
     padding-right: 20px;
+    color: rgb(255, 82, 82);
+}
+.total_p{
+    color:rgb(255, 82, 82);
+    padding-left: 5px;
 }

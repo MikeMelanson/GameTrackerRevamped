@@ -14,7 +14,9 @@ class Home extends React.Component{
             totalGames: 0,
             totalSystems: 0,
         }
-
+    }
+    
+    componentDidMount(){
         fetch('/systems_total').then(res => res.json()).then(data => {
             var stotal = data.total
             this.setState({totalSystems:stotal});
@@ -43,8 +45,8 @@ class Home extends React.Component{
                         <div className='border'></div>
                     </div>
                     <div className='totals'>
-                        <div className='game_total'>Games Total: {this.state.totalGames}</div>
-                        <div className='system_total'>Systems Total: {this.state.totalSystems}</div>
+                        <div className='game_total'>Games Total: <p className='total_p'>{this.state.totalGames}</p></div>
+                        <div className='system_total'>Systems Total: <p className='total_p'>{this.state.totalSystems}</p></div>
                     </div>
                     <div className='div'>
                         <div className='border'></div>

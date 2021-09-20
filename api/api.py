@@ -1,3 +1,4 @@
+from os import close
 from db import *
 from flask import Flask
 
@@ -23,6 +24,13 @@ def get_games_total():
     total = get_games_count(connection)
     close_connection(connection)
     return {'total':total}
+
+@app.route('/np')
+def get_np():
+    connection = create_connection()
+    np = get_np_games(connection)
+    close_connection(connection)
+    return {'np':np}
 
 @app.route('/test')
 def test():

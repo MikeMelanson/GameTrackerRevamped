@@ -50,13 +50,19 @@ def select_all_non_wl_systems(conn):
 
 def get_systems_count(conn):
     cur = conn.cursor()
-    cur.execute("SELECT COUNT(Name) AS total from Systems WHERE Wishlist=0")
+    cur.execute("SELECT COUNT(Name) AS total FROM Systems WHERE Wishlist=0")
     rows = cur.fetchall()
     return rows
 
 def get_games_count(conn):
     cur = conn.cursor()
-    cur.execute("SELECT COUNT(Id) AS total from Games WHERE Wishlist=0")
+    cur.execute("SELECT COUNT(Id) AS total FROM Games WHERE Wishlist=0")
+    rows = cur.fetchall()
+    return rows
+
+def get_np_games(conn):
+    cur = conn.cursor()
+    cur.execute("SELECT Title,System FROM Games WHERE Wishlist=0 AND NowPlaying=1 ORDER BY System")
     rows = cur.fetchall()
     return rows
 
