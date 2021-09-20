@@ -15,9 +15,7 @@ class NowPlaying extends React.Component{
     componentDidMount(){
         fetch('/np').then(res => res.json()).then(data => {
             var np = data.np
-            console.log(np)
             this.setState({gamesList:np});
-            console.log(this.state.games_list)
         });
     }
 
@@ -25,9 +23,8 @@ class NowPlaying extends React.Component{
         var games = [];
         for (let i=0;i< this.state.gamesList.length;i++){
             games.push(<NowPlayingGame key={this.state.gamesList[i][0]} title={this.state.gamesList[i][0]}
-                system={this.state.gamesList[i][1]}></NowPlayingGame>);
+                system={this.state.gamesList[i][1]} status={this.state.gamesList[i][2]}></NowPlayingGame>);
         }
-        console.log(games)
         return (
             <>
                 <div className="np">
