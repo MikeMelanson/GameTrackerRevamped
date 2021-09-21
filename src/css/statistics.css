@@ -8,6 +8,7 @@
     height: 100%;
     width: 100%;
     font-family: airstrike;
+    overflow: auto;
 }
 .stats_title{
     font-size: 40px;

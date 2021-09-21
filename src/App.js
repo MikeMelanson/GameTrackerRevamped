@@ -16,12 +16,35 @@ import Settings from './js/Settings';
 import Import from './js/Import';
 import SystemDisplay from './js/System';
 import {Route, Switch, withRouter} from "react-router-dom";
+import {TransitionGroup, CSSTransition} from 'react-transition-group';
 
 class App extends React.Component{
+  constructor(props){
+    super(props);
 
+    this.state = {
+      content: 'visible'
+    }
+
+    this.onEnter = this.onEnter.bind(this);
+    this.onExit = this.onExit.bind(this);
+  }
+  
   componentDidMount(){
     this.props.history.push('/home');
     fetch('/init');
+  }
+
+  onEnter(){
+    this.setState({
+      content: 'hidden'
+    })
+  }
+
+  onExit(){
+    this.setState({
+      content: 'visible'
+    })
   }
 
   render(){
@@ -42,21 +65,41 @@ class App extends React.Component{
                 <Info/>
               </div>
             </div>
-            <div className='content'>
-            <Switch>
-              <Route path="/Home" component={Home}/>
-              <Route exact path="/Abo" component={About}/>
-              <Route exact path="/Help" component={Help}/>
-              <Route exact path="/Set" component={Settings}/>
-              <Route exact path="/Imp" component={Import}/>
-              <Route exact path="/Add" component={AddEditDelete}/>
-              <Route exact path="/Wish" component={Wishlist}/>
-              <Route exact path="/Plan" component={Planner}/>
-              <Route exact path="/Mem" component={MemoryCard}/>
-              <Route exact path="/DS" component={DetailedStatistics}/>
-              <Route exact path="/System" component={SystemDisplay}/>
-              <Route path="/" component={Home}/>
-            </Switch>
+            <div className='content' 
+              style={
+                {overflow: this.state.content}
+              }
+            >
+            <Route render={ ({location}) =>
+              (
+                <TransitionGroup>
+                  <CSSTransition timeout={800}
+                    classNames='pageSlider'
+                    key={location.key}
+                    mountOnEnter={true}
+                    unmountOnExit={true}
+                    onEnter={this.onEnter}
+                    onExited={this.onExit}
+                    appear={true}
+                    in={true}>
+                      <Switch location={location}>
+                        <Route path="/Home" component={Home}/>
+                        <Route exact path="/Abo" component={About}/>
+                        <Route exact path="/Help" component={Help}/>
+                        <Route exact path="/Set" component={Settings}/>
+                        <Route exact path="/Imp" component={Import}/>
+                        <Route exact path="/Add" component={AddEditDelete}/>
+                        <Route exact path="/Wish" component={Wishlist}/>
+                        <Route exact path="/Plan" component={Planner}/>
+                        <Route exact path="/Mem" component={MemoryCard}/>
+                        <Route exact path="/DS" component={DetailedStatistics}/>
+                        <Route exact path="/System" component={SystemDisplay}/>
+                        <Route path="/" component={Home}/>
+                      </Switch>
+                  </CSSTransition>
+                </TransitionGroup>
+              )
+            }/>
             </div>
           </div>
       </div>

@@ -3,6 +3,7 @@
   min-height: 100vh;
   width: 100%;
   color: white;
+  overflow: hidden;
 }
 .nav{
   position: fixed;
@@ -17,12 +18,16 @@
   height:100%;
   width: calc(100% - 80px);
   margin: 0;
+  overflow: hidden;
 }
 .layout {
   height: 100%;
   width:25%;
   float: left;
   margin-right: 10px;
+  background-color: #282834;
+  z-index: 2;
+  position: relative;
 }
 .content{
   height: 100%;
@@ -36,7 +41,7 @@
   height: 35%;
 }
 .info_div{
-  height:4%;
+  height:4.3%;
 }
 
 @media only screen and (max-height: 100vh) {
@@ -44,7 +49,6 @@
     overflow-y: auto;
   }
 }
-
 ::-webkit-scrollbar{
   width: 15px;
   height: 15px;
@@ -63,4 +67,21 @@
 ::-webkit-scrollbar-corner{
     background-color: #a3aaff;
     border-radius: 10px;
+}
+.pageSlider-enter{
+  transform: translate3d(-100%, 0, 0);
+}
+.pageSlider-enter.pageSlider-enter-active {
+  transform: translate3d(0, 0, 0);
+  transition: all 800ms;
+}
+.pageSlider-exit {
+  transform: translate3d(0, 0, 0);
+}
+.pageSlider-exit.pageSlider-exit-active {
+  transform: translate3d(100%, 0, 0);
+  transition: all 600ms;
+}
+.animation{
+  overflow:hidden;
 }
