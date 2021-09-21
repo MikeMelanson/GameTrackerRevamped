@@ -25,6 +25,7 @@
 #navbar {
     float: left;
     font-family: airstrike;
+    width: 350px;
   }
   #navbar .pro-sidebar {
     height: 100vh;
@@ -59,6 +60,10 @@
   #navbar .pro-sidebar-inner .pro-sidebar-layout ul .pro-inner-item {
     color: #000;
     margin: 10px 0px;
+    font-size: 20px;
+  }
+  #navbar .pro-sidebar-inner .pro-sidebar-layout ul .pro-inner-item a{
+    color: #000;
     font-size: 20px;
   }
   #navbar .pro-sidebar-inner .pro-sidebar-layout ul .pro-inner-item .pro-icon-wrapper {

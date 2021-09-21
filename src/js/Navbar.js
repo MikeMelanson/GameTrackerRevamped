@@ -12,6 +12,7 @@ import {
     SidebarFooter,
     SidebarContent,
 } from "react-pro-sidebar";
+import {Link} from 'react-router-dom'
 
 import "react-pro-sidebar/dist/css/styles.css";
 import "../css/navbar.css";
@@ -180,6 +181,82 @@ class Navbar extends React.Component{
     navbarMouseLeave = () => {this.setNavbarCollapse(true);};
 
     render(){
+      var systems = []
+      if ((this.state.systemsActive.length === this.state.systemsList.length) && this.state.systemsActive.length > 0){
+          for (let i= 0; i < this.state.systemsList.length;i++){
+              systems.push(<MenuItem key={this.state.systemsList[i][0]} active={Object.values(this.state.systemsActive[i])[0]}
+                  onClick={() => this.setActive('system',this.state.systemsList[i][0])}>{this.state.systemsList[i][0]}</MenuItem>);
+          }
+      } 
+      return (
+          <>
+              <div id='navbar'>
+                  <ProSidebar collapsed={this.state.navbarCollapse} onMouseOver={this.navbarMouseOver} onMouseLeave={this.navbarMouseLeave}>
+                      <SidebarHeader className="sHeader">
+                          <div className='logotext'>
+                              <img src={logo} className="controller-logo" alt="logo" />
+                              <p>{this.state.navbarCollapse ? '' : 'Game On!'}</p>
+                          </div>
+                      </SidebarHeader>
+                      <SidebarContent>
+                          <Menu iconShape='square'>
+                              <MenuItem 
+                                  active={this.state.homeActive} 
+                                  icon={<FaHome size={28}/>} 
+                                  onClick={() => this.setActive('home')}>Home</MenuItem>
+                              <SubMenu title="Systems" icon={<GiGameConsole size={28}/>}>Systems
+                                  {systems}
+                              </SubMenu>
+                              <MenuItem 
+                                  active={this.state.statsActive} 
+                                  icon={<AiOutlinePercentage size={28}/>}
+                                  onClick={() => this.setActive('stats')}>Detailed Statistics</MenuItem>
+                              <MenuItem 
+                                  active={this.state.memoryActive} 
+                                  icon={<FaHistory size={28}/>}
+                                  onClick={() => this.setActive('memory')}>Memory Card</MenuItem>
+                              <MenuItem 
+                                  active={this.state.plannerActive}
+                                  icon={<GiCalendar size={28}/>}
+                                  onClick={() => this.setActive('planner')}>Planner</MenuItem>
+                              <MenuItem 
+                                  active={this.state.wishlistActive}
+                                  icon={<GiChecklist size={28}/>}
+                                  onClick={() => this.setActive('wish')}>Wishlist</MenuItem>
+                              <MenuItem 
+                                  active={this.state.addActive}
+                                  icon={<FaPlus size={28}/>}
+                                  onClick={() => this.setActive('add')}>Add/Edit/Delete</MenuItem>
+                              <MenuItem 
+                                  active={this.state.importActive}
+                                  icon={<FaFileImport size={28}/>}
+                                  onClick={() => this.setActive('import')}>Import Data</MenuItem>
+                              <MenuItem 
+                                  active={this.state.optionsActive}
+                                  icon={<AiFillSetting size={28}/>}
+                                  onClick={() => this.setActive('options')}>Settings</MenuItem>
+                              <MenuItem
+                                  active={this.state.helpActive} 
+                                  icon={<FaHandsHelping size={28}/>}
+                                  onClick={() => this.setActive('help')}>Help</MenuItem>
+                              <MenuItem 
+                                  active={this.state.aboutActive}
+                                  icon={<FaInfo size={28}/>}
+                                  onClick={() => this.setActive('about')}>About</MenuItem>
+                          </Menu>
+                      </SidebarContent>
+                      <SidebarFooter>
+                          <Menu iconShape='square'>
+                              <MenuItem icon={<FaHome size={28}/>}>Logout</MenuItem>
+                          </Menu>
+                      </SidebarFooter>
+                  </ProSidebar>
+              </div>
+          </>
+      );
+      }
+/*
+    render(){
         var systems = []
         if ((this.state.systemsActive.length === this.state.systemsList.length) && this.state.systemsActive.length > 0){
             for (let i= 0; i < this.state.systemsList.length;i++){
@@ -202,46 +279,46 @@ class Navbar extends React.Component{
                                 <MenuItem 
                                     active={this.state.homeActive} 
                                     icon={<FaHome size={28}/>} 
-                                    onClick={() => this.setActive('home')}>Home</MenuItem>
+                                    onClick={() => this.setActive('home')}><Link to='/Home'>Home</Link></MenuItem>
                                 <SubMenu title="Systems" icon={<GiGameConsole size={28}/>}>Systems
                                     {systems}
                                 </SubMenu>
                                 <MenuItem 
                                     active={this.state.statsActive} 
                                     icon={<AiOutlinePercentage size={28}/>}
-                                    onClick={() => this.setActive('stats')}>Detailed Statistics</MenuItem>
+                                    onClick={() => this.setActive('stats')}><Link to='/DS'>Detailed Statistics</Link></MenuItem>
                                 <MenuItem 
                                     active={this.state.memoryActive} 
                                     icon={<FaHistory size={28}/>}
-                                    onClick={() => this.setActive('memory')}>Memory Card</MenuItem>
+                                    onClick={() => this.setActive('memory')}><Link to='/Mem'>Memory Card</Link></MenuItem>
                                 <MenuItem 
                                     active={this.state.plannerActive}
                                     icon={<GiCalendar size={28}/>}
-                                    onClick={() => this.setActive('planner')}>Planner</MenuItem>
+                                    onClick={() => this.setActive('planner')}><Link to='/Plan'>Planner</Link></MenuItem>
                                 <MenuItem 
                                     active={this.state.wishlistActive}
                                     icon={<GiChecklist size={28}/>}
-                                    onClick={() => this.setActive('wish')}>Wishlist</MenuItem>
+                                    onClick={() => this.setActive('wish')}><Link to='/Wish'>Wishlist</Link></MenuItem>
                                 <MenuItem 
                                     active={this.state.addActive}
                                     icon={<FaPlus size={28}/>}
-                                    onClick={() => this.setActive('add')}>Add/Edit/Delete</MenuItem>
+                                    onClick={() => this.setActive('add')}><Link to='/Add'>Add/Edit/Delete</Link></MenuItem>
                                 <MenuItem 
                                     active={this.state.importActive}
                                     icon={<FaFileImport size={28}/>}
-                                    onClick={() => this.setActive('import')}>Import Data</MenuItem>
+                                    onClick={() => this.setActive('import')}><Link to='/Imp'>Import Data</Link></MenuItem>
                                 <MenuItem 
                                     active={this.state.optionsActive}
                                     icon={<AiFillSetting size={28}/>}
-                                    onClick={() => this.setActive('options')}>Options</MenuItem>
+                                    onClick={() => this.setActive('options')}><Link to='/Set'>Settings</Link></MenuItem>
                                 <MenuItem
                                     active={this.state.helpActive} 
                                     icon={<FaHandsHelping size={28}/>}
-                                    onClick={() => this.setActive('help')}>Help</MenuItem>
+                                    onClick={() => this.setActive('help')}><Link to='/Help'>Help</Link></MenuItem>
                                 <MenuItem 
                                     active={this.state.aboutActive}
                                     icon={<FaInfo size={28}/>}
-                                    onClick={() => this.setActive('about')}>About</MenuItem>
+                                    onClick={() => this.setActive('about')}><Link to='/Abo'>About</Link></MenuItem>
                             </Menu>
                         </SidebarContent>
                         <SidebarFooter>
@@ -253,7 +330,7 @@ class Navbar extends React.Component{
                 </div>
             </>
         );
-        }
+        }*/
 }
 
 export default Navbar;
