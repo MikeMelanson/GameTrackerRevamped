@@ -19,32 +19,6 @@ import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
 function App(){
   return (
     <div className="App">
-        <div className='nav'>
-          <Navbar/>
-        </div>
-        <div className='main'>
-          <div className='layout'>
-            <div className='np_div'>
-              <NowPlaying/>
-            </div>
-            <div className='stats_div'>
-              <Statistics/>
-            </div>
-            <div className='info_div'>
-              <Info/>
-            </div>
-          </div>
-          <div className='content'>
-            <Home/>
-          </div>
-        </div>
-    </div>
-  );
-}
-/*
-function App(){
-  return (
-    <div className="App">
       <Router>
         <div className='nav'>
           <Navbar/>
@@ -80,5 +54,5 @@ function App(){
       </Router>
     </div>
   );
-}*/
+}
 export default App;
