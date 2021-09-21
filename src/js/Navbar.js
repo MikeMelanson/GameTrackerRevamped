@@ -47,9 +47,9 @@ class Navbar extends React.Component{
 
     componentDidMount(){
         fetch('/systems').then(res => res.json()).then(data => {
-          var systems = data.systems
+          var systems = data.systems;
           this.setState({systemsList:systems});
-          var system=''
+          var system='';
           for (let i=0;i<systems.length;i++){
             system=systems[i][0];
             this.updateSystemsActive(system)
