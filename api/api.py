@@ -4,6 +4,12 @@ from flask import Flask
 
 app = Flask(__name__)
 
+@app.route('/init')
+def init_db():
+    connection=create_connection()
+    close_connection(connection)
+    return ''
+
 @app.route('/systems')
 def get_systems():
     connection = create_connection()

@@ -1,7 +1,7 @@
 import sqlite3
 from sqlite3 import Error
 import os
-from variables import games_table_query,systems_table_query, gvalues_table_query, options_table_query,changes_table_query
+from variables import games_table_query,systems_table_query, gvalues_table_query, options_table_query,changes_table_query,metacritic_table_query
 
 def create_connection():
     conn = None
@@ -19,6 +19,7 @@ def create_connection():
             cursor.execute("INSERT INTO Options default values;")
             conn.commit()
             cursor.execute(changes_table_query)
+            cursor.execute(metacritic_table_query)
             
             cursor.close()
             print('does not exist')

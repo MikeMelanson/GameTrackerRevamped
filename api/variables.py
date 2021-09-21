@@ -23,17 +23,19 @@ games_table_query = """CREATE TABLE Games (
     DateAdded          DATETIME       DEFAULT (CURRENT_TIMESTAMP) 
                                       NOT NULL,
     NumberOwned        INTEGER        DEFAULT (1),
+    Genre1             VARCHAR (50),
+    Genre2             VARCHAR (50),
+    AcquiredFrom       VARCHAR (100),
     Image1             BLOB,
     Image2             BLOB,
     Image3             BLOB,
     Image4             BLOB,
     Image5             BLOB,
     BackgroundImage    BLOB,
-    ValueLink          VARCHAR (1000), 
-    Wishlist           INTEGER        DEFAULT (0)
+    Wishlist           INTEGER        DEFAULT (0) 
 );"""
 
-systems_table_query = """CREATE TABLE Systems (
+systems_table_query = '''CREATE TABLE Systems (
     Name              VARCHAR (100)  PRIMARY KEY
                                      UNIQUE,
     Format            VARCHAR (100),
@@ -50,8 +52,9 @@ systems_table_query = """CREATE TABLE Systems (
     Image1            BLOB,
     Image2            BLOB,
     BackgroundImage   BLOB,
-    Wishlist          INTEGER       DEFAULT (0)
-);"""
+    Wishlist          INTEGER        DEFAULT (0) 
+);
+'''
 
 gvalues_table_query = '''CREATE TABLE GValues (
     ID           REFERENCES Games (Id) 
@@ -69,4 +72,12 @@ changes_table_query = '''CREATE TABLE Changes (
     ID          INTEGER      REFERENCES Games (Id),
     Change      VARCHAR (20),
     DateChanged DATETIME     DEFAULT (CURRENT_TIMESTAMP) 
+);'''
+
+metacritic_table_query = '''CREATE TABLE MetacriticScores (
+    ID          INTEGER PRIMARY KEY
+                        REFERENCES Games (Id) 
+                        NOT NULL,
+    CriticScore DOUBLE,
+    UserScore   DOUBLE
 );'''

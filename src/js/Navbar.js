@@ -185,7 +185,8 @@ class Navbar extends React.Component{
         if ((this.state.systemsActive.length === this.state.systemsList.length) && this.state.systemsActive.length > 0){
             for (let i= 0; i < this.state.systemsList.length;i++){
                 systems.push(<MenuItem key={this.state.systemsList[i][0]} active={Object.values(this.state.systemsActive[i])[0]}
-                    onClick={() => this.setActive('system',this.state.systemsList[i][0])}>{this.state.systemsList[i][0]}</MenuItem>);
+                    onClick={() => this.setActive('system',this.state.systemsList[i][0])}>
+                      <Link to={{pathname:'/System', state:{system:this.state.systemsList[i][0]}}}>{this.state.systemsList[i][0]}</Link></MenuItem>);
             }
         } 
         return (

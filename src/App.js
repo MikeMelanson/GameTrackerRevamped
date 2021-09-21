@@ -14,45 +14,53 @@ import About from './js/About';
 import Help from './js/Help';
 import Settings from './js/Settings';
 import Import from './js/Import';
-import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
+import SystemDisplay from './js/System';
+import {Route, Switch, withRouter} from "react-router-dom";
 
-function App(){
-  return (
-    <div className="App">
-      <Router>
-        <div className='nav'>
-          <Navbar/>
-        </div>
-        <div className='main'>
-          <div className='layout'>
-            <div className='np_div'>
-              <NowPlaying/>
+class App extends React.Component{
+
+  componentDidMount(){
+    this.props.history.push('/home');
+    fetch('/init');
+  }
+
+  render(){
+    return (
+      <div className="App">
+          <div className='nav'>
+            <Navbar/>
+          </div>
+          <div className='main'>
+            <div className='layout'>
+              <div className='np_div'>
+                <NowPlaying/>
+              </div>
+              <div className='stats_div'>
+                <Statistics/>
+              </div>
+              <div className='info_div'>
+                <Info/>
+              </div>
             </div>
-            <div className='stats_div'>
-              <Statistics/>
-            </div>
-            <div className='info_div'>
-              <Info/>
+            <div className='content'>
+            <Switch>
+              <Route path="/Home" component={Home}/>
+              <Route exact path="/Abo" component={About}/>
+              <Route exact path="/Help" component={Help}/>
+              <Route exact path="/Set" component={Settings}/>
+              <Route exact path="/Imp" component={Import}/>
+              <Route exact path="/Add" component={AddEditDelete}/>
+              <Route exact path="/Wish" component={Wishlist}/>
+              <Route exact path="/Plan" component={Planner}/>
+              <Route exact path="/Mem" component={MemoryCard}/>
+              <Route exact path="/DS" component={DetailedStatistics}/>
+              <Route exact path="/System" component={SystemDisplay}/>
+              <Route path="/" component={Home}/>
+            </Switch>
             </div>
           </div>
-          <div className='content'>
-          <Switch>
-            <Route path="/Abo" component={About}/>
-            <Route path="/Help" component={Help}/>
-            <Route path="/Set" component={Settings}/>
-            <Route path="/Imp" component={Import}/>
-            <Route path="/Add" component={AddEditDelete}/>
-            <Route path="/Wish" component={Wishlist}/>
-            <Route path="/Plan" component={Planner}/>
-            <Route path="/Mem" component={MemoryCard}/>
-            <Route path="/DS" component={DetailedStatistics}/>
-            <Route path="/Home" component={Home}/>
-            <Route path="/" component={Home}/>
-          </Switch>
-          </div>
-        </div>
-      </Router>
-    </div>
-  );
+      </div>
+    );
+  }
 }
-export default App;
+export default withRouter(App);
