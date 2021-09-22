@@ -1,0 +1,16 @@
+.system{
+    display: grid;
+    grid-template-columns: 50% 50%;
+    grid-template-rows: 50% 50%;
+    align-items: center;
+    text-align: center;
+    width:100%;
+}
+.system div{
+    border: 1px solid red;
+    height: 49.5vh;
+}
+.gameInfo{
+    grid-column-start: 1;
+    grid-column-end: 3;
+}

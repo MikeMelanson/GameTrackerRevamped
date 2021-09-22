@@ -14,7 +14,7 @@ import About from './js/About';
 import Help from './js/Help';
 import Settings from './js/Settings';
 import Import from './js/Import';
-import SystemDisplay from './js/System';
+import System from './js/System';
 import {Route, Switch, withRouter} from "react-router-dom";
 import {TransitionGroup, CSSTransition} from 'react-transition-group';
 
@@ -80,20 +80,20 @@ class App extends React.Component{
                     unmountOnExit={true}
                     onEnter={this.onEnter}
                     onExited={this.onExit}
-                    appear={true}
-                    in={true}>
+                    appear={false}
+                    in={false}>
                       <Switch location={location}>
-                        <Route path="/Home" component={Home}/>
-                        <Route exact path="/Abo" component={About}/>
-                        <Route exact path="/Help" component={Help}/>
-                        <Route exact path="/Set" component={Settings}/>
-                        <Route exact path="/Imp" component={Import}/>
-                        <Route exact path="/Add" component={AddEditDelete}/>
-                        <Route exact path="/Wish" component={Wishlist}/>
-                        <Route exact path="/Plan" component={Planner}/>
-                        <Route exact path="/Mem" component={MemoryCard}/>
-                        <Route exact path="/DS" component={DetailedStatistics}/>
-                        <Route exact path="/System" component={SystemDisplay}/>
+                        <Route path="/Home"><div className='content2'><Home /></div></Route>
+                        <Route exact path="/Abo"><div className='content2'><About /></div></Route>
+                        <Route exact path="/Help"><div className='content2'><Help /></div></Route>
+                        <Route exact path="/Set"><div className='content2'><Settings /></div></Route>
+                        <Route exact path="/Imp"><div className='content2'><Import /></div></Route>
+                        <Route exact path="/Add"><div className='content2'><AddEditDelete /></div></Route>
+                        <Route exact path="/Wish"><div className='content2'><Wishlist/></div></Route>
+                        <Route exact path="/Plan"><div className='content2'><Planner /></div></Route>
+                        <Route exact path="/Mem"><div className='content2'><MemoryCard /></div></Route>
+                        <Route exact path="/DS"><div className='content2'><DetailedStatistics /></div></Route>
+                        <Route exact path="/System"><div className='content2'><System/></div></Route>
                         <Route path="/" component={Home}/>
                       </Switch>
                   </CSSTransition>

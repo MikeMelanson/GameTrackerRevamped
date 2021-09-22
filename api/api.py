@@ -1,6 +1,7 @@
 from os import close
 from db import *
 from flask import Flask
+from flask import request
 
 app = Flask(__name__)
 
@@ -56,6 +57,14 @@ def get_statuses():
     return {'unbeaten':unbeaten,'unplayed':unplayed,'beaten':beaten,'completed':completed,'nullg':nullg,
         'unplayedP':unplayedPercentage,'unbeatenP':unbeatenPercentage,'beatenP':beatenPercentage,'completedP':completedPercentage,'nullP':nullPercentage}
     
+@app.route('/system_info')
+def get_system_info():
+    system = request.headers.get('System')
+    connection = create_connection()
+    system_info = retrieve_system_info(connection,system)
+    close_connection(connection)
+    return{'systemInfo':system_info}
+
 @app.route('/test')
 def test():
     return {'test' : "test"}

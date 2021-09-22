@@ -97,6 +97,12 @@ def get_null_total(conn):
     rows = cur.fetchall()
     return rows
 
+def retrieve_system_info(conn,system):
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM Systems WHERE Name = '"  + system + "' AND Wishlist=0")
+    rows = cur.fetchall()
+    return rows
+
 def close_connection(conn):
     conn.close()
 
