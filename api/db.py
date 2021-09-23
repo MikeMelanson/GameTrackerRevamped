@@ -8,7 +8,6 @@ def create_connection():
     try:
         if os.path.isfile(r"../GameTracker.db"):
             conn = sqlite3.connect(r"../GameTracker.db")
-            print('exists')
         else:
             conn = sqlite3.connect(r"../GameTracker.db")
             cursor = conn.cursor()
@@ -22,7 +21,6 @@ def create_connection():
             cursor.execute(metacritic_table_query)
             
             cursor.close()
-            print('does not exist')
     except Error as e:
         print(e)
         print('error')
@@ -45,7 +43,7 @@ def select_all_systems(conn):
 
 def select_all_non_wl_systems(conn):
     cur = conn.cursor()
-    cur.execute("SELECT * FROM Systems WHERE Wishlist = 0 ORDER BY Name")
+    cur.execute("SELECT Name FROM Systems WHERE Wishlist = 0 ORDER BY Name")
     rows = cur.fetchall()
     return rows
 
@@ -101,6 +99,21 @@ def retrieve_system_info(conn,system):
     cur = conn.cursor()
     cur.execute("SELECT * FROM Systems WHERE Name = '"  + system + "' AND Wishlist=0")
     rows = cur.fetchall()
+    return rows
+
+def retrieve_system_stats(conn,system):
+    cur = conn.cursor()
+    rows = {'unplayed':0,'unbeaten':0,'beaten':0,'completed':0,'nullg':0}
+    cur.execute("SELECT Count(Id) AS number FROM Games WHERE System='" + system + "' AND Status = 'Unplayed' AND Wishlist = 0")
+    rows['unplayed'] = cur.fetchall()[0][0]
+    cur.execute("SELECT Count(Id) AS number FROM Games WHERE System='" + system + "' AND Status = 'Unbeaten' AND Wishlist = 0")
+    rows['unbeaten'] = cur.fetchall()[0][0]
+    cur.execute("SELECT Count(Id) AS number FROM Games WHERE System='" + system + "' AND Status = 'Beaten' AND Wishlist = 0")
+    rows['beaten'] = cur.fetchall()[0][0]
+    cur.execute("SELECT Count(Id) AS number FROM Games WHERE System='" + system + "' AND Status = 'Completed' AND Wishlist = 0")
+    rows['completed'] = cur.fetchall()[0][0]
+    cur.execute("SELECT Count(Id) AS number FROM Games WHERE System='" + system + "' AND Status = 'Null' AND Wishlist = 0")
+    rows['nullg'] = cur.fetchall()[0][0]
     return rows
 
 def close_connection(conn):

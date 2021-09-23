@@ -2,6 +2,11 @@ from os import close
 from db import *
 from flask import Flask
 from flask import request
+from PIL import Image
+from io import BytesIO
+import io
+import base64
+import numpy
 
 app = Flask(__name__)
 
@@ -64,6 +69,26 @@ def get_system_info():
     system_info = retrieve_system_info(connection,system)
     close_connection(connection)
     return{'systemInfo':system_info}
+
+@app.route('/spec_system_totals')
+def get_system_stats():
+    system = request.headers.get('System')
+    connection = create_connection()
+    system_stats = retrieve_system_stats(connection,system)
+    total = system_stats['unplayed'] + system_stats['unbeaten'] + system_stats['beaten'] + system_stats['completed'] + system_stats['nullg']
+    unplayedPercentage = 0 if total==0 else round(system_stats['unplayed']*100/total,1)
+    unbeatenPercentage = 0 if total==0 else round(system_stats['unbeaten']*100/total,1)
+    beatenPercentage = 0 if total==0 else round(system_stats['beaten']*100/total,1)
+    completedPercentage = 0 if total==0 else round(system_stats['completed']*100/total,1)
+    nullPercentage = 0 if total==0 else round(system_stats['nullg']*100/total,1)
+    system_stats['unplayedP']=unplayedPercentage
+    system_stats['unbeatenP']=unbeatenPercentage
+    system_stats['beatenP']=beatenPercentage
+    system_stats['completedP']=completedPercentage
+    system_stats['nullP']=nullPercentage
+    system_stats['total']=total
+    close_connection(connection)
+    return system_stats
 
 @app.route('/test')
 def test():
