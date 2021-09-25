@@ -53,6 +53,12 @@ def get_systems_count(conn):
     rows = cur.fetchall()
     return rows
 
+def get_max_sys_id(conn):
+    cur = conn.cursor()
+    cur.execute("SELECT MAX(Id) FROM Systems")
+    rows = cur.fetchall()
+    return rows
+
 def get_games_count(conn):
     cur = conn.cursor()
     cur.execute("SELECT COUNT(Id) AS total FROM Games WHERE Wishlist=0")
@@ -114,6 +120,12 @@ def retrieve_system_stats(conn,system):
     rows['completed'] = cur.fetchall()[0][0]
     cur.execute("SELECT Count(Id) AS number FROM Games WHERE System='" + system + "' AND Status = 'Null' AND Wishlist = 0")
     rows['nullg'] = cur.fetchall()[0][0]
+    return rows
+
+def retrieve_system_publishers(conn):
+    cur = conn.cursor()
+    cur.execute("SELECT DISTINCT Publisher FROM Systems WHERE Wishlist=0 AND Publisher!=''")
+    rows = cur.fetchall()
     return rows
 
 def close_connection(conn):

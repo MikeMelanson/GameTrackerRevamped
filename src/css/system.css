@@ -22,6 +22,7 @@
 #big1{
     grid-column-start: 1;
     grid-column-end: 3;
+    background-color: whitesmoke;
 }
 #big2{
     grid-column-start: 2;

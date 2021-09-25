@@ -9,7 +9,8 @@ class System extends React.Component{
         super(props);
 
         this.state = {
-            systemInfo: []
+            systemInfo: [],
+            image: ''
         }
     }
 
@@ -17,9 +18,9 @@ class System extends React.Component{
         let systemHeader = new Headers();
         systemHeader.append('System',this.props.location.state.system.toString());
         fetch('/system_info', {method: 'GET', headers:systemHeader}).then(res => res.json()).then(data => {
-            console.log(data.image)
             this.setState({
-                systemInfo:data.systemInfo
+                systemInfo:data.systemInfo,
+                image:data.image
             });
         });
     }
@@ -27,12 +28,12 @@ class System extends React.Component{
     render(){
         var imageString = '';
         if (this.state.systemInfo.length !==0){
-            imageString = this.state.systemInfo[0][11]
+            imageString = this.state.image.replace(/(\r\n|\n|\r)/gm, "")
         }
         return (
             <>
                 <div className='system'>
-                    <div className='quadrant' id='big1' style={{backgroundImage:'url(../../images/'+imageString+'.png)',backgroundSize:'100% 100%'}}>
+                    <div className='quadrant' id='big1' style={{backgroundImage:"url('data:image/png;base64,"+imageString+"')",backgroundSize:'100% 100%'}}>
                         <SystemInfo
                             info={this.state.systemInfo}
                         />

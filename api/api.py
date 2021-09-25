@@ -1,14 +1,15 @@
-from os import close
 from db import *
 from flask import Flask
 from flask import request
+from flask_cors import CORS
+import os
 from PIL import Image
-from io import BytesIO
-import io
 import base64
-import numpy
+from io import BytesIO
+
 
 app = Flask(__name__)
+CORS(app)
 
 @app.route('/init')
 def init_db():
@@ -67,8 +68,24 @@ def get_system_info():
     system = request.headers.get('System')
     connection = create_connection()
     system_info = retrieve_system_info(connection,system)
+    data_array = []
+    length = len(system_info[0])-1
+    for i in range(length):
+        data_array.append(system_info[0][i])
+    image = Image.open(BytesIO(system_info[0][13]))
+    buffer = BytesIO()
+    image.save(buffer,'PNG')
+    imageBase64 = base64.b64encode(buffer.getvalue()).decode('utf-8')
     close_connection(connection)
-    return{'systemInfo':system_info}
+    print(data_array)
+    return{'systemInfo':data_array,'image':imageBase64}
+
+@app.route('/system_publishers')
+def get_system_publishers():
+    connection = create_connection()
+    publishers = retrieve_system_publishers(connection)
+    close_connection(connection)
+    return{'publishers':publishers}
 
 @app.route('/spec_system_totals')
 def get_system_stats():
@@ -89,6 +106,56 @@ def get_system_stats():
     system_stats['total']=total
     close_connection(connection)
     return system_stats
+
+@app.route('/send_new_system', methods=['GET','POST'])
+def add_system_to_db():
+    connection = create_connection()
+    #retrieve id for image naming
+    id = get_max_sys_id(connection)[0][0] + 1
+
+    #get data and assign to variables
+    data = request.get_json()
+    name = data.get('name')
+    format = data.get('format')
+    publisher = data.get('publisher')
+    pricePaid = data.get('pricePaid')
+    ownership = data.get('ownership')
+    owned = data.get('owned')
+    numCont = data.get('numCont')
+    region = data.get('region')
+    notes = data.get('notes')
+    dateAcq = data.get('dateAcq')
+    image = data.get('img')
+    final_img_string = ''
+    alpha_image_bytes = ""
+
+    if not os.path.isfile("../images/temp.png") and image!='':
+        with open("../images/temp.png", 'wb') as fh:
+            fh.write(base64.b64decode(image))
+            fh.close()
+        alpha_image = Image.open("../images/temp.png")
+        alpha_image.putalpha(70)
+        stream = BytesIO()
+        alpha_image.save(stream,format="PNG")
+        alpha_image_bytes = stream.getvalue()
+        #alpha_image.save("../images/sys" + str(id) + ".png")
+        #buffered = BytesIO()
+        #alpha_image.save(buffered,format='PNG')
+        #new_img = base64.b64encode(buffered.getvalue())
+        #final_img_string = new_img.decode('utf-8')
+        os.remove("../images/temp.png")
+
+    query = """INSERT INTO Systems (Name,Format,Publisher,PricePaid,Ownership,Owned,
+            NumberControllers,Region,Notes,DateAcquired,Wishlist,Image)
+            VALUES(?,?,?,?,?,?,?,?,?,?,?,?) 
+        """
+    data_tuple = (
+        name,format,publisher,pricePaid,ownership,owned,numCont,region,notes,dateAcq,0,alpha_image_bytes
+    )
+    execute_insert_query(connection,query,data_tuple)
+    close_connection(connection)
+    return ""
+    
 
 @app.route('/test')
 def test():

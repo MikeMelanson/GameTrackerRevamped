@@ -23,7 +23,6 @@ class SystemInfo extends React.Component{
             completedPercent: 0,
             nullPercent: 0,
             total: 0,
-            image: '',
         }
     }
 
@@ -39,7 +38,7 @@ class SystemInfo extends React.Component{
             this.setState({beaten:data.beaten,completed:data.completed,unplayed:data.unplayed,unbeaten:data.unbeaten,nullg:data.nullg,unplayedPercent:data.unplayedP
                 ,unbeatenPercent:data.unbeatenP,beatenPercent:data.beatenP,completedPercent:data.completedP,nullPercent:data.nullP,total:data.total});
         });
-        this.setState({image:this.props.image});
+        console.log(this.props.systemInfo)
     }
 
     render(){
@@ -47,18 +46,18 @@ class SystemInfo extends React.Component{
         var headings = ['Format: ','Publisher: ','Price Paid: ','Ownership: ','Number Owned: ',
             'Number of Controllers: ','Region: ','Notes: ','Date Acquired: ','Date Added: '];
         if (this.props.info.length > 0){
-            array[0] = this.props.info[0][0];
-            array[1] = this.props.info[0][1];
-            array[2] = this.props.info[0][2];
-            array[3] = '$' + this.props.info[0][3];
-            array[4] = this.props.info[0][4];
-            array[5] = this.props.info[0][5];
-            array[6] = this.props.info[0][6];
-            array[7] = this.props.info[0][7];
-            array[8] = this.props.info[0][8];
-            array[9] = this.props.info[0][9];
-            array[10] = this.props.info[0][10].split(' ')[0];
-            array[11] = this.props.info[0][11];
+            array[0] = this.props.info[1];
+            array[1] = this.props.info[2];
+            array[2] = this.props.info[3];
+            array[3] = '$' + this.props.info[4];
+            array[4] = this.props.info[5];
+            array[5] = this.props.info[6];
+            array[6] = this.props.info[7];
+            array[7] = this.props.info[8];
+            array[8] = this.props.info[9];
+            array[9] = this.props.info[10];
+            array[10] = this.props.info[11].split(' ')[0];
+            array[11] = this.props.info[12];
         }
         var spans = [];
         var spans2 = [];
