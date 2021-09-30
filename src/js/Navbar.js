@@ -57,6 +57,16 @@ class Navbar extends React.Component{
         });
     }
 
+    //Update the navbar system list when a new system is added
+    //Prop that is changing is name - is name of system being added
+    componentDidUpdate(prevProps,prevState){
+      if (prevProps.refresh !== this.props.refresh){
+        console.log("We're in")
+        this.setState({systemsList: [...prevState.systemsList, [this.props.refresh]]});
+        this.setState({systemsActive: [...prevState.systemsActive, {[this.props.refresh]:false}]});
+      }
+    }
+
     setNavbarCollapse(bool){
         this.setState({navbarCollapse: bool});
     }

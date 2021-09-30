@@ -126,6 +126,8 @@ class AddSystem extends React.Component{
             });
         }
         Upload();
+        //callback to parent passing system name in order to update navbar
+        this.props.onAddSystem(this.state.name)
     }
 
     componentDidMount(){
