@@ -124,7 +124,25 @@ def retrieve_system_stats(conn,system):
 
 def retrieve_system_publishers(conn):
     cur = conn.cursor()
-    cur.execute("SELECT DISTINCT Publisher FROM Systems WHERE Wishlist=0 AND Publisher!=''")
+    cur.execute("SELECT DISTINCT Publisher FROM Systems WHERE Wishlist=0 AND Publisher!='' ORDER BY Publisher COLLATE NOCASE ASC")
+    rows = cur.fetchall()
+    return rows
+
+def retrieve_game_publishers(conn):
+    cur = conn.cursor()
+    cur.execute("SELECT DISTINCT Publisher FROM Games WHERE Wishlist=0 AND Publisher!='' ORDER BY Publisher COLLATE NOCASE ASC")
+    rows = cur.fetchall()
+    return rows
+
+def retrieve_game_developers(conn):
+    cur = conn.cursor()
+    cur.execute("SELECT DISTINCT Developer FROM Games WHERE Wishlist=0 AND Developer!='' ORDER BY Developer COLLATE NOCASE ASC")
+    rows = cur.fetchall()
+    return rows
+
+def retrieve_game_genres(conn):
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM (SELECT Genre1 AS Genre FROM Games UNION SELECT Genre2 AS Genre FROM Games)t Order by t.Genre COLLATE NOCASE ASC;")
     rows = cur.fetchall()
     return rows
 

@@ -7,7 +7,6 @@ from PIL import Image
 import base64
 from io import BytesIO
 
-
 app = Flask(__name__)
 CORS(app)
 
@@ -67,17 +66,25 @@ def get_statuses():
 def get_system_info():
     system = request.headers.get('System')
     connection = create_connection()
+    
+    #retrieve system info
     system_info = retrieve_system_info(connection,system)
+
+    #get all data except image data and append to array for return
     data_array = []
     length = len(system_info[0])-1
     for i in range(length):
         data_array.append(system_info[0][i])
-    image = Image.open(BytesIO(system_info[0][13]))
-    buffer = BytesIO()
-    image.save(buffer,'PNG')
-    imageBase64 = base64.b64encode(buffer.getvalue()).decode('utf-8')
+
+    #open image data as PIL Image, and save in as a base64 string before passing to front end
+    imageBase64 = ''
+    if system_info[0][13] != '':
+        image = Image.open(BytesIO(system_info[0][13]))
+        buffer = BytesIO()
+        image.save(buffer,'PNG')
+        imageBase64 = base64.b64encode(buffer.getvalue()).decode('utf-8')
+
     close_connection(connection)
-    print(data_array)
     return{'systemInfo':data_array,'image':imageBase64}
 
 @app.route('/system_publishers')
@@ -87,9 +94,20 @@ def get_system_publishers():
     close_connection(connection)
     return{'publishers':publishers}
 
+@app.route('/game_options_info')
+def get_game_option_info():
+    connection = create_connection()
+    publishers = retrieve_game_publishers(connection)
+    developers = retrieve_game_developers(connection)
+    systems = select_all_non_wl_systems(connection)
+    genres = retrieve_game_genres(connection)
+    close_connection(connection)
+    return{'publishers':publishers,'developers':developers,'systems':systems,'genres':genres}
+
 @app.route('/spec_system_totals')
 def get_system_stats():
     system = request.headers.get('System')
+    print(system)
     connection = create_connection()
     system_stats = retrieve_system_stats(connection,system)
     total = system_stats['unplayed'] + system_stats['unbeaten'] + system_stats['beaten'] + system_stats['completed'] + system_stats['nullg']
@@ -110,26 +128,25 @@ def get_system_stats():
 @app.route('/send_new_system', methods=['GET','POST'])
 def add_system_to_db():
     connection = create_connection()
-    #retrieve id for image naming
-    id = get_max_sys_id(connection)[0][0] + 1
 
     #get data and assign to variables
     data = request.get_json()
-    name = data.get('name')
+    name = data.get('name').replace("'","''") #scrub input
     format = data.get('format')
     publisher = data.get('publisher')
-    pricePaid = data.get('pricePaid')
+    pricePaid = data.get('pricePaid') #allow decimals, no need to round
     ownership = data.get('ownership')
     owned = data.get('owned')
     numCont = data.get('numCont')
     region = data.get('region')
-    notes = data.get('notes')
+    notes = data.get('notes').replace("'","''") #scrub input
     dateAcq = data.get('dateAcq')
+
     image = data.get('img')
-    final_img_string = ''
     alpha_image_bytes = ""
 
-    if not os.path.isfile("../images/temp.png") and image!='':
+    #open a temp image for editing, add an alpha, then save to a stream for passing to db
+    if image!='':
         with open("../images/temp.png", 'wb') as fh:
             fh.write(base64.b64decode(image))
             fh.close()
@@ -138,12 +155,7 @@ def add_system_to_db():
         stream = BytesIO()
         alpha_image.save(stream,format="PNG")
         alpha_image_bytes = stream.getvalue()
-        #alpha_image.save("../images/sys" + str(id) + ".png")
-        #buffered = BytesIO()
-        #alpha_image.save(buffered,format='PNG')
-        #new_img = base64.b64encode(buffered.getvalue())
-        #final_img_string = new_img.decode('utf-8')
-        os.remove("../images/temp.png")
+        os.remove("../images/temp.png") #remove temp image when done! Very important!
 
     query = """INSERT INTO Systems (Name,Format,Publisher,PricePaid,Ownership,Owned,
             NumberControllers,Region,Notes,DateAcquired,Wishlist,Image)
@@ -151,6 +163,62 @@ def add_system_to_db():
         """
     data_tuple = (
         name,format,publisher,pricePaid,ownership,owned,numCont,region,notes,dateAcq,0,alpha_image_bytes
+    )
+    execute_insert_query(connection,query,data_tuple)
+    close_connection(connection)
+    return ""
+
+@app.route('/send_new_game', methods=['GET','POST'])
+def add_game_to_db():
+    connection = create_connection()
+
+    #get data and assign to variables
+    data = request.get_json()
+    title = data.get('title').replace("'","''") #scrub input
+    system = data.get('system')
+    status = data.get('status')
+    pricePaid = data.get('pricePaid')
+    rating = data.get('rating')
+    publisher = data.get('publisher')
+    developer = data.get('developer')
+    condition = data.get('condition')
+    completeness = data.get('completeness')
+    timePlayed = data.get('timePlayed')
+    region = data.get('region')
+    ownership = data.get('ownership')
+    notes = data.get('notes').replace("'","''") #scrub input
+    nowPlaying = data.get('nowPlaying')
+    eAchieve = data.get('eAchieve')
+    tAchieve = data.get('tAchieve')
+    owned = data.get('owned')
+    genre1 = data.get('genre1')
+    genre2 = data.get('genre2')
+    acquiredFrom = data.get('acquiredFrom')
+    compilation = data.get('compilation')
+    dateAcq = data.get('dateAcq')
+
+    image = data.get('img')
+    alpha_image_bytes = ""
+
+    #open a temp image for editing, add an alpha, then save to a stream for passing to db
+    if image!='':
+        with open("../images/temp.png", 'wb') as fh:
+            fh.write(base64.b64decode(image))
+            fh.close()
+        alpha_image = Image.open("../images/temp.png")
+        alpha_image.putalpha(70)
+        stream = BytesIO()
+        alpha_image.save(stream,format="PNG")
+        alpha_image_bytes = stream.getvalue()
+        os.remove("../images/temp.png") #remove temp image when done! Very important!
+
+    query = """INSERT INTO Games (Title,System,Status,PricePaid,Rating,Publisher,Developer,Condition,Completeness,TimePlayed,Region,Ownership,
+            Notes,NowPlaying,EarnedAchievements,TotalAchievements,NumberOwned,Genre1,Genre2,AcquiredFrom,Compilation,DateAcquired,Wishlist,Image)
+            VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) 
+        """
+    data_tuple = (
+        title,system,status,pricePaid,rating,publisher,developer,condition,completeness,timePlayed,region,ownership,notes,nowPlaying,eAchieve,tAchieve,owned,
+        genre1,genre2,acquiredFrom,compilation,dateAcq,0,alpha_image_bytes
     )
     execute_insert_query(connection,query,data_tuple)
     close_connection(connection)
