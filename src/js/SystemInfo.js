@@ -26,19 +26,21 @@ class SystemInfo extends React.Component{
         }
     }
 
-    componentDidMount(){
+    async componentDidMount(){
         let systemHeader = new Headers();
-        if (this.props.info.length > 0){
-            systemHeader.append('System',this.props.info[0][0].toString());
-        }
-        else{
-            systemHeader.append('System','');
-        }
-        fetch('/spec_system_totals',{method: 'GET', headers:systemHeader}).then(res => res.json()).then(data => {
+        //if (this.props.info.length > 0){
+            console.log("Good")
+            systemHeader.append('System',this.props.info[1]);
+            console.log(this.props.info[1])
+        //}
+        //else{
+            //console.log("Bad")
+            //systemHeader.append('System','');
+        //}
+        await fetch('/spec_system_totals',{method: 'GET', headers:systemHeader}).then(res => res.json()).then(data => {
             this.setState({beaten:data.beaten,completed:data.completed,unplayed:data.unplayed,unbeaten:data.unbeaten,nullg:data.nullg,unplayedPercent:data.unplayedP
                 ,unbeatenPercent:data.unbeatenP,beatenPercent:data.beatenP,completedPercent:data.completedP,nullPercent:data.nullP,total:data.total});
         });
-        console.log(this.props.systemInfo)
     }
 
     render(){

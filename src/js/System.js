@@ -10,14 +10,26 @@ class System extends React.Component{
 
         this.state = {
             systemInfo: [],
-            image: ''
+            image: '',
+            systemInfoComponent: ''
         }
     }
 
     componentDidMount(){
+        this.fetchInfo();
+    }
+    componentDidUpdate(prevProps,prevState){
+        if (prevState.systemInfo !== this.state.systemInfo){
+            this.setState({
+                systemInfoComponent: <SystemInfo info={this.state.systemInfo}/>
+            });
+        }
+    }
+
+    async fetchInfo(){
         let systemHeader = new Headers();
         systemHeader.append('System',this.props.location.state.system.toString());
-        fetch('/system_info', {method: 'GET', headers:systemHeader}).then(res => res.json()).then(data => {
+        await fetch('/system_info', {method: 'GET', headers:systemHeader}).then(res => res.json()).then(data => {
             this.setState({
                 systemInfo:data.systemInfo,
                 image:data.image
@@ -34,9 +46,7 @@ class System extends React.Component{
             <>
                 <div className='system'>
                     <div className='quadrant' id='big1' style={{backgroundImage:"url('data:image/png;base64,"+imageString+"')",backgroundSize:'100% 100%'}}>
-                        <SystemInfo
-                            info={this.state.systemInfo}
-                        />
+                        {this.state.systemInfoComponent}
                     </div>
                     <div className='quadrant' id='small1'>
                         Games Filter

@@ -227,7 +227,7 @@ class Navbar extends React.Component{
                                 <MenuItem 
                                     active={this.state.addActive}
                                     icon={<FaPlus size={28}/>}
-                                    onClick={() => this.setActive('add')}><Link to='/Add'>Add/Edit/Delete</Link></MenuItem>
+                                    onClick={() => this.setActive('add')}><Link to='/Add'>Add</Link></MenuItem>
                                 <MenuItem 
                                     active={this.state.importActive}
                                     icon={<FaFileImport size={28}/>}
