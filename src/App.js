@@ -25,11 +25,13 @@ class App extends React.Component{
     super(props);
 
     this.state = {
-      content: 'visible'
+      content: 'visible',
+      refresh: false
     }
 
     this.onEnter = this.onEnter.bind(this);
     this.onExit = this.onExit.bind(this);
+    this.addSystemRefresh = this.addSystemRefresh.bind(this);
   }
   
   componentDidMount(){
@@ -49,11 +51,16 @@ class App extends React.Component{
     })
   }
 
+  //refresh state is passed to navbar, so when it changes, navbar is updated with new system
+  addSystemRefresh(name){
+    this.setState({refresh: name})
+  }
+
   render(){
     return (
       <div className="App">
           <div className='nav'>
-            <Navbar/>
+            <Navbar refresh={this.state.refresh}/>
           </div>
           <div className='main'>
             <div className='layout'>
@@ -96,7 +103,7 @@ class App extends React.Component{
                         <Route exact path="/Mem"><div className='content2'><MemoryCard /></div></Route>
                         <Route exact path="/DS"><div className='content2'><DetailedStatistics /></div></Route>
                         <Route exact path="/System"><div className='content2'><System/></div></Route>
-                        <Route exact path="/AddSys"><div className='content2'><AddSystem/></div></Route>
+                        <Route exact path="/AddSys"><div className='content2'><AddSystem onAddSystem={this.addSystemRefresh}/></div></Route>
                         <Route exact path="/AddGame"><div className='content2'><AddGame/></div></Route>
                         <Route path="/" component={Home}/>
                       </Switch>
