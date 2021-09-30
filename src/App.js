@@ -7,7 +7,9 @@ import Home from './js/Home';
 import Info from './js/Info';
 import MemoryCard from './js/MemoryCard';
 import Wishlist from './js/Wishlist';
-import AddEditDelete from './js/AddEditDelete';
+import AddHome from './js/AddHome';
+import AddSystem from './js/AddSystem';
+import AddGame from './js/AddGame';
 import Planner from './js/Planner'
 import DetailedStatistics from './js/DetailedStatistics'
 import About from './js/About';
@@ -88,12 +90,14 @@ class App extends React.Component{
                         <Route exact path="/Help"><div className='content2'><Help /></div></Route>
                         <Route exact path="/Set"><div className='content2'><Settings /></div></Route>
                         <Route exact path="/Imp"><div className='content2'><Import /></div></Route>
-                        <Route exact path="/Add"><div className='content2'><AddEditDelete /></div></Route>
+                        <Route exact path="/Add"><div className='content2'><AddHome /></div></Route>
                         <Route exact path="/Wish"><div className='content2'><Wishlist/></div></Route>
                         <Route exact path="/Plan"><div className='content2'><Planner /></div></Route>
                         <Route exact path="/Mem"><div className='content2'><MemoryCard /></div></Route>
                         <Route exact path="/DS"><div className='content2'><DetailedStatistics /></div></Route>
                         <Route exact path="/System"><div className='content2'><System/></div></Route>
+                        <Route exact path="/AddSys"><div className='content2'><AddSystem/></div></Route>
+                        <Route exact path="/AddGame"><div className='content2'><AddGame/></div></Route>
                         <Route path="/" component={Home}/>
                       </Switch>
                   </CSSTransition>
