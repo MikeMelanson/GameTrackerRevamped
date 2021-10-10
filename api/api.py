@@ -188,6 +188,10 @@ def add_game_to_db():
     ownership = data.get('ownership')
     notes = data.get('notes').replace("'","''") #scrub input
     nowPlaying = data.get('nowPlaying')
+    if nowPlaying == 'on':
+        nowPlaying = 1
+    else:
+        nowPlaying = 0
     eAchieve = data.get('eAchieve')
     tAchieve = data.get('tAchieve')
     owned = data.get('owned')
@@ -200,8 +204,14 @@ def add_game_to_db():
     image = data.get('img')
     alpha_image_bytes = ""
 
+    nextID = get_max_game_id(connection)[0][0]
+    if nextID != None:
+        nextID = nextID + 1
+    else:
+        nextID = 1
+
     #open a temp image for editing, add an alpha, then save to a stream for passing to db
-    if image!='':
+    if image!='' and image != None:
         with open("../images/temp.png", 'wb') as fh:
             fh.write(base64.b64decode(image))
             fh.close()
@@ -212,19 +222,70 @@ def add_game_to_db():
         alpha_image_bytes = stream.getvalue()
         os.remove("../images/temp.png") #remove temp image when done! Very important!
 
-    query = """INSERT INTO Games (Title,System,Status,PricePaid,Rating,Publisher,Developer,Condition,Completeness,TimePlayed,Region,Ownership,
+    query = """INSERT INTO Games (Id,Title,System,Status,PricePaid,Rating,Publisher,Developer,Condition,Completeness,TimePlayed,Region,Ownership,
             Notes,NowPlaying,EarnedAchievements,TotalAchievements,NumberOwned,Genre1,Genre2,AcquiredFrom,Compilation,DateAcquired,Wishlist,Image)
-            VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) 
+            VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) 
         """
     data_tuple = (
-        title,system,status,pricePaid,rating,publisher,developer,condition,completeness,timePlayed,region,ownership,notes,nowPlaying,eAchieve,tAchieve,owned,
+        nextID,title,system,status,pricePaid,rating,publisher,developer,condition,completeness,timePlayed,region,ownership,notes,nowPlaying,eAchieve,tAchieve,owned,
         genre1,genre2,acquiredFrom,compilation,dateAcq,0,alpha_image_bytes
     )
     execute_insert_query(connection,query,data_tuple)
     close_connection(connection)
     return ""
     
+@app.route('/send_new_subgame', methods=['GET','POST'])
+def add_subgame_to_db():
+    connection = create_connection()
 
-@app.route('/test')
-def test():
-    return {'test' : "test"}
+    #get data and assign to variables
+    data = request.get_json()
+    title = data.get('title').replace("'","''") #scrub input
+    status = data.get('status')
+    rating = data.get('rating')
+    notes = data.get('notes').replace("'","''") #scrub input
+    nowPlaying = data.get('nowPlaying')
+    if nowPlaying == 'on':
+        nowPlaying = 1
+    else:
+        nowPlaying = 0
+    parentID = data.get('parentID')
+    gameNumber = data.get('gameNumber')
+
+    image = data.get('img')
+    alpha_image_bytes = ""
+
+    nextID = get_max_comp_id(connection)[0][0]
+    if nextID != None:
+        nextID = nextID + 1
+    else:
+        nextID = 1
+
+    #open a temp image for editing, add an alpha, then save to a stream for passing to db
+    if image!='' and image!=None:
+        with open("../images/temp.png", 'wb') as fh:
+            fh.write(base64.b64decode(image))
+            fh.close()
+        alpha_image = Image.open("../images/temp.png")
+        alpha_image.putalpha(70)
+        stream = BytesIO()
+        alpha_image.save(stream,format="PNG")
+        alpha_image_bytes = stream.getvalue()
+        os.remove("../images/temp.png") #remove temp image when done! Very important!
+
+    query = """INSERT INTO Compilations (ID,ParentID,GameNumber,Title,Status,Rating,Notes,NowPlaying,Image)
+            VALUES(?,?,?,?,?,?,?,?,?) 
+        """
+    data_tuple = (
+        nextID,parentID,gameNumber,title,status,rating,notes,nowPlaying,alpha_image_bytes
+    )
+    execute_insert_query(connection,query,data_tuple)
+    close_connection(connection)
+    return ""
+
+@app.route('/next_game_id')
+def next_game_id():
+    connection = create_connection()
+    maxID = get_max_game_id(connection)
+    maxID = maxID[0][0] + 1
+    return {'nextID':maxID}

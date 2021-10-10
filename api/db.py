@@ -59,6 +59,18 @@ def get_max_sys_id(conn):
     rows = cur.fetchall()
     return rows
 
+def get_max_game_id(conn):
+    cur = conn.cursor()
+    cur.execute("SELECT MAX(Id) FROM Games")
+    rows = cur.fetchall()
+    return rows
+
+def get_max_comp_id(conn):
+    cur = conn.cursor()
+    cur.execute("SELECT MAX(Id) FROM Compilations")
+    rows = cur.fetchall()
+    return rows
+
 def get_games_count(conn):
     cur = conn.cursor()
     cur.execute("SELECT COUNT(Id) AS total FROM Games WHERE Wishlist=0")
