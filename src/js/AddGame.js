@@ -1,10 +1,15 @@
 import React from 'react';
+import {CSSTransition} from 'react-transition-group'
+import AddSubGame from './AddSubGame';
 
-//import "../css/addeditdelete.css";
+import "../css/addgame.css";
 
 class AddGame extends React.Component{
     constructor(props){
         super(props);
+
+        this.addSubGameClick = this.addSubGameClick.bind(this);
+        this.removeSubGameClick = this.removeSubGameClick.bind(this);
 
         this.state = {
             title: '',
@@ -31,10 +36,16 @@ class AddGame extends React.Component{
             dateAcq: '',
             img: '',
 
-            publishers: [<option value=''></option>],
-            developers: [<option value=''></option>],
-            systems: [<option value=''></option>],
-            genres: [<option value=''></option>],
+            publishers: [<option key = 'pdefault' value=''></option>],
+            developers: [<option key = 'ddefault' value=''></option>],
+            systems: [<option key = 'sdefault' value=''></option>],
+            genres: [<option key = 'gdefault' value=''></option>],
+
+            compFade: false,
+            nextID: 0,
+            subGames: [],
+            subGameData: [],
+            numSubGames: 1,
         }
     }
 
@@ -176,8 +187,17 @@ class AddGame extends React.Component{
 
     handleCompilationChange = e => {
         this.setState({
-            compilation: e.target.value
+            compilation: e.target.checked
         });
+        if (e.target.checked){
+            this.setState({
+                compFade: true
+            })
+        }else{
+            this.setState({
+                compFade: false
+            })
+        }
     }
 
     handleDateAcquiredChange = e => {
@@ -237,11 +257,60 @@ class AddGame extends React.Component{
                     dateAcq: this.state.dateAcq,
                     img: this.state.img.replace('data:image/jpeg;base64,','')
                 })
-            }).then(res => res.text()).then(data => {
-                console.log("Testing")
-            });
+            })
+            if (this.state.compilation){
+                for (let i=0;i<this.state.numSubGames;i++){
+                    await fetch('/send_new_subgame',{
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json',
+                            'Access-Control-Allow-Origin': '*',
+                            "Access-Control-Allow-Credentials" : true 
+                        },
+                        body:JSON.stringify({
+                            title: this.state.subGameData[i].title,
+                            status: this.state.subGameData[i].status,
+                            rating: this.state.subGameData[i].rating,
+                            notes: this.state.subGameData[i].notes,
+                            nowPlaying: this.state.subGameData[i].nowPlaying,
+                            image: this.state.subGameData[i].image,
+                            parentID: this.state.nextID,
+                            gameNumber: i+1
+                        })
+                    })
+                }
+            }
         }
         Upload();
+    }
+
+    async addSubGameClick(){
+        await this.setState(prevState => ({
+            numSubGames: prevState.numSubGames + 1,
+            subGames: [...prevState.subGames, <AddSubGame gameNumber={this.state.numSubGames+1} getData={this.getSubGameData}/>],
+            subGameData: [...prevState.subGameData, []]
+        }))
+    }
+
+    async removeSubGameClick(){
+        if (this.state.subGames.length > 1){
+            this.state.subGames.pop()
+            this.state.subGameData.pop()
+            await this.setState({
+                subGames: this.state.subGames
+            })
+        }
+    }
+
+    getSubGameData = (subGameNum,subGameData) =>{
+        let temp = [...this.state.subGameData];
+        let item = temp[subGameNum-1]
+        item = subGameData
+        temp[subGameNum-1] = item
+        this.setState({
+            subGameData: temp
+        });
     }
 
     componentDidMount(){
@@ -271,28 +340,40 @@ class AddGame extends React.Component{
                 }))
             }
         });
+        fetch('/next_game_id', {method: 'GET'}).then(res => res.json()).then(data => {
+            this.setState({
+                nextID: data.nextID
+            })
+        });
+        //set initial state to one subgame, pass game number as prop
+        this.setState({
+            subGames:[<AddSubGame gameNumber={this.state.numSubGames} getData={this.getSubGameData}/>]
+        })
     }
 
     render(){
         return (
             <>
                 <div>
-                    Add System
                     <form onSubmit={this.handleSubmit} method='post'>
                         <label htmlFor='title'>Title*:</label><input type='text' id='title' onChange={this.handleTitleChange} required></input>
                         <label htmlFor='system'>System*:</label>
                             <select id='system' onChange={this.handleSystemChange} required>
                                 {this.state.systems}
                             </select>
-                        <label htmlFor='status'>Status:</label>
-                            <select id='status' onChange={this.handleStatusChange} required>
-                                <option value=''></option>
-                                <option value='Unplayed'>Unplayed</option>
-                                <option value='Unbeaten'>Unbeaten</option>
-                                <option value='Beaten'>Beaten</option>
-                                <option value='Completed'>Completed</option>
-                                <option value='Null'>Null</option>
-                            </select>
+                        <CSSTransition in={!this.state.compFade} timeout={200} classNames='fade-in' unmountOnExit>
+                            <>
+                            <label htmlFor='status'>Status:</label>
+                                <select id='status' onChange={this.handleStatusChange} required>
+                                    <option value=''></option>
+                                    <option value='Unplayed'>Unplayed</option>
+                                    <option value='Unbeaten'>Unbeaten</option>
+                                    <option value='Beaten'>Beaten</option>
+                                    <option value='Completed'>Completed</option>
+                                    <option value='Null'>Null</option>
+                                </select>
+                            </>
+                        </CSSTransition>
                         <label htmlFor='pricePaid'>Price Paid:</label><input type='number' id='pricePaid' onChange={this.handlePricePaidChange} step='.01' min='0'></input>
                         <label htmlFor='rating'>Rating:</label><input type='number' id='rating' onChange={this.handleRatingChange} min='0' max='10' step='0.5'></input>
                         <label htmlFor='publisher'>Publisher:</label>
@@ -350,7 +431,12 @@ class AddGame extends React.Component{
                                 <option value='Other'>Other</option>
                             </select>
                         <label htmlFor='notes'>Notes:</label><input type='text' id='notes' onChange={this.handleNotesChange}></input>
-                        <label htmlFor='nowPlaying'>Now Playing?</label><input type='checkbox' id='nowPlaying' onChange={this.handleNowPlayingChange}></input>
+                        <CSSTransition in={!this.state.compFade} timeout={200} classNames='fade-in' unmountOnExit>
+                            <>
+                                <label htmlFor='nowPlaying'>Now Playing?</label>
+                                <input type='checkbox' id='nowPlaying' onChange={this.handleNowPlayingChange}></input>
+                            </>
+                        </CSSTransition>
                         <label htmlFor='eAchieve'>Earned Achievements:</label><input type='number' id='eAchieve' onChange={this.handleEAchieveChange} min='0'></input>
                         <label htmlFor='tAchieve'>Total Achievements:</label><input type='number' id='tAchieve' onChange={this.handleTAchieveChange} min='0'></input>
                         <label htmlFor='numOwned'>Number Owned:</label><input type='number' id='numOwned' onChange={this.handleOwnedChange}min='0'></input>
@@ -363,9 +449,20 @@ class AddGame extends React.Component{
                                 {this.state.genres}
                             </select>
                         <label htmlFor='acquiredFrom'>Acquired From:</label><input type='text' id='acquiredFrom' onChange={this.handleAcquiredFromChange}></input>
-                        <label htmlFor='compilation'>Compilation?</label><input type='checkbox' id='compilation' onChange={this.handleCompilationChange}></input>
+                        <label htmlFor='compilation'>Compilation?</label><input type='checkbox' id='compilation' onChange={this.handleCompilationChange} defaultChecked={this.state.compFade}></input>
                         <label htmlFor='dateAcq'>Date Acquired:</label><input type='date' id='dateAcq' onChange={this.handleDateAcquiredChange}></input>
                         <label htmlFor='image'>Image:</label><input type='file' id='image' onChange={this.handleImgChange}></input>
+                        <CSSTransition in={this.state.compFade} timeout={200} classNames='fade-in' unmountOnExit>
+                            <>
+                            <button type='button' onClick={this.addSubGameClick}>Add Sub-Game</button> 
+                            <button type='button' onClick={this.removeSubGameClick}>Remove Sub-Game</button> 
+                            </>
+                        </CSSTransition>
+                        <CSSTransition id='subgames' in={this.state.compFade} timeout={200} classNames='fade-in' unmountOnExit>
+                            <>
+                            {this.state.subGames}
+                            </>
+                        </CSSTransition>
                         <input type='submit'></input>
                     </form>
                 </div>
