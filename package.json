@@ -52,5 +52,5 @@
     "electron": "^14.0.1",
     "wait-on": "^6.0.0"
   },
-  "proxy": "http://localhost:5000"
+  "proxy": "http://localhost:5000/"
 }

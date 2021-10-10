@@ -28,15 +28,7 @@ class SystemInfo extends React.Component{
 
     async componentDidMount(){
         let systemHeader = new Headers();
-        //if (this.props.info.length > 0){
-            console.log("Good")
-            systemHeader.append('System',this.props.info[1]);
-            console.log(this.props.info[1])
-        //}
-        //else{
-            //console.log("Bad")
-            //systemHeader.append('System','');
-        //}
+        systemHeader.append('System',this.props.info[1]);
         await fetch('/spec_system_totals',{method: 'GET', headers:systemHeader}).then(res => res.json()).then(data => {
             this.setState({beaten:data.beaten,completed:data.completed,unplayed:data.unplayed,unbeaten:data.unbeaten,nullg:data.nullg,unplayedPercent:data.unplayedP
                 ,unbeatenPercent:data.unbeatenP,beatenPercent:data.beatenP,completedPercent:data.completedP,nullPercent:data.nullP,total:data.total});
@@ -51,7 +43,7 @@ class SystemInfo extends React.Component{
             array[0] = this.props.info[1];
             array[1] = this.props.info[2];
             array[2] = this.props.info[3];
-            array[3] = '$' + this.props.info[4];
+            array[3] = this.props.info[4];
             array[4] = this.props.info[5];
             array[5] = this.props.info[6];
             array[6] = this.props.info[7];
@@ -65,7 +57,13 @@ class SystemInfo extends React.Component{
         var spans2 = [];
         for (let i=1;i<8;i++){
             if (array[i]){
-                spans.push(<span className='infoSpan'>{headings[i-1]} <span className='sinfoText'>{array[i]}</span></span>)
+                if (i===3){
+                    spans.push(<span className='infoSpan'>{headings[i-1]} <span className='sinfoText'>{'$' + array[i]}</span></span>)
+                }
+                else{
+                    spans.push(<span className='infoSpan'>{headings[i-1]} <span className='sinfoText'>{array[i]}</span></span>)
+                }
+               
             }
         }
         for (let i=8; i<11; i++){

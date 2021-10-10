@@ -122,15 +122,15 @@ def retrieve_system_info(conn,system):
 def retrieve_system_stats(conn,system):
     cur = conn.cursor()
     rows = {'unplayed':0,'unbeaten':0,'beaten':0,'completed':0,'nullg':0}
-    cur.execute("SELECT Count(Id) AS number FROM Games WHERE System='" + system + "' AND Status = 'Unplayed' AND Wishlist = 0")
+    cur.execute("SELECT Count(g.Id) AS number FROM Games g LEFT JOIN Compilations c ON g.Id = c.ParentID  WHERE g.System='" + system + "' AND (g.Status = 'Unplayed' OR c.Status = 'Unplayed') AND g.Wishlist = 0")
     rows['unplayed'] = cur.fetchall()[0][0]
-    cur.execute("SELECT Count(Id) AS number FROM Games WHERE System='" + system + "' AND Status = 'Unbeaten' AND Wishlist = 0")
+    cur.execute("SELECT Count(g.Id) AS number FROM Games g LEFT JOIN Compilations c ON g.Id = c.ParentID  WHERE g.System='" + system + "' AND (g.Status = 'Unbeaten' OR c.Status = 'Unbeaten') AND g.Wishlist = 0")
     rows['unbeaten'] = cur.fetchall()[0][0]
-    cur.execute("SELECT Count(Id) AS number FROM Games WHERE System='" + system + "' AND Status = 'Beaten' AND Wishlist = 0")
+    cur.execute("SELECT Count(g.Id) AS number FROM Games g LEFT JOIN Compilations c ON g.Id = c.ParentID  WHERE g.System='" + system + "' AND (g.Status = 'Beaten' OR c.Status = 'Beaten') AND g.Wishlist = 0")
     rows['beaten'] = cur.fetchall()[0][0]
-    cur.execute("SELECT Count(Id) AS number FROM Games WHERE System='" + system + "' AND Status = 'Completed' AND Wishlist = 0")
+    cur.execute("SELECT Count(g.Id) AS number FROM Games g LEFT JOIN Compilations c ON g.Id = c.ParentID  WHERE g.System='" + system + "' AND (g.Status = 'Completed' OR c.Status = 'Completed') AND g.Wishlist = 0")
     rows['completed'] = cur.fetchall()[0][0]
-    cur.execute("SELECT Count(Id) AS number FROM Games WHERE System='" + system + "' AND Status = 'Null' AND Wishlist = 0")
+    cur.execute("SELECT Count(g.Id) AS number FROM Games g LEFT JOIN Compilations c ON g.Id = c.ParentID  WHERE g.System='" + system + "' AND (g.Status = 'Null' OR c.Status = 'Null') AND g.Wishlist = 0")
     rows['nullg'] = cur.fetchall()[0][0]
     return rows
 
