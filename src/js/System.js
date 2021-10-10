@@ -1,5 +1,7 @@
 import React from 'react';
-import SystemInfo from './SystemInfo'
+import SystemInfo from './SystemInfo';
+import GamesList from './GamesList';
+import GameFilters from './GameFilters';
 import {withRouter} from 'react-router-dom';
 
 import "../css/system.css";
@@ -49,10 +51,10 @@ class System extends React.Component{
                         {this.state.systemInfoComponent}
                     </div>
                     <div className='quadrant' id='small1'>
-                        Games Filter
+                        <GameFilters/>
                     </div>
                     <div className='quadrant' id='small2'>
-                        Game List
+                        <GamesList/>
                     </div>
                     <div className='quadrant' id='big2'>
                         Game Info
