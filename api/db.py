@@ -73,43 +73,46 @@ def get_max_comp_id(conn):
 
 def get_games_count(conn):
     cur = conn.cursor()
-    cur.execute("SELECT COUNT(Id) AS total FROM Games WHERE Wishlist=0")
+    cur.execute("SELECT (SELECT COUNT(Id) FROM Games g WHERE Wishlist=0 and g.Compilation=0) +(SELECT Count(ID) AS Total FROM Compilations c) AS TOTAL")
     rows = cur.fetchall()
     return rows
 
 def get_np_games(conn):
     cur = conn.cursor()
-    cur.execute("SELECT Title,System,Status FROM Games WHERE Wishlist=0 AND NowPlaying=1 ORDER BY System")
+    cur.execute("""SELECT Title,System,Status FROM Games WHERE Wishlist=0 AND NowPlaying=1
+                    UNION
+                    SELECT c.Title,g.System,c.Status FROM Compilations c LEFT JOIN Games g ON g.Id = c.ParentID WHERE c.NowPlaying=1
+                    ORDER BY System""")
     rows = cur.fetchall()
     return rows
 
 def get_unplayed_total(conn):
     cur = conn.cursor()
-    cur.execute("SELECT COUNT(Id) AS Total FROM Games WHERE Status='Unplayed' and Wishlist=0")
+    cur.execute("SELECT (SELECT COUNT(Id) FROM Games g WHERE Wishlist=0 and g.Status='Unplayed') +(SELECT Count(ID) AS Total FROM Compilations c WHERE Status = 'Unplayed') AS TOTAL")
     rows = cur.fetchall()
     return rows
 
 def get_unbeaten_total(conn):
     cur = conn.cursor()
-    cur.execute("SELECT COUNT(Id) AS Total FROM Games WHERE Status='Unbeaten' and Wishlist=0")
+    cur.execute("SELECT (SELECT COUNT(Id) FROM Games g WHERE Wishlist=0 and g.Status='Unbeaten') +(SELECT Count(ID) AS Total FROM Compilations c WHERE Status = 'Unbeaten') AS TOTAL")
     rows = cur.fetchall()
     return rows
 
 def get_beaten_total(conn):
     cur = conn.cursor()
-    cur.execute("SELECT COUNT(Id) AS Total FROM Games WHERE Status='Beaten' and Wishlist=0")
+    cur.execute("SELECT (SELECT COUNT(Id) FROM Games g WHERE Wishlist=0 and g.Status='Beaten') +(SELECT Count(ID) AS Total FROM Compilations c WHERE Status = 'Beaten') AS TOTAL")
     rows = cur.fetchall()
     return rows
 
 def get_completed_total(conn):
     cur = conn.cursor()
-    cur.execute("SELECT COUNT(Id) AS Total FROM Games WHERE Status='Completed' and Wishlist=0")
+    cur.execute("SELECT (SELECT COUNT(Id) FROM Games g WHERE Wishlist=0 and g.Status='Completed') +(SELECT Count(ID) AS Total FROM Compilations c WHERE Status = 'Completed') AS TOTAL")
     rows = cur.fetchall()
     return rows
 
 def get_null_total(conn):
     cur = conn.cursor()
-    cur.execute("SELECT COUNT(Id) AS Total FROM Games WHERE Status='Null' and Wishlist=0")
+    cur.execute("SELECT (SELECT COUNT(Id) FROM Games g WHERE Wishlist=0 and g.Status='Null') +(SELECT Count(ID) AS Total FROM Compilations c WHERE Status = 'Null') AS TOTAL")
     rows = cur.fetchall()
     return rows
 
