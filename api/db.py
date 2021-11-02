@@ -122,6 +122,12 @@ def retrieve_system_info(conn,system):
     rows = cur.fetchall()
     return rows
 
+def retrieve_games_from_system(conn,system):
+    cur = conn.cursor()
+    cur.execute("SELECT Title FROM Games WHERE System = '" + system + "' AND Wishlist=0")
+    rows = cur.fetchall()
+    return rows
+
 def retrieve_system_stats(conn,system):
     cur = conn.cursor()
     rows = {'unplayed':0,'unbeaten':0,'beaten':0,'completed':0,'nullg':0}
