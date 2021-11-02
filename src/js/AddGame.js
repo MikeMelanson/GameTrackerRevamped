@@ -377,16 +377,16 @@ class AddGame extends React.Component{
                         <label htmlFor='pricePaid'>Price Paid:</label><input type='number' id='pricePaid' onChange={this.handlePricePaidChange} step='.01' min='0'></input>
                         <label htmlFor='rating'>Rating:</label><input type='number' id='rating' onChange={this.handleRatingChange} min='0' max='10' step='0.5'></input>
                         <label htmlFor='publisher'>Publisher:</label>
-                            <datalist id='publisher' onChange={this.handlePublisherChange}>
+                            <datalist id='publisher'>
                                 {this.state.publishers}
                             </datalist>
-                            <input  autoComplete="on" list="publisher"/>
+                            <input  autoComplete="on" list="publisher" onChange={this.handlePublisherChange}/>
                         <label htmlFor='newPublisher'>New Publisher:</label><input type='text' id='newPublisher' onChange={this.handleNewPubChange}></input>
                         <label htmlFor='developer'>Developer:</label>
-                            <datalist id='developer' onChange={this.handleDeveloperChange}>
+                            <datalist id='developer'>
                                 {this.state.developers}
                             </datalist>   
-                            <input  autoComplete="on" list="developer"/>
+                            <input  autoComplete="on" list="developer" onChange={this.handleDeveloperChange}/>
                         <label htmlFor='newDeveloper'>New Developer:</label><input type='text' id='newDeveloper' onChange={this.handleNewDevChange}></input>
                         <label htmlFor='condition'>Condition:</label>
                             <select id='condition' onChange={this.handleConditionChange}>

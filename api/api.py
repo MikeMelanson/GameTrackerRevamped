@@ -1,4 +1,5 @@
 from db import *
+from query_builder import *
 from flask import Flask
 from flask import request
 from flask_cors import CORS
@@ -6,6 +7,7 @@ import os
 from PIL import Image
 import base64
 from io import BytesIO
+import json
 
 app = Flask(__name__)
 CORS(app)
@@ -107,7 +109,6 @@ def get_game_option_info():
 @app.route('/spec_system_totals')
 def get_system_stats():
     system = request.headers.get('System')
-    print(system)
     connection = create_connection()
     system_stats = retrieve_system_stats(connection,system)
     total = system_stats['unplayed'] + system_stats['unbeaten'] + system_stats['beaten'] + system_stats['completed'] + system_stats['nullg']
@@ -289,3 +290,15 @@ def next_game_id():
     maxID = get_max_game_id(connection)
     maxID = maxID[0][0] + 1
     return {'nextID':maxID}
+
+@app.route('/games_list_games')
+def get_games_list_for_sys():
+    connection = create_connection()
+    system = request.headers.get('system')
+    filters = request.headers.get('filters')
+    filters = json.loads(filters)
+    query = game_filter_build_query(system,filters[0]['status'],filters[0]['publisher'],filters[0]['developer'],filters[0]['condition'],filters[0]['completeness'],
+                                    filters[0]['region'],filters[0]['ownership'],filters[0]['genre1'],filters[0]['genre2'],filters[0]['pricePaid1'],
+                                    filters[0]['pricePaid2'],filters[0]['rating1'],filters[0]['rating2'])
+    games = execute_query(connection,query)
+    return {'games':games}

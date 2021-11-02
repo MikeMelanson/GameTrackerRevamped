@@ -1,8 +1,16 @@
 import React from 'react';
-import SystemInfo from './SystemInfo'
+import SystemInfo from './SystemInfo';
+import GamesList from './GamesList';
+import GameFilters from './GameFilters';
 import {withRouter} from 'react-router-dom';
 
 import "../css/system.css";
+
+/*
+TODO
+
+create callback to pass filters from gamefilters component to gameslist component
+*/
 
 class System extends React.Component{
     constructor(props){
@@ -11,17 +19,50 @@ class System extends React.Component{
         this.state = {
             systemInfo: [],
             image: '',
-            systemInfoComponent: ''
+            systemInfoComponent: '',
+            gamesListComponent: '',
+
+            statusFilter: null,
+            publisherFilter: null,
+            developerFilter: null,
+            conditionFilter: null,
+            completenessFilter: null,
+            regionFilter: null,
+            ownershipFilter: null,
+            genre1Filter: null,
+            genre2Filter: null,
+            pricePaidMin: null,
+            pricePaidMax: null,
+            ratingMin: null,
+            ratingMax: null,
+        }
+
+        this.getFilters = this.getFilters.bind(this);
+    }
+
+    getFilters(data){
+        //retrieve data from GameFilters child, store in state, and pass to GamesList child
+        if (data === 'clear'){
+            this.setState({
+                gamesListComponent: <GamesList info={this.state.systemInfo[1]}/>
+            })
+        }
+        else{
+            this.setState({
+                gamesListComponent: <GamesList info={this.state.systemInfo[1]} filters={data}/>
+            }) 
         }
     }
 
     componentDidMount(){
         this.fetchInfo();
     }
+
     componentDidUpdate(prevProps,prevState){
         if (prevState.systemInfo !== this.state.systemInfo){
             this.setState({
-                systemInfoComponent: <SystemInfo info={this.state.systemInfo}/>
+                systemInfoComponent: <SystemInfo info={this.state.systemInfo}/>,
+                gamesListComponent: <GamesList info={this.state.systemInfo[1]}/>
             });
         }
     }
@@ -49,10 +90,10 @@ class System extends React.Component{
                         {this.state.systemInfoComponent}
                     </div>
                     <div className='quadrant' id='small1'>
-                        Games Filter
+                        <GameFilters getFilters={this.getFilters}/>
                     </div>
                     <div className='quadrant' id='small2'>
-                        Game List
+                        {this.state.gamesListComponent}
                     </div>
                     <div className='quadrant' id='big2'>
                         Game Info
