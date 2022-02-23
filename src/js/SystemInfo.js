@@ -58,22 +58,22 @@ class SystemInfo extends React.Component{
         for (let i=1;i<8;i++){
             if (array[i]){
                 if (i===3){
-                    spans.push(<span className='infoSpan'>{headings[i-1]} <span className='sinfoText'>{'$' + array[i]}</span></span>)
+                    spans.push(<span key={headings[i-1]} className='infoSpan'>{headings[i-1]} <span className='sinfoText'>{'$' + array[i]}</span></span>)
                 }
                 else{
-                    spans.push(<span className='infoSpan'>{headings[i-1]} <span className='sinfoText'>{array[i]}</span></span>)
+                    spans.push(<span key={headings[i-1]} className='infoSpan'>{headings[i-1]} <span className='sinfoText'>{array[i]}</span></span>)
                 }
                
             }
         }
         for (let i=8; i<11; i++){
             if (array[i]){
-                spans2.push(<span className='infoSpan'>{headings[i-1]} <span className='sinfoText'>{array[i]}</span></span>)
+                spans2.push(<span key={headings[i-1]} className='infoSpan'>{headings[i-1]} <span className='sinfoText'>{array[i]}</span></span>)
             }
         }
 
-        spans2.push(<div className='div'><div className='np_border'></div></div>)
-        spans2.push(<span className='infoSpan'>Total Games: <span className='sinfoText'>{this.state.total}</span></span>)
+        spans2.push(<div key='border' className='div'><div className='np_border'></div></div>)
+        spans2.push(<span key='infoSpan' className='infoSpan'>Total Games: <span className='sinfoText'>{this.state.total}</span></span>)
 
         return (
             <>

@@ -1,15 +1,16 @@
 import React from 'react';
 import GamesListEntry from './GamesListEntry';
 
-//import "../css/addeditdelete.css";
+import "../css/gameslist.css";
 
 /*
 TODO
 
-Configure API to build filter query based on what is passed
 */
 
 class GamesList extends React.Component{
+    //_isMounted = false;
+
     constructor(props){
         super(props);
 
@@ -17,9 +18,12 @@ class GamesList extends React.Component{
             title: [],
             gamesListComponents: [],
         }
+
+        this.getSelectedGame = this.getSelectedGame.bind(this)
     }
     
     componentDidMount(){
+        //this._isMounted = true;
         this.retrieveGames();
     }
 
@@ -46,6 +50,14 @@ class GamesList extends React.Component{
             this.retrieveGames(this.props.filters)
         }
     }
+
+    /*componentWillUnmount(){
+        this._isMounted = false;
+    }*/
+
+    getSelectedGame(game){
+        this.props.getSelectedGame(game)
+    }
     
     render(){
         //create a GamesListEntry for every game in "title" State
@@ -53,7 +65,7 @@ class GamesList extends React.Component{
         length = this.state.title.length
         var entries = [];
         for (let i=0;i<length;i++){
-            entries.push(<GamesListEntry title={this.state.title[i]}></GamesListEntry>);
+            entries.push(<GamesListEntry key={this.state.title[i]} title={this.state.title[i]} getSelectedGame={this.getSelectedGame}></GamesListEntry>);
         }
         return (
             <>

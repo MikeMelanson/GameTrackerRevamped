@@ -2,6 +2,7 @@ import React from 'react';
 import SystemInfo from './SystemInfo';
 import GamesList from './GamesList';
 import GameFilters from './GameFilters';
+import GameInfo from './GameInfo';
 import {withRouter} from 'react-router-dom';
 
 import "../css/system.css";
@@ -9,7 +10,6 @@ import "../css/system.css";
 /*
 TODO
 
-create callback to pass filters from gamefilters component to gameslist component
 */
 
 class System extends React.Component{
@@ -18,40 +18,35 @@ class System extends React.Component{
 
         this.state = {
             systemInfo: [],
+            curGameInfo: [],
             image: '',
+            gameImage: '',
+            initGame: '',
             systemInfoComponent: '',
             gamesListComponent: '',
-
-            statusFilter: null,
-            publisherFilter: null,
-            developerFilter: null,
-            conditionFilter: null,
-            completenessFilter: null,
-            regionFilter: null,
-            ownershipFilter: null,
-            genre1Filter: null,
-            genre2Filter: null,
-            pricePaidMin: null,
-            pricePaidMax: null,
-            ratingMin: null,
-            ratingMax: null,
+            gameInfoComponent: '',
         }
 
         this.getFilters = this.getFilters.bind(this);
+        this.getSelectedGame = this.getSelectedGame.bind(this);
     }
 
     getFilters(data){
         //retrieve data from GameFilters child, store in state, and pass to GamesList child
         if (data === 'clear'){
             this.setState({
-                gamesListComponent: <GamesList info={this.state.systemInfo[1]}/>
+                gamesListComponent: <GamesList info={this.state.systemInfo[1]} getSelectedGame={this.getSelectedGame}/>
             })
         }
         else{
             this.setState({
-                gamesListComponent: <GamesList info={this.state.systemInfo[1]} filters={data}/>
+                gamesListComponent: <GamesList info={this.state.systemInfo[1]} filters={data} getSelectedGame={this.getSelectedGame}/>
             }) 
         }
+    }
+
+    getSelectedGame(game){
+        this.fetchGameInfo(game)
     }
 
     componentDidMount(){
@@ -62,7 +57,7 @@ class System extends React.Component{
         if (prevState.systemInfo !== this.state.systemInfo){
             this.setState({
                 systemInfoComponent: <SystemInfo info={this.state.systemInfo}/>,
-                gamesListComponent: <GamesList info={this.state.systemInfo[1]}/>
+                gamesListComponent: <GamesList info={this.state.systemInfo[1]} getSelectedGame={this.getSelectedGame}/>,
             });
         }
     }
@@ -76,12 +71,35 @@ class System extends React.Component{
                 image:data.image
             });
         });
+        await fetch('/init_game', {method: 'GET', headers:systemHeader}).then(res => res.json()).then(data => {
+            this.setState({
+                initGame: data.init[0],
+            });
+        });
+        this.fetchGameInfo(this.state.initGame)
+    }
+
+    async fetchGameInfo(game){
+        let systemHeader = new Headers();
+        systemHeader.append('system',this.state.systemInfo[1]);
+        systemHeader.append('game',game)
+        await fetch('/game_info', {method: 'GET', headers:systemHeader}).then(res => res.json()).then(data => {
+            this.setState({
+                curGameInfo: data.gameInfo,
+                gameImage: data.image,
+                gameInfoComponent: <GameInfo info={data.gameInfo}/>
+            });
+        });
     }
     
     render(){
         var imageString = '';
         if (this.state.systemInfo.length !==0){
             imageString = this.state.image.replace(/(\r\n|\n|\r)/gm, "")
+        }
+        var gameImageString = '';
+        if (this.state.curGameInfo.length !==0){
+            gameImageString = this.state.gameImage.replace(/(\r\n|\n|\r)/gm, "")
         }
         return (
             <>
@@ -95,8 +113,8 @@ class System extends React.Component{
                     <div className='quadrant' id='small2'>
                         {this.state.gamesListComponent}
                     </div>
-                    <div className='quadrant' id='big2'>
-                        Game Info
+                    <div className='quadrant' id='big2' style={{backgroundImage:"url('data:image/png;base64,"+gameImageString+"')",backgroundSize:'100% 100%'}}>
+                        {this.state.gameInfoComponent}
                     </div>
                 </div>
             </>

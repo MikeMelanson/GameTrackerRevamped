@@ -1,0 +1,62 @@
+@font-face {
+    font-family: 'airstrike';
+    src: url(../fonts/airstrike.ttf) format('truetype');
+}
+
+.holder{
+    font-family: airstrike;
+}
+
+.title{
+    grid-column-start: 1;
+    grid-column-end: 2;
+    text-align: left;
+    padding-left: 10px;
+    padding-top: 10px;
+    font-size: 50px;
+    display:grid;
+    grid-template-columns: 90% 10%;
+}
+
+.status_icon_for_game_info{
+    object-fit: fill;
+}
+
+.changingInfo{
+    display:grid;
+    grid-template-columns: 50% 50%;
+    font-size: 25px;
+    padding-top: 10px;
+    padding-left: 10px;
+    text-align: left;
+    word-wrap: break-word;
+}
+
+.comp_spans{
+    padding-left: 10px;
+    display: grid;
+    grid-template-columns: 5% 7% 32% 20% 29% 5%;
+    grid-template-rows: 50% 50%;
+    grid-column-start: 1;
+    grid-column-end: 3;
+}
+
+.comp_spans .infoSpan{
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.infoSpanNotes{
+    grid-column-start: 2;
+    grid-column-end: 4;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+#prevSubGame:hover{
+    cursor: pointer;
+}
+
+#nextSubGame:hover{
+    cursor:pointer;
+}
