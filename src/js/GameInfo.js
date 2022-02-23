@@ -101,7 +101,12 @@ class GameInfo extends React.Component{
             array[14] = this.props.info[17];
             array[15] = this.props.info[22];
             array[16] = this.props.info[20];
-            array[17] = this.props.info[14];
+            if (this.props.info[14] === 1){
+                array[17] = 'True';
+            }
+            else{
+                array[17] = 'False';
+            }
         }
         var div;
         var spans = [];
@@ -138,15 +143,25 @@ class GameInfo extends React.Component{
             else if (this.state.subGames[this.state.curSubGame][4] === 'Null'){
                 compImg = <img key='nImgComp'src={nullLogo} alt='null' title='Null' className='status_icon_for_game_info'></img>
             }
+
+            var np;
+            if (this.state.subGames[this.state.curSubGame][7] === 1){
+                np = 'True'
+            }
+            else{
+                np = 'False'
+            }
             compSpan.push(
                         <button key='prev' id='prevSubGame' onClick={this.changeSubGameL}>&#60;</button>,
                         <span key='IMG' className='infoSpan'>{compImg}</span>,
                         <span key='TitleComp' className='infoSpan'>Title: <span key='TitleText' className='sinfoText'>{this.state.subGames[this.state.curSubGame][3]}</span></span>,
                         <span key='RatingComp' className='infoSpan'>Rating: <span key='RatingText' className='sinfoText'>{this.state.subGames[this.state.curSubGame][5]}</span></span>,
-                        <span key='NowPlayingComp' className='infoSpan'>Now Playing: <span key='NPText' className='sinfoText'>{this.state.subGames[this.state.curSubGame][7]}</span></span>,
+                        <span key='NowPlayingComp' className='infoSpan'>Now Playing: <span key='NPText' className='sinfoText'>{np}</span></span>,
                         <button key='next' id='nextSubGame' onClick={this.changeSubGameR}>&#62;</button>
             )
-            compSpan2.push(<span key='Notes2Comp' className='infoSpanNotes'>Notes: <span className='sinfoText'>{this.state.subGames[this.state.curSubGame][6]}</span></span>)
+            if (this.state.subGames[this.state.curSubGame][6]){
+                compSpan2.push(<span key='Notes2Comp' className='infoSpanNotes'>Notes: <span className='sinfoText'>{this.state.subGames[this.state.curSubGame][6]}</span></span>)
+            }
         }
         else{
             for (let i=0;i<8;i++){
