@@ -39,6 +39,20 @@ class GameFilters extends React.Component{
     logSubmit(event){
         event.preventDefault();
         if (event.submitter.name === 'clear'){
+            this.setState({status: '',
+            publisher: '',
+            developer: '',
+            condition: '',
+            completeness: '',
+            region: '',
+            ownership: '',
+            genre1: '',
+            genre2: '',
+            pricePaid1: '',
+            pricePaid2: '',
+            rating1: '',
+            rating2: '',
+            });
             this.props.getFilters('clear')
         }
         else{
@@ -129,7 +143,7 @@ class GameFilters extends React.Component{
                 <div className='filterTitle'>Filters</div>
                 <form className='filtersForm' id='form'>
                     <label htmlFor='status'>Status:</label>
-                        <select id='status' onChange={this.handleFilterChange}>
+                        <select id='status' onChange={this.handleFilterChange} value={this.state.status}>
                             <option value=''></option>
                             <option value='Unplayed'>Unplayed</option>
                             <option value='Unbeaten'>Unbeaten</option>
@@ -138,17 +152,17 @@ class GameFilters extends React.Component{
                             <option value='Null'>Null</option>
                         </select>
                     <label htmlFor='publisher'>Publisher:</label>
-                        <datalist id='publisher' >
+                        <datalist id='publisher'>
                             {this.state.publishers}
                         </datalist>
-                        <input id='pubIn' autoComplete="on" list="publisher" onChange={this.handleFilterChange}/>
+                        <input id='pubIn' autoComplete="on" list="publisher" onChange={this.handleFilterChange} value={this.state.publisher}/>
                     <label htmlFor='developer'>Developer:</label>
                         <datalist id='developer'>
                             {this.state.developers}
                         </datalist>   
-                        <input id='devIn' autoComplete="on" list="developer" onChange={this.handleFilterChange}/>
+                        <input id='devIn' autoComplete="on" list="developer" onChange={this.handleFilterChange} value={this.state.developer}/>
                     <label htmlFor='condition'>Condition:</label>
-                        <select id='condition' onChange={this.handleFilterChange}>
+                        <select id='condition' onChange={this.handleFilterChange} value={this.state.condition}>
                             <option value=''></option>
                             <option value='New'>New</option>
                             <option value='Like New'>Like New</option>
@@ -159,7 +173,7 @@ class GameFilters extends React.Component{
                             <option value='NA'>NA</option>
                         </select> 
                     <label htmlFor='completeness'>Completeness:</label>
-                        <select id='completeness' onChange={this.handleFilterChange}>
+                        <select id='completeness' onChange={this.handleFilterChange} value={this.state.completeness}>
                             <option value=''></option>
                             <option value='New'>New</option>
                             <option value='Complete'>Complete</option>
@@ -172,7 +186,7 @@ class GameFilters extends React.Component{
                             <option value='NA'>NA</option>
                         </select> 
                     <label htmlFor='region'>Region:</label>
-                        <select id='region' onChange={this.handleFilterChange}>
+                        <select id='region' onChange={this.handleFilterChange} value={this.state.region}>
                                 <option value=''></option>
                                 <option value='NTSC-U'>NTSC-U (Americas)</option>
                                 <option value='PAL'>PAL (Europe)</option>
@@ -181,7 +195,7 @@ class GameFilters extends React.Component{
                                 <option value='Other'>Other</option>
                         </select>
                     <label htmlFor='ownership'>Ownership:</label>
-                        <select id='ownership' onChange={this.handleFilterChange}>
+                        <select id='ownership' onChange={this.handleFilterChange} value={this.state.ownership}>
                             <option value=''></option>
                             <option value='Owned'>Owned</option>
                             <option value='Household'>Household</option>
@@ -189,21 +203,21 @@ class GameFilters extends React.Component{
                             <option value='Other'>Other</option>
                         </select>
                     <label htmlFor='genre1'>Genre 1:</label>
-                        <select id='genre1' onChange={this.handleFilterChange}>
+                        <select id='genre1' onChange={this.handleFilterChange} value={this.state.genre1}>
                             {this.state.genres}
                         </select>
                     <label htmlFor='genre2'>Genre 2:</label>
-                        <select id='genre2' onChange={this.handleFilterChange}>
+                        <select id='genre2' onChange={this.handleFilterChange} value={this.state.genre2}>
                             {this.state.genres}
                         </select>
                     <label htmlFor='pricePaid1'>Price Paid: Min</label>
-                        <input type='number' id='pricePaid1' onChange={this.handleFilterChange} min='0' step='0.01'></input>
+                        <input type='number' id='pricePaid1' onChange={this.handleFilterChange} min='0' step='0.01' value={this.state.pricePaid1}></input>
                     <label htmlFor='pricePaid2'>Price Paid: Max</label>
-                        <input type='number' id='pricePaid2' onChange={this.handleFilterChange} min='0' step='0.01'></input>
+                        <input type='number' id='pricePaid2' onChange={this.handleFilterChange} min='0' step='0.01' value={this.state.pricePaid2}></input>
                     <label htmlFor='rating1'>Rating: Min</label>
-                        <input type='number' id='rating1' onChange={this.handleFilterChange} min='0' step='0.5'></input>
+                        <input type='number' id='rating1' onChange={this.handleFilterChange} min='0' step='0.5' value={this.state.rating1}></input>
                     <label htmlFor='rating2'>Rating: Max</label>
-                        <input type='number' id='rating2' onChange={this.handleFilterChange} min='0' step='0.5'></input>
+                        <input type='number' id='rating2' onChange={this.handleFilterChange} min='0' step='0.5' value={this.state.rating2}></input>
                     <input type='submit' value="Apply Filter" name='apply'></input>
                     <input type='submit' value="Clear Filter" name='clear'></input>
                 </form>    

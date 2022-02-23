@@ -289,6 +289,7 @@ def next_game_id():
     connection = create_connection()
     maxID = get_max_game_id(connection)
     maxID = maxID[0][0] + 1
+    close_connection(connection)
     return {'nextID':maxID}
 
 @app.route('/games_list_games')
@@ -301,4 +302,50 @@ def get_games_list_for_sys():
                                     filters[0]['region'],filters[0]['ownership'],filters[0]['genre1'],filters[0]['genre2'],filters[0]['pricePaid1'],
                                     filters[0]['pricePaid2'],filters[0]['rating1'],filters[0]['rating2'])
     games = execute_query(connection,query)
+    close_connection(connection)
     return {'games':games}
+
+@app.route('/init_game')
+def get_init_game():
+    connection = create_connection()
+    system = request.headers.get('system')
+    games = retrieve_games_from_system(connection,system)
+    game = ''
+    if games:
+        game = games[0]
+    close_connection(connection)
+    return{'init':game}
+
+@app.route('/game_info')
+def get_game_info():
+    connection = create_connection()
+    system = request.headers.get('system')
+    game = request.headers.get('game')
+    info = retrieve_game_info(connection,system,game)
+    close_connection(connection)
+    if info:
+        #get all data except image data and append to array for return
+        data_array = []
+        length = len(info[0])-1
+        for i in range(length):
+            data_array.append(info[0][i])
+    
+    #open image data as PIL Image, and save in as a base64 string before passing to front end
+    imageBase64 = ''
+    if info[0][25] != '':
+        image = Image.open(BytesIO(info[0][25]))
+        buffer = BytesIO()
+        image.save(buffer,'PNG')
+        imageBase64 = base64.b64encode(buffer.getvalue()).decode('utf-8')
+
+    return{'gameInfo':data_array,'image':imageBase64}
+
+@app.route('/sub_games_info')
+def get_sub_game_info():
+    connection = create_connection()
+    gameID = request.headers.get('gameID')
+    info = retrieve_sub_game_info(connection,gameID)
+    print(gameID)
+    print(info)
+    close_connection(connection)
+    return{'subInfo':info}
