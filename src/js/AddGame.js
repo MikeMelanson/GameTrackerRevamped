@@ -283,6 +283,7 @@ class AddGame extends React.Component{
             }
         }
         Upload();
+        this.props.onAddGame()
     }
 
     async addSubGameClick(){
