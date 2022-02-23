@@ -19,6 +19,15 @@ class NowPlaying extends React.Component{
         });
     }
 
+    componentDidUpdate(prevProps){
+        if (prevProps.refresh !== this.props.refresh){
+            fetch('/np').then(res => res.json()).then(data => {
+                var np = data.np
+                this.setState({gamesList:np});
+            });
+        }
+    }
+
     render(){
         var games = [];
         for (let i=0;i< this.state.gamesList.length;i++){

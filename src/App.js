@@ -26,12 +26,14 @@ class App extends React.Component{
 
     this.state = {
       content: 'visible',
-      refresh: false
+      refresh: false,
+      refreshNP: false
     }
 
     this.onEnter = this.onEnter.bind(this);
     this.onExit = this.onExit.bind(this);
     this.addSystemRefresh = this.addSystemRefresh.bind(this);
+    this.nowPlayingChange = this.nowPlayingChange.bind(this);
   }
   
   componentDidMount(){
@@ -56,6 +58,10 @@ class App extends React.Component{
     this.setState({refresh: name})
   }
 
+  nowPlayingChange(){
+    this.setState({refreshNP: true})
+  }
+
   render(){
     return (
       <div className="App">
@@ -65,7 +71,7 @@ class App extends React.Component{
           <div className='main'>
             <div className='layout'>
               <div className='np_div'>
-                <NowPlaying/>
+                <NowPlaying refresh={this.state.refreshNP}/>
               </div>
               <div className='stats_div'>
                 <Statistics/>
@@ -104,7 +110,7 @@ class App extends React.Component{
                         <Route exact path="/DS"><div className='content2'><DetailedStatistics /></div></Route>
                         <Route exact path="/System"><div className='content2'><System/></div></Route>
                         <Route exact path="/AddSys"><div className='content2'><AddSystem onAddSystem={this.addSystemRefresh}/></div></Route>
-                        <Route exact path="/AddGame"><div className='content2'><AddGame/></div></Route>
+                        <Route exact path="/AddGame"><div className='content2'><AddGame onAddGame={this.nowPlayingChange}/></div></Route>
                         <Route path="/" component={Home}/>
                       </Switch>
                   </CSSTransition>
