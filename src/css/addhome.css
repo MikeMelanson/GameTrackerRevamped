@@ -1,0 +1,14 @@
+.add_buttons{
+    border: 1px solid black;
+    display: flex;
+    height: 99vh;
+    align-items: center;
+    justify-content: center;
+}
+
+.add_buttons button{
+    font-family: airstrike;
+    font-size: 50px;
+    width: 400px;
+    height: 200px;
+}

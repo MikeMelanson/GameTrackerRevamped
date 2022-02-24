@@ -12,3 +12,34 @@
     opacity: 0;
     transition: opacity 200ms;
   }
+
+  .addGameBody{
+    font-family: airstrike;
+    font-size: 25px;
+    color: rgb(125, 125, 187);
+  }
+  .addGameBody form{
+    display: flex;
+    flex-direction: column;
+  }
+  .addGameBody form div{
+    padding-bottom: 10px;
+  }
+
+  label{
+    text-align: left;
+    padding-right: 15px;
+    padding-left: 15px;
+  }
+
+  #gameTitle{
+    width:80%;
+  }
+
+  #title{
+    width: 80%;
+  }
+
+  #notes{
+    width: 80%;
+  }

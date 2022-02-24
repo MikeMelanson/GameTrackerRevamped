@@ -1,6 +1,8 @@
 import React from 'react';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
-//import "../css/addeditdelete.css";
+import "../css/addsystem.css";
 
 class AddSystem extends React.Component{
     constructor(props){
@@ -18,7 +20,9 @@ class AddSystem extends React.Component{
             notes: '',
             dateAcq: '',
             img: '',
-            publishers: [<option value=''></option>]
+            publishers: [<option value=''></option>],
+
+            imgKey: ''
         }
     }
 
@@ -128,6 +132,16 @@ class AddSystem extends React.Component{
         Upload();
         //callback to parent passing system name in order to update navbar
         this.props.onAddSystem(this.state.name)
+        toast("System added successfully!");
+        this.resetImageFile()
+    }
+
+    resetImageFile(){
+        let randomString = Math.random().toString(36);
+
+        this.setState({
+            imgKey: randomString
+        });
     }
 
     componentDidMount(){
@@ -144,47 +158,74 @@ class AddSystem extends React.Component{
     render(){
         return (
             <>
-                <div>
-                    Add System
+                <div className='addSystemBody'>
                     <form onSubmit={this.handleSubmit} method='post'>
-                        <label htmlFor='name'>Name*:</label><input type='text' id='name' onChange={this.handleNameChange} required></input>
-                        <label htmlFor='image'>Image:</label><input type='file' id='image' onChange={this.handleImgChange}></input>
-                        <label htmlFor='format'>Format:</label>
-                            <select id='format' onChange={this.handleFormatChange} value="">
-                                <option value=''></option>
-                                <option value='Cartridge'>Cartridge</option>
-                                <option value='Disc'>Disc</option>
-                                <option value='Digital/Download'>Digital/Download</option>
-                                <option value='Other'>Other</option>
-                            </select>
-                        <label htmlFor='publisher'>Publisher:</label>
-                            <select id='publisher' onChange={this.handlePublisherChange}>
-                                {this.state.publishers}
-                            </select>
-                        <label htmlFor='pricePaid'>Price Paid:</label><input type='number' id='pricePaid' onChange={this.handlePricePaidChange} step='.01' min='0'></input>
-                        <label htmlFor='ownership'>Ownership:</label>
-                            <select id='ownership' onChange={this.handleOwnershipChange}>
-                                <option value=''></option>
-                                <option value='Owned'>Owned</option>
-                                <option value='Household'>Household</option>
-                                <option value='Borrowed/Rented'>Borrowed/Rented</option>
-                                <option value='Other'>Other</option>
-                            </select>
-                        <label htmlFor='numOwned'>Number Owned:</label><input type='number' id='numOwned' onChange={this.handleOwnedChange}min='0'></input>
-                        <label htmlFor='numCont'>Number of Controllers:</label><input type='number' id='numCont' onChange={this.handleNumContChange}min='0'></input>
-                        <label htmlFor='region'>Region:</label>
-                        <select id='region' onChange={this.handleRegionChange}>
-                                <option value=''></option>
-                                <option value='NTSC-U'>NTSC-U (Americas)</option>
-                                <option value='PAL'>PAL (Europe)</option>
-                                <option value='NTSC-J'>NTSC-J (Japan)</option>
-                                <option value='NTSC-C'>NTSC-C (China)</option>
-                                <option value='Other'>Other</option>
-                            </select>
-                        <label htmlFor='notes'>Notes:</label><input type='text' id='notes' onChange={this.handleNotesChange}></input>
-                        <label htmlFor='dateAcq'>Date Acquired:</label><input type='date' id='dateAcq' onChange={this.handleDateAcquiredChange}></input>
-                        <input type='submit'></input>
+                        <div>
+                            <label htmlFor='name'>Name*:</label><input type='text' id='name' onChange={this.handleNameChange} required value={this.state.name}></input>
+                        </div>
+                        <div>
+                            <label htmlFor='format'>Format:</label>
+                                <select id='format' onChange={this.handleFormatChange} value={this.state.format}>
+                                    <option value=''></option>
+                                    <option value='Cartridge'>Cartridge</option>
+                                    <option value='Disc'>Disc</option>
+                                    <option value='Digital/Download'>Digital/Download</option>
+                                    <option value='Other'>Other</option>
+                                </select>
+                        </div>
+                        <div>
+                            <label htmlFor='publisher'>Publisher:</label>
+                                <select id='publisher' onChange={this.handlePublisherChange} value={this.state.publisher}>
+                                    {this.state.publishers}
+                                </select>
+                        </div>
+                        <div>
+                            <label htmlFor='pricePaid'>Price Paid:</label><input type='number' id='pricePaid' onChange={this.handlePricePaidChange} step='.01' min='0' value={this.state.pricePaid}></input>
+                            <label htmlFor='ownership'>Ownership:</label>
+                                <select id='ownership' onChange={this.handleOwnershipChange} value={this.state.ownership}>
+                                    <option value=''></option>
+                                    <option value='Owned'>Owned</option>
+                                    <option value='Household'>Household</option>
+                                    <option value='Borrowed/Rented'>Borrowed/Rented</option>
+                                    <option value='Other'>Other</option>
+                                </select>
+                            <label htmlFor='numOwned'>Number Owned:</label><input type='number' id='numOwned' onChange={this.handleOwnedChange}min='0' value={this.state.owned}></input>
+                        </div>
+                        <div>
+                            <label htmlFor='numCont'>Number of Controllers:</label><input type='number' id='numCont' onChange={this.handleNumContChange}min='0' value={this.state.numCont}></input>
+                        </div>
+                        <div>
+                            <label htmlFor='region'>Region:</label>
+                            <select id='region' onChange={this.handleRegionChange}> value={this.state.region}
+                                    <option value=''></option>
+                                    <option value='NTSC-U'>NTSC-U (Americas)</option>
+                                    <option value='PAL'>PAL (Europe)</option>
+                                    <option value='NTSC-J'>NTSC-J (Japan)</option>
+                                    <option value='NTSC-C'>NTSC-C (China)</option>
+                                    <option value='Other'>Other</option>
+                                </select>
+                        </div>
+                        <div>
+                            <label htmlFor='dateAcq'>Date Acquired:</label><input type='date' id='dateAcq' onChange={this.handleDateAcquiredChange} value={this.state.dateAcq}></input>
+                        </div>
+                        <div>
+                            <label htmlFor='notes'>Notes:</label><input type='text' id='notes' onChange={this.handleNotesChange} value={this.state.notes}></input>
+                        </div>
+                        <div>
+                            <label htmlFor='image'>Image:</label><input type='file' id='image' onChange={this.handleImgChange} key={this.state.imgKey || ''}></input>
+                        </div>
+                        <div>
+                            <input type='submit'></input>
+                        </div>
                     </form>
+                    <ToastContainer
+                        position="bottom-center"
+                        autoClose={2500}
+                        hideProgressBar={true}
+                        closeOnClick={true}
+                        draggable={false}
+                        theme={'dark'}
+                    />
                 </div>
             </>
         );

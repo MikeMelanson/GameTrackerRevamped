@@ -32,6 +32,15 @@ class Statistics extends React.Component{
         });        
     }
 
+    componentDidUpdate(prevProps){
+        if (this.props.newGame !== prevProps.newGame){
+            fetch('/status_totals').then(res => res.json()).then(data => {
+                this.setState({beaten:data.beaten,completed:data.completed,unplayed:data.unplayed,unbeaten:data.unbeaten,nullg:data.nullg,
+                unplayedPercent:data.unplayedP,unbeatenPercent:data.unbeatenP,beatenPercent:data.beatenP,completedPercent:data.completedP,nullPercent:data.nullP});
+            }); 
+        }
+    }
+
     render(){
         return (
             <>

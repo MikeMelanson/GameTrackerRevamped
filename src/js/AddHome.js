@@ -1,6 +1,8 @@
 import React from "react";
 import {Link} from 'react-router-dom'
 
+import "../css/addhome.css";
+
 class AddHome extends React.Component{
     render(){
         return(

@@ -27,7 +27,7 @@ class App extends React.Component{
     this.state = {
       content: 'visible',
       refresh: false,
-      refreshNP: false
+      refreshNP: ''
     }
 
     this.onEnter = this.onEnter.bind(this);
@@ -59,7 +59,8 @@ class App extends React.Component{
   }
 
   nowPlayingChange(){
-    this.setState({refreshNP: true})
+    let randomString = Math.random().toString(36);
+    this.setState({refreshNP: randomString})
   }
 
   render(){
@@ -74,7 +75,7 @@ class App extends React.Component{
                 <NowPlaying refresh={this.state.refreshNP}/>
               </div>
               <div className='stats_div'>
-                <Statistics/>
+                <Statistics newGame={this.state.refreshNP}/>
               </div>
               <div className='info_div'>
                 <Info/>

@@ -73,20 +73,28 @@ class AddSubGame extends React.Component{
         return(
             <>
                 <div>
-                    <label htmlFor='title'>Title*:</label><input type='text' id='title' onChange={this.handleTitleChange} required></input>
-                    <label htmlFor='status'>Status:</label>
-                        <select id='status' onChange={this.handleStatusChange} required>
-                            <option value=''></option>
-                            <option value='Unplayed'>Unplayed</option>
-                            <option value='Unbeaten'>Unbeaten</option>
-                            <option value='Beaten'>Beaten</option>
-                            <option value='Completed'>Completed</option>
-                            <option value='Null'>Null</option>
-                        </select>
-                    <label htmlFor='rating'>Rating:</label><input type='number' id='rating' onChange={this.handleRatingChange} min='0' max='10' step='0.5'></input>
-                    <label htmlFor='notes'>Notes:</label><input type='text' id='notes' onChange={this.handleNotesChange}></input>
-                    <label htmlFor='nowPlaying'>Now Playing?</label><input type='checkbox' id='nowPlaying' onChange={this.handleNowPlayingChange}></input>
-                    <label htmlFor='image'>Image:</label><input type='file' id='image' onChange={this.handleImgChange}></input>
+                    <div id='gameTitle'> 
+                        <label htmlFor='title'>Title*:</label><input type='text' id='title' onChange={this.handleTitleChange} required></input>
+                    </div>
+                    <div>
+                        <label htmlFor='status'>Status*:</label>
+                            <select id='status' onChange={this.handleStatusChange} required>
+                                <option value=''></option>
+                                <option value='Unplayed'>Unplayed</option>
+                                <option value='Unbeaten'>Unbeaten</option>
+                                <option value='Beaten'>Beaten</option>
+                                <option value='Completed'>Completed</option>
+                                <option value='Null'>Null</option>
+                            </select>
+                        <label htmlFor='rating'>Rating:</label><input type='number' id='rating' onChange={this.handleRatingChange} min='0' max='10' step='0.5'></input>
+                        <label htmlFor='nowPlaying'>Now Playing?</label><input type='checkbox' id='nowPlaying' onChange={this.handleNowPlayingChange}></input>
+                    </div>
+                    <div>
+                        <label htmlFor='notes'>Notes:</label><input type='text' id='notes' onChange={this.handleNotesChange}></input>
+                    </div>
+                    <div>
+                        <label htmlFor='image'>Image:</label><input type='file' id='image' onChange={this.handleImgChange}></input>
+                    </div>
                 </div>
             </>
         );

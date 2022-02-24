@@ -1,0 +1,23 @@
+.addSystemBody{
+    font-family: airstrike;
+    font-size: 25px;
+    color: rgb(125, 125, 187);
+}
+.addSystemBody form{
+    display: flex;
+    flex-direction: column;
+}
+.addSystemBody form div{
+    padding-bottom: 10px;
+}
+
+label{
+    text-align: left;
+    padding-right: 15px;
+    padding-left: 15px;
+}
+
+#name{
+    width: 50%;
+}
+

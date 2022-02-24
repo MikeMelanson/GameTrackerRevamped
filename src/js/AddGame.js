@@ -1,6 +1,8 @@
 import React from 'react';
 import {CSSTransition} from 'react-transition-group'
 import AddSubGame from './AddSubGame';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import "../css/addgame.css";
 
@@ -36,6 +38,8 @@ class AddGame extends React.Component{
             dateAcq: '',
             img: '',
 
+            imgKey: '',
+
             publishers: [<option key = 'pdefault' value=''></option>],
             developers: [<option key = 'ddefault' value=''></option>],
             systems: [<option key = 'sdefault' value=''></option>],
@@ -47,6 +51,8 @@ class AddGame extends React.Component{
             subGameData: [],
             numSubGames: 1,
         }
+
+        this.resetImageFile = this.resetImageFile.bind(this)
     }
 
     handleTitleChange = e => {
@@ -145,7 +151,7 @@ class AddGame extends React.Component{
 
     handleNowPlayingChange = e => {
         this.setState({
-            nowPlaying: e.target.value
+            nowPlaying: e.target.checked
         });
     }
 
@@ -248,7 +254,7 @@ class AddGame extends React.Component{
                     notes: this.state.notes,
                     nowPlaying: this.state.nowPlaying,
                     eAchieve: this.state.eAcheive,
-                    tAchieve: this.state.tAcheive,
+                    tAchieve: this.state.tAchieve,
                     owned: this.state.owned,
                     genre1: this.state.genre1,
                     genre2: this.state.genre2,
@@ -284,12 +290,45 @@ class AddGame extends React.Component{
         }
         Upload();
         this.props.onAddGame()
+        toast("Game added successfully!");
+        this.setState({title: '',
+        system: '',
+        status: '',
+        pricePaid: '',
+        rating: '',
+        publisher: '',
+        developer: '',
+        condition: '',
+        completeness: '',
+        timePlayed: '',
+        region: '',
+        ownership: '',
+        notes: '',
+        nowPlaying: 0,
+        eAcheive: 0,
+        tAchieve: 0,
+        owned: '',
+        genre1: '',
+        genre2: '',
+        acquiredFrom: '',
+        compilation: 0,
+        dateAcq: '',
+        img: '',})
+        this.resetImageFile()
+    }
+
+    resetImageFile(){
+        let randomString = Math.random().toString(36);
+
+        this.setState({
+            imgKey: randomString
+        });
     }
 
     async addSubGameClick(){
         await this.setState(prevState => ({
             numSubGames: prevState.numSubGames + 1,
-            subGames: [...prevState.subGames, <AddSubGame gameNumber={this.state.numSubGames+1} getData={this.getSubGameData}/>],
+            subGames: [...prevState.subGames, <div><AddSubGame gameNumber={this.state.numSubGames+1} getData={this.getSubGameData}/></div>],
             subGameData: [...prevState.subGameData, []]
         }))
     }
@@ -315,6 +354,16 @@ class AddGame extends React.Component{
     }
 
     componentDidMount(){
+        this.onMountOrUpdate()
+    }
+
+    componentDidUpdate(prevProps){
+        if (this.props.newGame !== prevProps.newGame){
+            this.onMountOrUpdate()
+        }
+    }
+
+    onMountOrUpdate(){
         fetch('/game_options_info', {method: 'GET'}).then(res => res.json()).then(data => {
             var l = data.publishers.length
             var l2 = data.developers.length
@@ -348,115 +397,153 @@ class AddGame extends React.Component{
         });
         //set initial state to one subgame, pass game number as prop
         this.setState({
-            subGames:[<AddSubGame gameNumber={this.state.numSubGames} getData={this.getSubGameData}/>]
+            subGames:[<div><AddSubGame gameNumber={this.state.numSubGames} getData={this.getSubGameData}/></div>]
         })
     }
 
     render(){
         return (
             <>
-                <div>
+                <div className='addGameBody'>
                     <form onSubmit={this.handleSubmit} method='post'>
-                        <label htmlFor='title'>Title*:</label><input type='text' id='title' onChange={this.handleTitleChange} required></input>
-                        <label htmlFor='system'>System*:</label>
-                            <select id='system' onChange={this.handleSystemChange} required>
-                                {this.state.systems}
-                            </select>
-                        <CSSTransition in={!this.state.compFade} timeout={200} classNames='fade-in' unmountOnExit>
-                            <>
-                            <label htmlFor='status'>Status:</label>
-                                <select id='status' onChange={this.handleStatusChange} required>
-                                    <option value=''></option>
-                                    <option value='Unplayed'>Unplayed</option>
-                                    <option value='Unbeaten'>Unbeaten</option>
-                                    <option value='Beaten'>Beaten</option>
-                                    <option value='Completed'>Completed</option>
-                                    <option value='Null'>Null</option>
+                        <div id='gameTitle'>
+                            <label htmlFor='title'>Title*:</label><input type='text' id='title' onChange={this.handleTitleChange} required value={this.state.title}></input>
+                        </div>
+                        <div>
+                            <label htmlFor='system'>System*:</label>
+                                <select id='system' onChange={this.handleSystemChange} required value={this.state.system}>
+                                    {this.state.systems}
                                 </select>
-                            </>
-                        </CSSTransition>
-                        <label htmlFor='pricePaid'>Price Paid:</label><input type='number' id='pricePaid' onChange={this.handlePricePaidChange} step='.01' min='0'></input>
-                        <label htmlFor='rating'>Rating:</label><input type='number' id='rating' onChange={this.handleRatingChange} min='0' max='10' step='0.5'></input>
-                        <label htmlFor='publisher'>Publisher:</label>
-                            <datalist id='publisher'>
-                                {this.state.publishers}
-                            </datalist>
-                            <input  autoComplete="on" list="publisher" onChange={this.handlePublisherChange}/>
-                        <label htmlFor='newPublisher'>New Publisher:</label><input type='text' id='newPublisher' onChange={this.handleNewPubChange}></input>
-                        <label htmlFor='developer'>Developer:</label>
-                            <datalist id='developer'>
-                                {this.state.developers}
-                            </datalist>   
-                            <input  autoComplete="on" list="developer" onChange={this.handleDeveloperChange}/>
-                        <label htmlFor='newDeveloper'>New Developer:</label><input type='text' id='newDeveloper' onChange={this.handleNewDevChange}></input>
-                        <label htmlFor='condition'>Condition:</label>
-                            <select id='condition' onChange={this.handleConditionChange}>
-                                <option value=''></option>
-                                <option value='New'>New</option>
-                                <option value='Like New'>Like New</option>
-                                <option value='Very Good'>Very Good</option>
-                                <option value='Good'>Good</option>
-                                <option value='Acceptable'>Acceptable</option>
-                                <option value='Bad'>Bad</option>
-                                <option value='NA'>NA</option>
-                            </select> 
-                        <label htmlFor='completeness'>Completeness:</label>
-                            <select id='completeness' onChange={this.handleCompletenessChange}>
-                                <option value=''></option>
-                                <option value='New'>New</option>
-                                <option value='Complete'>Complete</option>
-                                <option value='Game + Case/Box'>Game + Case/Box</option>
-                                <option value='Game + Manual'>Game + Manual</option>
-                                <option value='Game Only'>Game Only</option>
-                                <option value='Case/Box Only'>Case/Box Only</option>
-                                <option value='Manual Only'>Manual Only</option>
-                                <option value='Manual + Case/Box'>Manual + Case/Box</option>
-                                <option value='NA'>NA</option>
-                            </select> 
-                        <label htmlFor='timePlayed'>Time Played:</label><input type='number' id='timePlayed' onChange={this.handleTimePlayedChange} min='0'></input>
-                        <label htmlFor='region'>Region:</label>
-                        <select id='region' onChange={this.handleRegionChange}>
-                                <option value=''></option>
-                                <option value='NTSC-U'>NTSC-U (Americas)</option>
-                                <option value='PAL'>PAL (Europe)</option>
-                                <option value='NTSC-J'>NTSC-J (Japan)</option>
-                                <option value='NTSC-C'>NTSC-C (China)</option>
-                                <option value='Other'>Other</option>
-                            </select>
-                        <label htmlFor='ownership'>Ownership:</label>
-                            <select id='ownership' onChange={this.handleOwnershipChange}>
-                                <option value=''></option>
-                                <option value='Owned'>Owned</option>
-                                <option value='Household'>Household</option>
-                                <option value='Borrowed/Rented'>Borrowed/Rented</option>
-                                <option value='Other'>Other</option>
-                            </select>
-                        <label htmlFor='notes'>Notes:</label><input type='text' id='notes' onChange={this.handleNotesChange}></input>
-                        <CSSTransition in={!this.state.compFade} timeout={200} classNames='fade-in' unmountOnExit>
-                            <>
-                                <label htmlFor='nowPlaying'>Now Playing?</label>
-                                <input type='checkbox' id='nowPlaying' onChange={this.handleNowPlayingChange}></input>
-                            </>
-                        </CSSTransition>
-                        <label htmlFor='eAchieve'>Earned Achievements:</label><input type='number' id='eAchieve' onChange={this.handleEAchieveChange} min='0'></input>
-                        <label htmlFor='tAchieve'>Total Achievements:</label><input type='number' id='tAchieve' onChange={this.handleTAchieveChange} min='0'></input>
-                        <label htmlFor='numOwned'>Number Owned:</label><input type='number' id='numOwned' onChange={this.handleOwnedChange}min='0'></input>
-                        <label htmlFor='genre1'>Genre 1:</label>
-                            <select id='genre1' onChange={this.handleGenre1Change}>
-                                {this.state.genres}
-                            </select>
-                        <label htmlFor='genre2'>Genre 2:</label>
-                            <select id='genre2' onChange={this.handleGenre2Change}>
-                                {this.state.genres}
-                            </select>
-                        <label htmlFor='acquiredFrom'>Acquired From:</label><input type='text' id='acquiredFrom' onChange={this.handleAcquiredFromChange}></input>
-                        <label htmlFor='compilation'>Compilation?</label><input type='checkbox' id='compilation' onChange={this.handleCompilationChange} defaultChecked={this.state.compFade}></input>
-                        <label htmlFor='dateAcq'>Date Acquired:</label><input type='date' id='dateAcq' onChange={this.handleDateAcquiredChange}></input>
-                        <label htmlFor='image'>Image:</label><input type='file' id='image' onChange={this.handleImgChange}></input>
+                            <CSSTransition in={!this.state.compFade} timeout={200} classNames='fade-in' unmountOnExit>
+                                <>
+                                <label htmlFor='status'>Status*:</label>
+                                    <select id='status' onChange={this.handleStatusChange} required value={this.state.status}>
+                                        <option value=''></option>
+                                        <option value='Unplayed'>Unplayed</option>
+                                        <option value='Unbeaten'>Unbeaten</option>
+                                        <option value='Beaten'>Beaten</option>
+                                        <option value='Completed'>Completed</option>
+                                        <option value='Null'>Null</option>
+                                    </select>
+                                </>
+                            </CSSTransition>
+                        </div>
+                        <div>
+                            <label htmlFor='pricePaid'>Price Paid:</label><input type='number' id='pricePaid' onChange={this.handlePricePaidChange} step='.01' min='0' value={this.state.pricePaid}></input>
+                        </div>
+                        <div>
+                            <CSSTransition in={!this.state.compFade} timeout={200} classNames='fade-in' unmountOnExit>
+                                <>
+                                <label htmlFor='rating'>Rating:</label><input type='number' id='rating' onChange={this.handleRatingChange} min='0' max='10' step='0.5' value={this.state.rating}></input>
+                                </>
+                            </CSSTransition>
+                        </div>
+                        <div>
+                            <label htmlFor='publisher'>Publisher:</label>
+                                <datalist id='publisher'>
+                                    {this.state.publishers}
+                                </datalist>
+                                <input  autoComplete="on" list="publisher" onChange={this.handlePublisherChange} value={this.state.publisher}/>
+                            <label htmlFor='newPublisher'>New Publisher:</label><input type='text' id='newPublisher' onChange={this.handleNewPubChange} value={this.state.publisher}></input>
+                        </div>
+                        <div>
+                            <label htmlFor='developer'>Developer:</label>
+                                    <datalist id='developer'>
+                                        {this.state.developers}
+                                    </datalist>   
+                                    <input  autoComplete="on" list="developer" onChange={this.handleDeveloperChange} value={this.state.developer}/>
+                            <label htmlFor='newDeveloper'>New Developer:</label><input type='text' id='newDeveloper' onChange={this.handleNewDevChange} value={this.state.developer}></input>
+                        </div>
+                        <div>
+                            <label htmlFor='condition'>Condition:</label>
+                                <select id='condition' onChange={this.handleConditionChange} value={this.state.condition}>
+                                    <option value=''></option>
+                                    <option value='New'>New</option>
+                                    <option value='Like New'>Like New</option>
+                                    <option value='Very Good'>Very Good</option>
+                                    <option value='Good'>Good</option>
+                                    <option value='Acceptable'>Acceptable</option>
+                                    <option value='Bad'>Bad</option>
+                                    <option value='NA'>NA</option>
+                                </select> 
+                            <label htmlFor='completeness'>Completeness:</label>
+                                <select id='completeness' onChange={this.handleCompletenessChange} value={this.state.completeness}>
+                                    <option value=''></option>
+                                    <option value='New'>New</option>
+                                    <option value='Complete'>Complete</option>
+                                    <option value='Game + Case/Box'>Game + Case/Box</option>
+                                    <option value='Game + Manual'>Game + Manual</option>
+                                    <option value='Game Only'>Game Only</option>
+                                    <option value='Case/Box Only'>Case/Box Only</option>
+                                    <option value='Manual Only'>Manual Only</option>
+                                    <option value='Manual + Case/Box'>Manual + Case/Box</option>
+                                    <option value='NA'>NA</option>
+                                </select> 
+                        </div>
+                        <div>
+                            <label htmlFor='timePlayed'>Time Played:</label><input type='number' id='timePlayed' onChange={this.handleTimePlayedChange} min='0' value={this.state.timePlayed}></input>
+                        </div>
+                        <div>
+                            <label htmlFor='region'>Region:</label>
+                            <select id='region' onChange={this.handleRegionChange} value={this.state.region}>
+                                    <option value=''></option>
+                                    <option value='NTSC-U'>NTSC-U (Americas)</option>
+                                    <option value='PAL'>PAL (Europe)</option>
+                                    <option value='NTSC-J'>NTSC-J (Japan)</option>
+                                    <option value='NTSC-C'>NTSC-C (China)</option>
+                                    <option value='Other'>Other</option>
+                                </select>
+                            <label htmlFor='ownership'>Ownership:</label>
+                                <select id='ownership' onChange={this.handleOwnershipChange} value={this.state.ownership}>
+                                    <option value=''></option>
+                                    <option value='Owned'>Owned</option>
+                                    <option value='Household'>Household</option>
+                                    <option value='Borrowed/Rented'>Borrowed/Rented</option>
+                                    <option value='Other'>Other</option>
+                                </select>
+                            <label htmlFor='numOwned'>Number Owned:</label><input type='number' id='numOwned' onChange={this.handleOwnedChange}min='0' value={this.state.owned}></input>
+                        </div>
+                        <div>
+                            <label htmlFor='notes'>Notes:</label><input type='text' id='notes' onChange={this.handleNotesChange} value={this.state.notes}></input>
+                        </div>
+                        <div>
+                            <CSSTransition in={!this.state.compFade} timeout={200} classNames='fade-in' unmountOnExit>
+                                <>
+                                    <label htmlFor='nowPlaying'>Now Playing?</label>
+                                    <input type='checkbox' id='nowPlaying' onChange={this.handleNowPlayingChange} checked={this.state.nowPlaying}></input>
+                                </>
+                            </CSSTransition>
+                        </div>
+                        <div>
+                            <label htmlFor='eAchieve'>Earned Achievements:</label><input type='number' id='eAchieve' onChange={this.handleEAchieveChange} min='0' value={this.state.eAcheive}></input>
+                            <label htmlFor='tAchieve'>Total Achievements:</label><input type='number' id='tAchieve' onChange={this.handleTAchieveChange} min='0' value={this.state.tAchieve}></input>
+                        </div>
+                        <div>
+                            <label htmlFor='genre1'>Genre 1:</label>
+                                <select id='genre1' onChange={this.handleGenre1Change} value={this.state.genre1}>
+                                    {this.state.genres}
+                                </select>
+                            <label htmlFor='genre2'>Genre 2:</label>
+                                <select id='genre2' onChange={this.handleGenre2Change} value={this.state.genre2}>
+                                    {this.state.genres}
+                                </select>
+                        </div>
+                        <div>
+                            <label htmlFor='acquiredFrom'>Acquired From:</label><input type='text' id='acquiredFrom' onChange={this.handleAcquiredFromChange} value={this.state.acquiredFrom}></input>
+                            <label htmlFor='dateAcq'>Date Acquired:</label><input type='date' id='dateAcq' onChange={this.handleDateAcquiredChange} value={this.state.dateAcq}></input>
+                        </div>
+                        <div>
+                            <label htmlFor='compilation'>Compilation?</label><input type='checkbox' id='compilation' onChange={this.handleCompilationChange} checked={this.state.compilation}></input>
+                        </div>
+                        <div>
+                            <label htmlFor='image'>Image:</label><input type='file' id='image' onChange={this.handleImgChange} key={this.state.imgKey || ''}></input>
+                        </div>
                         <CSSTransition in={this.state.compFade} timeout={200} classNames='fade-in' unmountOnExit>
                             <>
-                            <button type='button' onClick={this.addSubGameClick}>Add Sub-Game</button> 
-                            <button type='button' onClick={this.removeSubGameClick}>Remove Sub-Game</button> 
+                            <div>
+                                <button type='button' onClick={this.addSubGameClick}>Add Sub-Game</button>
+                                <button type='button' onClick={this.removeSubGameClick}>Remove Sub-Game</button> 
+                            </div>
                             </>
                         </CSSTransition>
                         <CSSTransition id='subgames' in={this.state.compFade} timeout={200} classNames='fade-in' unmountOnExit>
@@ -464,8 +551,18 @@ class AddGame extends React.Component{
                             {this.state.subGames}
                             </>
                         </CSSTransition>
-                        <input type='submit'></input>
+                        <div>
+                            <input id='submit' type='submit'></input>
+                        </div>
                     </form>
+                    <ToastContainer
+                        position="bottom-center"
+                        autoClose={2500}
+                        hideProgressBar={true}
+                        closeOnClick={true}
+                        draggable={false}
+                        theme={'dark'}
+                    />
                 </div>
             </>
         );
