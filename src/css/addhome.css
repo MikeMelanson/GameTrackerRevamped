@@ -12,3 +12,7 @@
     width: 400px;
     height: 200px;
 }
+
+.add_buttons button Link{
+    border: 1px solid black;
+}

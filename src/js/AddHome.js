@@ -8,8 +8,8 @@ class AddHome extends React.Component{
         return(
             <>
                 <div className='add_buttons'>
-                    <button><Link to='/AddSys'>Add System</Link></button>
-                    <button><Link to='/AddGame'>Add Game</Link></button>
+                    <button><Link to='/AddSys' style={{display:'flex',height:'100%',alignItems:'center',justifyContent:'center'}}>Add System</Link></button>
+                    <button><Link to='/AddGame' style={{display:'flex',height:'100%',alignItems:'center',justifyContent:'center'}}>Add Game</Link></button>
                 </div>
             </>
         )
