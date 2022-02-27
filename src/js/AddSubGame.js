@@ -72,7 +72,7 @@ class AddSubGame extends React.Component{
     render(){
         return(
             <>
-                <div>
+                <div className="outline">
                     <div id='gameTitle'> 
                         <label htmlFor='title'>Title*:</label><input type='text' id='title' onChange={this.handleTitleChange} required></input>
                     </div>

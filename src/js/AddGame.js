@@ -36,6 +36,7 @@ class AddGame extends React.Component{
             acquiredFrom: '',
             compilation: 0,
             dateAcq: '',
+            link: '',
             img: '',
 
             imgKey: '',
@@ -209,6 +210,12 @@ class AddGame extends React.Component{
     handleDateAcquiredChange = e => {
         this.setState({
             dateAcq: e.target.value
+        });
+    }
+
+    handleLinkChange = e => {
+        this.setState({
+            link: e.target.value
         });
     }
 
@@ -406,102 +413,146 @@ class AddGame extends React.Component{
             <>
                 <div className='addGameBody'>
                     <form onSubmit={this.handleSubmit} method='post'>
-                        <div id='gameTitle'>
-                            <label htmlFor='title'>Title*:</label><input type='text' id='title' onChange={this.handleTitleChange} required value={this.state.title}></input>
-                        </div>
-                        <div>
-                            <label htmlFor='system'>System*:</label>
-                                <select id='system' onChange={this.handleSystemChange} required value={this.state.system}>
-                                    {this.state.systems}
-                                </select>
-                            <CSSTransition in={!this.state.compFade} timeout={200} classNames='fade-in' unmountOnExit>
-                                <>
-                                <label htmlFor='status'>Status*:</label>
-                                    <select id='status' onChange={this.handleStatusChange} required value={this.state.status}>
-                                        <option value=''></option>
-                                        <option value='Unplayed'>Unplayed</option>
-                                        <option value='Unbeaten'>Unbeaten</option>
-                                        <option value='Beaten'>Beaten</option>
-                                        <option value='Completed'>Completed</option>
-                                        <option value='Null'>Null</option>
+                        <div className='outline'>
+                            <div>
+                                <label htmlFor='title'>Title*:</label><input type='text' id='title' onChange={this.handleTitleChange} required value={this.state.title}></input>
+                            </div>
+                            <div>
+                                <label htmlFor='system'>System*:</label>
+                                    <select id='system' onChange={this.handleSystemChange} required value={this.state.system}>
+                                        {this.state.systems}
                                     </select>
-                                </>
-                            </CSSTransition>
+                                <CSSTransition in={!this.state.compFade} timeout={200} classNames='fade-in' unmountOnExit>
+                                    <>
+                                    <label htmlFor='status'>Status*:</label>
+                                        <select id='status' onChange={this.handleStatusChange} required value={this.state.status}>
+                                            <option value=''></option>
+                                            <option value='Unplayed'>Unplayed</option>
+                                            <option value='Unbeaten'>Unbeaten</option>
+                                            <option value='Beaten'>Beaten</option>
+                                            <option value='Completed'>Completed</option>
+                                            <option value='Null'>Null</option>
+                                        </select>
+                                    </>
+                                </CSSTransition>
+                            </div>
                         </div>
-                        <div>
-                            <label htmlFor='pricePaid'>Price Paid:</label><input type='number' id='pricePaid' onChange={this.handlePricePaidChange} step='.01' min='0' value={this.state.pricePaid}></input>
+                        <div className='outline'>
+                            <div>
+                                <label htmlFor='publisher'>Publisher:</label>
+                                    <datalist id='publisher'>
+                                        {this.state.publishers}
+                                    </datalist>
+                                    <input  autoComplete="on" list="publisher" onChange={this.handlePublisherChange} value={this.state.publisher}/>
+                                <label htmlFor='newPublisher'>Add New Publisher:</label><input type='text' id='newPublisher' onChange={this.handleNewPubChange} value={this.state.publisher}></input>
+                            </div>
+                            <div>
+                                <label htmlFor='developer'>Developer:</label>
+                                        <datalist id='developer'>
+                                            {this.state.developers}
+                                        </datalist>   
+                                        <input  autoComplete="on" list="developer" onChange={this.handleDeveloperChange} value={this.state.developer}/>
+                                <label htmlFor='newDeveloper'>Add New Developer:</label><input type='text' id='newDeveloper' onChange={this.handleNewDevChange} value={this.state.developer}></input>
+                            </div>
                         </div>
-                        <div>
-                            <CSSTransition in={!this.state.compFade} timeout={200} classNames='fade-in' unmountOnExit>
-                                <>
-                                <label htmlFor='rating'>Rating:</label><input type='number' id='rating' onChange={this.handleRatingChange} min='0' max='10' step='0.5' value={this.state.rating}></input>
-                                </>
-                            </CSSTransition>
+                        <div className='outline'>
+                            <div>
+                                <label htmlFor='condition'>Condition:</label>
+                                    <select id='condition' onChange={this.handleConditionChange} value={this.state.condition}>
+                                        <option value=''></option>
+                                        <option value='New'>New</option>
+                                        <option value='Like New'>Like New</option>
+                                        <option value='Very Good'>Very Good</option>
+                                        <option value='Good'>Good</option>
+                                        <option value='Acceptable'>Acceptable</option>
+                                        <option value='Bad'>Bad</option>
+                                        <option value='NA'>NA</option>
+                                    </select> 
+                                <label htmlFor='completeness'>Completeness:</label>
+                                    <select id='completeness' onChange={this.handleCompletenessChange} value={this.state.completeness}>
+                                        <option value=''></option>
+                                        <option value='New'>New</option>
+                                        <option value='Complete'>Complete</option>
+                                        <option value='Game + Case/Box'>Game + Case/Box</option>
+                                        <option value='Game + Manual'>Game + Manual</option>
+                                        <option value='Game Only'>Game Only</option>
+                                        <option value='Case/Box Only'>Case/Box Only</option>
+                                        <option value='Manual Only'>Manual Only</option>
+                                        <option value='Manual + Case/Box'>Manual + Case/Box</option>
+                                        <option value='NA'>NA</option>
+                                    </select> 
+                            </div>
                         </div>
-                        <div>
-                            <label htmlFor='publisher'>Publisher:</label>
-                                <datalist id='publisher'>
-                                    {this.state.publishers}
-                                </datalist>
-                                <input  autoComplete="on" list="publisher" onChange={this.handlePublisherChange} value={this.state.publisher}/>
-                            <label htmlFor='newPublisher'>New Publisher:</label><input type='text' id='newPublisher' onChange={this.handleNewPubChange} value={this.state.publisher}></input>
+                        <div className='outline'>
+                            <div>
+                                <label htmlFor='region'>Region:</label>
+                                    <select id='region' onChange={this.handleRegionChange} value={this.state.region}>
+                                        <option value=''></option>
+                                        <option value='NTSC-U'>NTSC-U (Americas)</option>
+                                        <option value='PAL'>PAL (Europe)</option>
+                                        <option value='NTSC-J'>NTSC-J (Japan)</option>
+                                        <option value='NTSC-C'>NTSC-C (China)</option>
+                                        <option value='Other'>Other</option>
+                                    </select>
+                            </div> 
                         </div>
-                        <div>
-                            <label htmlFor='developer'>Developer:</label>
-                                    <datalist id='developer'>
-                                        {this.state.developers}
-                                    </datalist>   
-                                    <input  autoComplete="on" list="developer" onChange={this.handleDeveloperChange} value={this.state.developer}/>
-                            <label htmlFor='newDeveloper'>New Developer:</label><input type='text' id='newDeveloper' onChange={this.handleNewDevChange} value={this.state.developer}></input>
+                        <div className='outline'>
+                            <div>
+                                <label htmlFor='genre1'>Genre 1:</label>
+                                    <select id='genre1' onChange={this.handleGenre1Change} value={this.state.genre1}>
+                                        {this.state.genres}
+                                    </select>
+                                <label htmlFor='genre2'>Genre 2:</label>
+                                    <select id='genre2' onChange={this.handleGenre2Change} value={this.state.genre2}>
+                                        {this.state.genres}
+                                    </select>
+                            </div>
                         </div>
-                        <div>
-                            <label htmlFor='condition'>Condition:</label>
-                                <select id='condition' onChange={this.handleConditionChange} value={this.state.condition}>
-                                    <option value=''></option>
-                                    <option value='New'>New</option>
-                                    <option value='Like New'>Like New</option>
-                                    <option value='Very Good'>Very Good</option>
-                                    <option value='Good'>Good</option>
-                                    <option value='Acceptable'>Acceptable</option>
-                                    <option value='Bad'>Bad</option>
-                                    <option value='NA'>NA</option>
-                                </select> 
-                            <label htmlFor='completeness'>Completeness:</label>
-                                <select id='completeness' onChange={this.handleCompletenessChange} value={this.state.completeness}>
-                                    <option value=''></option>
-                                    <option value='New'>New</option>
-                                    <option value='Complete'>Complete</option>
-                                    <option value='Game + Case/Box'>Game + Case/Box</option>
-                                    <option value='Game + Manual'>Game + Manual</option>
-                                    <option value='Game Only'>Game Only</option>
-                                    <option value='Case/Box Only'>Case/Box Only</option>
-                                    <option value='Manual Only'>Manual Only</option>
-                                    <option value='Manual + Case/Box'>Manual + Case/Box</option>
-                                    <option value='NA'>NA</option>
-                                </select> 
+                        <div className='outline'>
+                            <div>
+                                <label htmlFor='pricePaid'>Price Paid:</label><input type='number' id='pricePaid' onChange={this.handlePricePaidChange} step='.01' min='0' value={this.state.pricePaid}></input>
+                                <label htmlFor='valueLink'>Link from PriceCharting:</label><input type='text' id='valueLink' onChange={this.handleLinkChange} value={this.state.link}></input>
+                            </div>
                         </div>
-                        <div>
-                            <label htmlFor='timePlayed'>Time Played:</label><input type='number' id='timePlayed' onChange={this.handleTimePlayedChange} min='0' value={this.state.timePlayed}></input>
+                        <div className='outline'>
+                            <div>
+                                <CSSTransition in={!this.state.compFade} timeout={200} classNames='fade-in' unmountOnExit>
+                                    <>
+                                    <label htmlFor='rating'>Rating:</label><input type='number' id='rating' onChange={this.handleRatingChange} min='0' max='10' step='0.5' value={this.state.rating}></input>
+                                    </>
+                                </CSSTransition>
+                                <label htmlFor='timePlayed'>Time Played:</label><input type='number' id='timePlayed' onChange={this.handleTimePlayedChange} min='0' value={this.state.timePlayed}></input>
+                            </div>
                         </div>
-                        <div>
-                            <label htmlFor='region'>Region:</label>
-                            <select id='region' onChange={this.handleRegionChange} value={this.state.region}>
-                                    <option value=''></option>
-                                    <option value='NTSC-U'>NTSC-U (Americas)</option>
-                                    <option value='PAL'>PAL (Europe)</option>
-                                    <option value='NTSC-J'>NTSC-J (Japan)</option>
-                                    <option value='NTSC-C'>NTSC-C (China)</option>
-                                    <option value='Other'>Other</option>
-                                </select>
-                            <label htmlFor='ownership'>Ownership:</label>
-                                <select id='ownership' onChange={this.handleOwnershipChange} value={this.state.ownership}>
-                                    <option value=''></option>
-                                    <option value='Owned'>Owned</option>
-                                    <option value='Household'>Household</option>
-                                    <option value='Borrowed/Rented'>Borrowed/Rented</option>
-                                    <option value='Other'>Other</option>
-                                </select>
-                            <label htmlFor='numOwned'>Number Owned:</label><input type='number' id='numOwned' onChange={this.handleOwnedChange}min='0' value={this.state.owned}></input>
+                        <div className='outline'>
+                            <div>
+                                <label htmlFor='ownership'>Ownership:</label>
+                                    <select id='ownership' onChange={this.handleOwnershipChange} value={this.state.ownership}>
+                                        <option value=''></option>
+                                        <option value='Owned'>Owned</option>
+                                        <option value='Household'>Household</option>
+                                        <option value='Borrowed/Rented'>Borrowed/Rented</option>
+                                        <option value='Other'>Other</option>
+                                    </select>
+                                <label htmlFor='numOwned'>Number Owned:</label><input type='number' id='numOwned' onChange={this.handleOwnedChange}min='0' value={this.state.owned}></input>
+                            </div>
+                        </div>
+                        <div className='outline'>
+                            <div>
+                                <label htmlFor='eAchieve'>Earned Achievements:</label><input type='number' id='eAchieve' onChange={this.handleEAchieveChange} min='0' value={this.state.eAcheive}></input>
+                                <label htmlFor='tAchieve'>Total Achievements:</label><input type='number' id='tAchieve' onChange={this.handleTAchieveChange} min='0' value={this.state.tAchieve}></input>
+                            </div>
+                        </div>
+                        <div className='outline'>
+                            <div>
+                                <label htmlFor='acquiredFrom'>Acquired From:</label><input type='text' id='acquiredFrom' onChange={this.handleAcquiredFromChange} value={this.state.acquiredFrom}></input>
+                                <label htmlFor='dateAcq'>Date Acquired:</label><input type='date' id='dateAcq' onChange={this.handleDateAcquiredChange} value={this.state.dateAcq}></input>
+                            </div>
+                        </div>
+                        <div className='outline'>
+                            <div>
+                                <label htmlFor='image'>Image:</label><input type='file' id='image' onChange={this.handleImgChange} key={this.state.imgKey || ''}></input>
+                            </div>
                         </div>
                         <div>
                             <label htmlFor='notes'>Notes:</label><input type='text' id='notes' onChange={this.handleNotesChange} value={this.state.notes}></input>
@@ -515,28 +566,7 @@ class AddGame extends React.Component{
                             </CSSTransition>
                         </div>
                         <div>
-                            <label htmlFor='eAchieve'>Earned Achievements:</label><input type='number' id='eAchieve' onChange={this.handleEAchieveChange} min='0' value={this.state.eAcheive}></input>
-                            <label htmlFor='tAchieve'>Total Achievements:</label><input type='number' id='tAchieve' onChange={this.handleTAchieveChange} min='0' value={this.state.tAchieve}></input>
-                        </div>
-                        <div>
-                            <label htmlFor='genre1'>Genre 1:</label>
-                                <select id='genre1' onChange={this.handleGenre1Change} value={this.state.genre1}>
-                                    {this.state.genres}
-                                </select>
-                            <label htmlFor='genre2'>Genre 2:</label>
-                                <select id='genre2' onChange={this.handleGenre2Change} value={this.state.genre2}>
-                                    {this.state.genres}
-                                </select>
-                        </div>
-                        <div>
-                            <label htmlFor='acquiredFrom'>Acquired From:</label><input type='text' id='acquiredFrom' onChange={this.handleAcquiredFromChange} value={this.state.acquiredFrom}></input>
-                            <label htmlFor='dateAcq'>Date Acquired:</label><input type='date' id='dateAcq' onChange={this.handleDateAcquiredChange} value={this.state.dateAcq}></input>
-                        </div>
-                        <div>
                             <label htmlFor='compilation'>Compilation?</label><input type='checkbox' id='compilation' onChange={this.handleCompilationChange} checked={this.state.compilation}></input>
-                        </div>
-                        <div>
-                            <label htmlFor='image'>Image:</label><input type='file' id='image' onChange={this.handleImgChange} key={this.state.imgKey || ''}></input>
                         </div>
                         <CSSTransition in={this.state.compFade} timeout={200} classNames='fade-in' unmountOnExit>
                             <>

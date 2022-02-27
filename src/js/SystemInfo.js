@@ -38,7 +38,7 @@ class SystemInfo extends React.Component{
     render(){
         var array = ['','','','','','','','','',''];
         var headings = ['Format: ','Publisher: ','Price Paid: ','Ownership: ','Number Owned: ',
-            'Number of Controllers: ','Region: ','Notes: ','Date Acquired: ','Date Added: '];
+            'Number of Controllers: ','Region: ','Date Acquired: ','Date Added: ','Notes: '];
         if (this.props.info.length > 0){
             array[0] = this.props.info[1];
             array[1] = this.props.info[2];
@@ -55,7 +55,7 @@ class SystemInfo extends React.Component{
         }
         var spans = [];
         var spans2 = [];
-        for (let i=1;i<8;i++){
+        for (let i=1;i<9;i++){
             if (array[i]){
                 if (i===3){
                     spans.push(<span key={headings[i-1]} className='infoSpan'>{headings[i-1]} <span className='sinfoText'>{'$' + array[i]}</span></span>)
@@ -63,10 +63,9 @@ class SystemInfo extends React.Component{
                 else{
                     spans.push(<span key={headings[i-1]} className='infoSpan'>{headings[i-1]} <span className='sinfoText'>{array[i]}</span></span>)
                 }
-               
             }
         }
-        for (let i=8; i<11; i++){
+        for (let i=9; i<11; i++){
             if (array[i]){
                 spans2.push(<span key={headings[i-1]} className='infoSpan'>{headings[i-1]} <span className='sinfoText'>{array[i]}</span></span>)
             }

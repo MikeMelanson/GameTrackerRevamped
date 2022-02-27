@@ -160,53 +160,67 @@ class AddSystem extends React.Component{
             <>
                 <div className='addSystemBody'>
                     <form onSubmit={this.handleSubmit} method='post'>
-                        <div>
-                            <label htmlFor='name'>Name*:</label><input type='text' id='name' onChange={this.handleNameChange} required value={this.state.name}></input>
+                        <div className='outline'>
+                            <div>
+                                <label htmlFor='name'>Name*:</label><input type='text' id='name' onChange={this.handleNameChange} required value={this.state.name}></input>
+                            </div>
                         </div>
-                        <div>
-                            <label htmlFor='format'>Format:</label>
-                                <select id='format' onChange={this.handleFormatChange} value={this.state.format}>
-                                    <option value=''></option>
-                                    <option value='Cartridge'>Cartridge</option>
-                                    <option value='Disc'>Disc</option>
-                                    <option value='Digital/Download'>Digital/Download</option>
-                                    <option value='Other'>Other</option>
-                                </select>
+                        <div className='outline'>
+                            <div>
+                                <label htmlFor='format'>Format:</label>
+                                    <select id='format' onChange={this.handleFormatChange} value={this.state.format}>
+                                        <option value=''></option>
+                                        <option value='Cartridge'>Cartridge</option>
+                                        <option value='Disc'>Disc</option>
+                                        <option value='Digital/Download'>Digital/Download</option>
+                                        <option value='Other'>Other</option>
+                                    </select>
+                            </div>
                         </div>
-                        <div>
-                            <label htmlFor='publisher'>Publisher:</label>
-                                <select id='publisher' onChange={this.handlePublisherChange} value={this.state.publisher}>
-                                    {this.state.publishers}
-                                </select>
+                        <div className='outline'>
+                            <div>
+                                <label htmlFor='publisher'>Publisher:</label>
+                                    <select id='publisher' onChange={this.handlePublisherChange} value={this.state.publisher}>
+                                        {this.state.publishers}
+                                    </select>
+                            </div>
                         </div>
-                        <div>
-                            <label htmlFor='pricePaid'>Price Paid:</label><input type='number' id='pricePaid' onChange={this.handlePricePaidChange} step='.01' min='0' value={this.state.pricePaid}></input>
-                            <label htmlFor='ownership'>Ownership:</label>
-                                <select id='ownership' onChange={this.handleOwnershipChange} value={this.state.ownership}>
-                                    <option value=''></option>
-                                    <option value='Owned'>Owned</option>
-                                    <option value='Household'>Household</option>
-                                    <option value='Borrowed/Rented'>Borrowed/Rented</option>
-                                    <option value='Other'>Other</option>
-                                </select>
-                            <label htmlFor='numOwned'>Number Owned:</label><input type='number' id='numOwned' onChange={this.handleOwnedChange}min='0' value={this.state.owned}></input>
+                        <div className='outline'>
+                            <div>
+                                <label htmlFor='pricePaid'>Price Paid:</label><input type='number' id='pricePaid' onChange={this.handlePricePaidChange} step='.01' min='0' value={this.state.pricePaid}></input>
+                                <label htmlFor='ownership'>Ownership:</label>
+                                    <select id='ownership' onChange={this.handleOwnershipChange} value={this.state.ownership}>
+                                        <option value=''></option>
+                                        <option value='Owned'>Owned</option>
+                                        <option value='Household'>Household</option>
+                                        <option value='Borrowed/Rented'>Borrowed/Rented</option>
+                                        <option value='Other'>Other</option>
+                                    </select>
+                                <label htmlFor='numOwned'>Number Owned:</label><input type='number' id='numOwned' onChange={this.handleOwnedChange}min='0' value={this.state.owned}></input>
+                            </div>
                         </div>
-                        <div>
-                            <label htmlFor='numCont'>Number of Controllers:</label><input type='number' id='numCont' onChange={this.handleNumContChange}min='0' value={this.state.numCont}></input>
+                        <div className='outline'>
+                            <div>
+                                <label htmlFor='numCont'>Number of Controllers:</label><input type='number' id='numCont' onChange={this.handleNumContChange}min='0' value={this.state.numCont}></input>
+                            </div>
                         </div>
-                        <div>
-                            <label htmlFor='region'>Region:</label>
-                            <select id='region' onChange={this.handleRegionChange}> value={this.state.region}
-                                    <option value=''></option>
-                                    <option value='NTSC-U'>NTSC-U (Americas)</option>
-                                    <option value='PAL'>PAL (Europe)</option>
-                                    <option value='NTSC-J'>NTSC-J (Japan)</option>
-                                    <option value='NTSC-C'>NTSC-C (China)</option>
-                                    <option value='Other'>Other</option>
-                                </select>
+                        <div className='outline'>
+                            <div>
+                                <label htmlFor='region'>Region:</label>
+                                <select id='region' onChange={this.handleRegionChange}> value={this.state.region}
+                                        <option value=''></option>
+                                        <option value='NTSC-U'>NTSC-U (Americas)</option>
+                                        <option value='PAL'>PAL (Europe)</option>
+                                        <option value='NTSC-J'>NTSC-J (Japan)</option>
+                                        <option value='NTSC-C'>NTSC-C (China)</option>
+                                        <option value='Other'>Other</option>
+                                    </select>
+                            </div>
                         </div>
-                        <div>
-                            <label htmlFor='dateAcq'>Date Acquired:</label><input type='date' id='dateAcq' onChange={this.handleDateAcquiredChange} value={this.state.dateAcq}></input>
+                        <div className='outline'>
+                            <div>
+                                <label htmlFor='dateAcq'>Date Acquired:</label><input type='date' id='dateAcq' onChange={this.handleDateAcquiredChange} value={this.state.dateAcq}></input>
+                            </div>
                         </div>
                         <div>
                             <label htmlFor='notes'>Notes:</label><input type='text' id='notes' onChange={this.handleNotesChange} value={this.state.notes}></input>

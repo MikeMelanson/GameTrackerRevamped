@@ -17,6 +17,8 @@
     font-family: airstrike;
     font-size: 25px;
     color: rgb(125, 125, 187);
+    height: 99vh;
+    overflow-y: scroll;
   }
   .addGameBody form{
     display: flex;
@@ -32,8 +34,14 @@
     padding-left: 15px;
   }
 
-  #gameTitle{
-    width:80%;
+  .outline{
+    border: 2px solid black;
+    border-radius: 25px;
+    display: flex;
+    flex-direction: column;
+    padding-top: 15px;
+    margin-bottom: 8px;
+    margin-right: 2px;
   }
 
   #title{
@@ -42,4 +50,8 @@
 
   #notes{
     width: 80%;
+  }
+
+  #valueLink{
+    width: 40%;
   }

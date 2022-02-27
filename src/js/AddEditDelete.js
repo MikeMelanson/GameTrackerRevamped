@@ -2,6 +2,10 @@ import React from 'react';
 
 import "../css/addeditdelete.css";
 
+/**
+ * Not currently used, delete file in future update
+ */
+
 class AddEditDelete extends React.Component{
     constructor(props){
         super(props);

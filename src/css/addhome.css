@@ -11,8 +11,7 @@
     font-size: 50px;
     width: 400px;
     height: 200px;
-}
-
-.add_buttons button Link{
-    border: 1px solid black;
+    margin: 6px;
+    box-shadow: 5px 10px #3b3b3b;
+    border-radius: 10px;
 }
