@@ -268,6 +268,7 @@ class AddGame extends React.Component{
                     acquiredFrom: this.state.acquiredFrom,
                     compilation: this.state.compilation,
                     dateAcq: this.state.dateAcq,
+                    link: this.state.link,
                     img: this.state.img.replace('data:image/jpeg;base64,','')
                 })
             })
@@ -320,6 +321,7 @@ class AddGame extends React.Component{
         acquiredFrom: '',
         compilation: 0,
         dateAcq: '',
+        link: '',
         img: '',})
         this.resetImageFile()
     }

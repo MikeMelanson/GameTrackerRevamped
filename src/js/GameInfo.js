@@ -78,11 +78,16 @@ class GameInfo extends React.Component{
         }
     }
 
+    openTab(url){
+        var win = window.open(url, '_blank','noopener,noreferrer');
+        win.focus();
+    }
+
     render(){
         var array = ['','','','','','','','','','','','','','','','','',''];
         var headings = ['Publisher: ','Developer: ','Condition: ','Completeness: ','Region: ','Genre 1: ','Genre 2: ','Notes: ',
                         'Price Paid: ','Rating: ','Time Played: ','Ownership: ','Earned Achievements: ','Total Achievements: ','Number Owned: ',
-                        'Date Acquired: ','Acquired From: ','Now Playing: '];
+                        'Date Acquired: ','Acquired From: '];
         if (this.props.info.length > 0){
             array[0] = this.props.info[6];
             array[1] = this.props.info[7];
@@ -101,12 +106,7 @@ class GameInfo extends React.Component{
             array[14] = this.props.info[17];
             array[15] = this.props.info[22];
             array[16] = this.props.info[20];
-            if (this.props.info[14] === 1){
-                array[17] = 'True';
-            }
-            else{
-                array[17] = 'False';
-            }
+            array[17] = this.props.info[25];
         }
         var div;
         var spans = [];
@@ -122,11 +122,12 @@ class GameInfo extends React.Component{
                 }
             }
             spans.push(<div key='compdiv' className='div'><div key='compdiv2' className='np_border'></div></div>)
-            for (let i=8; i<18; i++){
-                if (array[i] || array[i] === 0){
+            for (let i=8; i<17; i++){
+                if (array[i]){
                     spans2.push(<span key={headings[i]+'Comp'} className='infoSpan'>{headings[i]} <span key={headings[i]+'CompText'} className='sinfoText'>{array[i]}</span></span>)
                 }
             }
+            spans2.push(<span key='link'><a href={array[17]}>Value Link</a></span>)
             spans2.push(<div key='compdiv3' className='div'><div key='compdiv4' className='np_border'></div></div>)
             if (this.state.subGames[this.state.curSubGame][4] === 'Beaten'){
                 compImg = <img key='bImgComp' src={beatenLogo} alt='beaten' title='Beaten' className='status_icon_for_game_info'></img>
@@ -169,10 +170,13 @@ class GameInfo extends React.Component{
                     spans.push(<span key={headings[i]} className='infoSpan'>{headings[i]} <span key={headings[i]+'Text'} className='sinfoText'>{array[i]}</span></span>)   
                 }
             }
-            for (let i=8; i<18; i++){
+            for (let i=8; i<17; i++){
                 if (array[i] || array[i] === 0){
                     spans2.push(<span key={headings[i]} className='infoSpan'>{headings[i]} <span key={headings[i]+'Text'} className='sinfoText'>{array[i]}</span></span>)
                 }
+            }
+            if (array[17]){
+                spans2.push(<span key='link'><a href={() => this.openTab(array[17])} onClick={() => this.openTab(array[17])}>Value Link</a></span>)
             }
             if (this.props.info[3] === 'Beaten'){
                 img = <img key='bImg' src={beatenLogo} alt='beaten' title='Beaten' className='status_icon_for_game_info'></img>
