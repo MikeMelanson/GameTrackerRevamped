@@ -202,6 +202,7 @@ def add_game_to_db():
     compilation = data.get('compilation')
     dateAcq = data.get('dateAcq')
     link = data.get('link')
+    value = data.get('value')
 
     image = data.get('img')
     alpha_image_bytes = ""
@@ -225,12 +226,12 @@ def add_game_to_db():
         os.remove("../images/temp.png") #remove temp image when done! Very important!
 
     query = """INSERT INTO Games (Id,Title,System,Status,PricePaid,Rating,Publisher,Developer,Condition,Completeness,TimePlayed,Region,Ownership,
-            Notes,NowPlaying,EarnedAchievements,TotalAchievements,NumberOwned,Genre1,Genre2,AcquiredFrom,Compilation,DateAcquired,Wishlist,Image,ValueLink)
-            VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) 
+            Notes,NowPlaying,EarnedAchievements,TotalAchievements,NumberOwned,Genre1,Genre2,AcquiredFrom,Compilation,DateAcquired,Wishlist,Image,ValueLink,Value)
+            VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) 
         """
     data_tuple = (
         nextID,title,system,status,pricePaid,rating,publisher,developer,condition,completeness,timePlayed,region,ownership,notes,nowPlaying,eAchieve,tAchieve,owned,
-        genre1,genre2,acquiredFrom,compilation,dateAcq,0,alpha_image_bytes,link
+        genre1,genre2,acquiredFrom,compilation,dateAcq,0,alpha_image_bytes,link,value
     )
     execute_insert_query(connection,query,data_tuple)
     close_connection(connection)
@@ -333,7 +334,7 @@ def get_game_info():
     
     #open image data as PIL Image, and save in as a base64 string before passing to front end
     imageBase64 = ''
-    if info[0][26] != '':
+    if info[0][27] != '':
         image = Image.open(BytesIO(info[0][25]))
         buffer = BytesIO()
         image.save(buffer,'PNG')

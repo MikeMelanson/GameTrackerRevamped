@@ -37,6 +37,7 @@ class AddGame extends React.Component{
             compilation: 0,
             dateAcq: '',
             link: '',
+            value: 0,
             img: '',
 
             imgKey: '',
@@ -219,6 +220,12 @@ class AddGame extends React.Component{
         });
     }
 
+    handleValueChange = e => {
+        this.setState({
+            value: e.target.value
+        });
+    }
+
     handleImgChange = e =>{
         var files = e.target.files;
         for (let i=0;i<files.length; i++){
@@ -269,6 +276,7 @@ class AddGame extends React.Component{
                     compilation: this.state.compilation,
                     dateAcq: this.state.dateAcq,
                     link: this.state.link,
+                    value: this.state.value,
                     img: this.state.img.replace('data:image/jpeg;base64,','')
                 })
             })
@@ -322,6 +330,7 @@ class AddGame extends React.Component{
         compilation: 0,
         dateAcq: '',
         link: '',
+        value: 0,
         img: '',})
         this.resetImageFile()
     }
@@ -513,6 +522,8 @@ class AddGame extends React.Component{
                         <div className='outline'>
                             <div>
                                 <label htmlFor='pricePaid'>Price Paid:</label><input type='number' id='pricePaid' onChange={this.handlePricePaidChange} step='.01' min='0' value={this.state.pricePaid}></input>
+                                <label htmlFor='value'>Value:</label><input type='number' id='value' onChange={this.handleValueChange} value={this.state.value} step='.01' min='0'></input>
+                                <br></br>
                                 <label htmlFor='valueLink'>Link from PriceCharting:</label><input type='text' id='valueLink' onChange={this.handleLinkChange} value={this.state.link}></input>
                             </div>
                         </div>

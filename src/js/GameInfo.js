@@ -6,6 +6,7 @@ import unbeatenLogo from '../img/unbeatenBIG.png';
 import beatenLogo from '../img/beatenBIG.png';
 import completedLogo from '../img/completedBIG.png';
 import nullLogo from '../img/nullBIG.png';
+import {FaRegTrashAlt,FaEdit} from 'react-icons/fa';
 
 /*
 TODO
@@ -83,6 +84,14 @@ class GameInfo extends React.Component{
         win.focus();
     }
 
+    editGame(){
+
+    }
+
+    deleteGame(){
+
+    }
+
     render(){
         var array = ['','','','','','','','','','','','','','','','','',''];
         var headings = ['Publisher: ','Developer: ','Condition: ','Completeness: ','Region: ','Genre 1: ','Genre 2: ','Notes: ',
@@ -107,6 +116,7 @@ class GameInfo extends React.Component{
             array[15] = this.props.info[22];
             array[16] = this.props.info[20];
             array[17] = this.props.info[25];
+            array[18] = this.props.info[26];
         }
         var div;
         var spans = [];
@@ -127,7 +137,17 @@ class GameInfo extends React.Component{
                     spans2.push(<span key={headings[i]+'Comp'} className='infoSpan'>{headings[i]} <span key={headings[i]+'CompText'} className='sinfoText'>{array[i]}</span></span>)
                 }
             }
-            spans2.push(<span key='link'><a href={array[17]}>Value Link</a></span>)
+
+            if (array[17]){
+                spans2.push(<span key='link' className='infoSpan'>Value: <span key='value' className='sinfoText'>${array[18]}</span>
+                                <a href={() => this.openTab(array[17])} onClick={() => this.openTab(array[17])}>Value Link</a>
+                            </span>)
+            }
+            else{
+                spans2.push(<span key='link' className='infoSpan'>Value: <span key='value' className='sinfoText'>${array[18]}</span>
+                            </span>)
+            }
+
             spans2.push(<div key='compdiv3' className='div'><div key='compdiv4' className='np_border'></div></div>)
             if (this.state.subGames[this.state.curSubGame][4] === 'Beaten'){
                 compImg = <img key='bImgComp' src={beatenLogo} alt='beaten' title='Beaten' className='status_icon_for_game_info'></img>
@@ -175,9 +195,17 @@ class GameInfo extends React.Component{
                     spans2.push(<span key={headings[i]} className='infoSpan'>{headings[i]} <span key={headings[i]+'Text'} className='sinfoText'>{array[i]}</span></span>)
                 }
             }
+
             if (array[17]){
-                spans2.push(<span key='link'><a href={() => this.openTab(array[17])} onClick={() => this.openTab(array[17])}>Value Link</a></span>)
+                spans2.push(<span key='link' className='infoSpan'>Value: <span key='value' className='sinfoText'>${array[18]}</span>
+                                <a href={() => this.openTab(array[17])} onClick={() => this.openTab(array[17])}>Value Link</a>
+                            </span>)
             }
+            else{
+                spans2.push(<span key='link' className='infoSpan'>Value: <span key='value' className='sinfoText'>${array[18]}</span>
+                            </span>)
+            }
+
             if (this.props.info[3] === 'Beaten'){
                 img = <img key='bImg' src={beatenLogo} alt='beaten' title='Beaten' className='status_icon_for_game_info'></img>
             }
@@ -203,12 +231,13 @@ class GameInfo extends React.Component{
                     <div className='title'>
                         {this.props.info[1]}
                         <div>{img}</div>
+                        <div><button onClick={this.editGame}><FaEdit size={28}/></button></div>
+                        <div><button onClick={this.deleteGame}><FaRegTrashAlt size={28}/></button></div>
                     </div>
                     <div className='div'><div className='np_border'></div></div>
                     <div className='changingInfo'>
                         {div}
                     </div>
-                    
                 </div>
             </>
         );
