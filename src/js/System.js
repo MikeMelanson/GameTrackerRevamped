@@ -27,6 +27,7 @@ class System extends React.Component{
             gameInfoComponent: '',
 
             reload: '',
+            subGamesInfoForDeletion: [],
         }
 
         this.getFilters = this.getFilters.bind(this);
@@ -100,6 +101,16 @@ class System extends React.Component{
     }
 
     async deleteGame(game,system){
+        let headers = new Headers();
+        headers.append('gameID',this.props.info[0]);
+        fetch('/sub_games_info', {method: 'GET', headers:headers}).then(res => res.json()).then(data => {
+            this.setState({
+                subGamesInfoForDeletion: data.subInfo
+            });
+        });
+        for (let i=0;i<this.state.subGamesInfoForDeletion.length;i++){
+            this.deleteSubGame(this.subGamesInfoForDeletion[i][1],this.state.subGamesInfoForDeletion[i][2])
+        }
         await fetch('/delete_game', {
             method:'POST',
             headers: {

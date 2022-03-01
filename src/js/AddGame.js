@@ -326,12 +326,12 @@ class AddGame extends React.Component{
                             rating: this.state.subGameData[i].rating,
                             notes: this.state.subGameData[i].notes,
                             nowPlaying: this.state.subGameData[i].nowPlaying,
-                            parentID: this.state.nextID,
                             gameNumber: i+1
                         })
                     })
                 }
                 this.setState({compilation:false})
+                this.props.onAddGame()
             }
         }
         Upload();
@@ -361,7 +361,8 @@ class AddGame extends React.Component{
         link: '',
         value: 0,
         img: '',
-        compFade: false})
+        compFade: false,
+        })
         this.resetImageFile()
     }
 

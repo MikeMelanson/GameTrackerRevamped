@@ -212,7 +212,7 @@ def add_game_to_db():
     if nextID != None:
         nextID = nextID + 1
     else:
-        nextID = 1
+        nextID = 0
 
     #open a temp image for editing, add an alpha, then save to a stream for passing to db
     if image!='' and image != None:
@@ -249,11 +249,11 @@ def add_subgame_to_db():
     rating = data.get('rating')
     notes = data.get('notes').replace("'","''") #scrub input
     nowPlaying = data.get('nowPlaying')
-    if nowPlaying == 'on':
+    if nowPlaying:
         nowPlaying = 1
     else:
         nowPlaying = 0
-    parentID = data.get('parentID')
+    parentID = get_max_game_id(connection)[0][0]
     gameNumber = data.get('gameNumber')
 
     nextID = get_max_comp_id(connection)[0][0]
