@@ -34,7 +34,7 @@ class AddGame extends React.Component{
             genre1: '',
             genre2: '',
             acquiredFrom: '',
-            compilation: 0,
+            compilation: false,
             dateAcq: '',
             link: '',
             value: 0,
@@ -243,6 +243,59 @@ class AddGame extends React.Component{
 
     handleSubmit = (e) => {
         e.preventDefault()
+        var dbody;
+        console.log(this.state.compilation)
+        if (this.state.compilation){
+            dbody={title: this.state.title,
+                system: this.state.system,
+                pricePaid: this.state.pricePaid,
+                publisher: this.state.publisher,
+                developer: this.state.developer,
+                condition: this.state.condition,
+                completeness: this.state.completeness,
+                timePlayed: this.state.timePlayed,
+                region: this.state.region,
+                ownership: this.state.ownership,
+                notes: this.state.notes,
+                eAchieve: this.state.eAcheive,
+                tAchieve: this.state.tAchieve,
+                owned: this.state.owned,
+                genre1: this.state.genre1,
+                genre2: this.state.genre2,
+                acquiredFrom: this.state.acquiredFrom,
+                compilation: this.state.compilation,
+                dateAcq: this.state.dateAcq,
+                link: this.state.link,
+                value: this.state.value,
+                img: this.state.img.replace('data:image/jpeg;base64,','')}
+        }
+        else{
+            dbody={title: this.state.title,
+                system: this.state.system,
+                status: this.state.status,
+                pricePaid: this.state.pricePaid,
+                rating: this.state.rating,
+                publisher: this.state.publisher,
+                developer: this.state.developer,
+                condition: this.state.condition,
+                completeness: this.state.completeness,
+                timePlayed: this.state.timePlayed,
+                region: this.state.region,
+                ownership: this.state.ownership,
+                notes: this.state.notes,
+                nowPlaying: this.state.nowPlaying,
+                eAchieve: this.state.eAcheive,
+                tAchieve: this.state.tAchieve,
+                owned: this.state.owned,
+                genre1: this.state.genre1,
+                genre2: this.state.genre2,
+                acquiredFrom: this.state.acquiredFrom,
+                compilation: this.state.compilation,
+                dateAcq: this.state.dateAcq,
+                link: this.state.link,
+                value: this.state.value,
+                img: this.state.img.replace('data:image/jpeg;base64,','')}
+        }
         const Upload = async() => {
             await fetch('/send_new_game', {
                 method:'POST',
@@ -252,36 +305,13 @@ class AddGame extends React.Component{
                     'Access-Control-Allow-Origin': '*',
                     "Access-Control-Allow-Credentials" : true 
                 },
-                body:JSON.stringify({
-                    title: this.state.title,
-                    system: this.state.system,
-                    status: this.state.status,
-                    pricePaid: this.state.pricePaid,
-                    rating: this.state.rating,
-                    publisher: this.state.publisher,
-                    developer: this.state.developer,
-                    condition: this.state.condition,
-                    completeness: this.state.completeness,
-                    timePlayed: this.state.timePlayed,
-                    region: this.state.region,
-                    ownership: this.state.ownership,
-                    notes: this.state.notes,
-                    nowPlaying: this.state.nowPlaying,
-                    eAchieve: this.state.eAcheive,
-                    tAchieve: this.state.tAchieve,
-                    owned: this.state.owned,
-                    genre1: this.state.genre1,
-                    genre2: this.state.genre2,
-                    acquiredFrom: this.state.acquiredFrom,
-                    compilation: this.state.compilation,
-                    dateAcq: this.state.dateAcq,
-                    link: this.state.link,
-                    value: this.state.value,
-                    img: this.state.img.replace('data:image/jpeg;base64,','')
-                })
+                body:JSON.stringify(dbody)
             })
+            console.log(this.state.compilation)
             if (this.state.compilation){
+                console.log('good1')
                 for (let i=0;i<this.state.numSubGames;i++){
+                    console.log('good2')
                     await fetch('/send_new_subgame',{
                         method: 'POST',
                         headers: {
@@ -296,12 +326,12 @@ class AddGame extends React.Component{
                             rating: this.state.subGameData[i].rating,
                             notes: this.state.subGameData[i].notes,
                             nowPlaying: this.state.subGameData[i].nowPlaying,
-                            image: this.state.subGameData[i].image,
                             parentID: this.state.nextID,
                             gameNumber: i+1
                         })
                     })
                 }
+                this.setState({compilation:false})
             }
         }
         Upload();
@@ -327,11 +357,11 @@ class AddGame extends React.Component{
         genre1: '',
         genre2: '',
         acquiredFrom: '',
-        compilation: 0,
         dateAcq: '',
         link: '',
         value: 0,
-        img: '',})
+        img: '',
+        compFade: false})
         this.resetImageFile()
     }
 

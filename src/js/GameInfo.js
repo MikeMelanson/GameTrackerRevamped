@@ -117,9 +117,16 @@ class GameInfo extends React.Component{
     }
 
     render(){
+        console.log(this.props.info[1])
         var modal = [];
         if (this.state.modalIsOpen){
-            var height1 = this.divElement.clientHeight;
+            var height1;
+            if (this.divElement.clientHeight <= this.divElement.parentElement.clientHeight){
+                height1 = '100%'
+            }
+            else{
+                height1 = this.divElement.clientHeight
+            }
             modal.push(
                 <div className='modal' style={{height:height1}}>
                     <div className='message'>Are you sure you want to delete this game?<br></br>This cannot be undone.</div>
@@ -163,6 +170,7 @@ class GameInfo extends React.Component{
         var compSpan2 = [];
         var img;
         var compImg;
+        var title;
         if (this.props.info[21] === 1 && this.state.subGames.length > 0){
             for (let i=0;i<8;i++){
                 if (array[i]){
@@ -180,7 +188,7 @@ class GameInfo extends React.Component{
                                 <a href={() => this.openTab(array[17])} onClick={() => this.openTab(array[17])}>Value Link</a>
                             </span>)
             }
-            else{
+            else if (this.props.info[1] !== undefined){
                 spans2.push(<span key='link' className='infoSpan'>Value: <span key='value' className='sinfoText'>${array[18]}</span>
                             </span>)
             }
@@ -231,7 +239,7 @@ class GameInfo extends React.Component{
                                 <a href={() => this.openTab(array[17])} onClick={() => this.openTab(array[17])}>Value Link</a>
                             </span>)
             }
-            else{
+            else if (this.props.info[1] !== undefined){
                 spans2.push(<span key='link' className='infoSpan'>Value: <span key='value' className='sinfoText'>${array[18]}</span>
                             </span>)
             }
@@ -255,16 +263,22 @@ class GameInfo extends React.Component{
         div = [<div key='spans' className='spans'>{spans}</div>,
                 <div key='spans2' className='spans'>{spans2}</div>,
                 <div key='comp_spans' className='comp_spans'>{compSpan}{compSpan2}</div>]
+        if (this.props.info[1] === undefined){
+            title=[]
+        }
+        else{
+            title=[<div className='title' >
+                    {this.props.info[1]}
+                    <div>{img}</div>
+                    <div><button onClick={this.editGame}><FaEdit size={28}/></button></div>
+                    <div><button onClick={() => this.openModal(false)}><FaRegTrashAlt size={28}/></button></div>
+                    </div>]
+        }
         return (
             <>
                 {modal}
                 <div className='holder' ref={(divElement) => { this.divElement = divElement}}>
-                    <div className='title' >
-                        {this.props.info[1]}
-                        <div>{img}</div>
-                        <div><button onClick={this.editGame}><FaEdit size={28}/></button></div>
-                        <div><button onClick={() => this.openModal(false)}><FaRegTrashAlt size={28}/></button></div>
-                    </div>
+                    {title}
                     <div className='div'><div className='np_border'></div></div>
                     <div className='changingInfo'>
                         {div}
