@@ -1,3 +1,4 @@
+from venv import create
 from db import *
 from query_builder import *
 from flask import Flask
@@ -189,7 +190,7 @@ def add_game_to_db():
     ownership = data.get('ownership')
     notes = data.get('notes').replace("'","''") #scrub input
     nowPlaying = data.get('nowPlaying')
-    if nowPlaying == 'on':
+    if nowPlaying:
         nowPlaying = 1
     else:
         nowPlaying = 0
@@ -255,32 +256,17 @@ def add_subgame_to_db():
     parentID = data.get('parentID')
     gameNumber = data.get('gameNumber')
 
-    image = data.get('img')
-    alpha_image_bytes = ""
-
     nextID = get_max_comp_id(connection)[0][0]
     if nextID != None:
         nextID = nextID + 1
     else:
         nextID = 1
 
-    #open a temp image for editing, add an alpha, then save to a stream for passing to db
-    if image!='' and image!=None:
-        with open("../images/temp.png", 'wb') as fh:
-            fh.write(base64.b64decode(image))
-            fh.close()
-        alpha_image = Image.open("../images/temp.png")
-        alpha_image.putalpha(70)
-        stream = BytesIO()
-        alpha_image.save(stream,format="PNG")
-        alpha_image_bytes = stream.getvalue()
-        os.remove("../images/temp.png") #remove temp image when done! Very important!
-
-    query = """INSERT INTO Compilations (ID,ParentID,GameNumber,Title,Status,Rating,Notes,NowPlaying,Image)
-            VALUES(?,?,?,?,?,?,?,?,?) 
+    query = """INSERT INTO Compilations (ID,ParentID,GameNumber,Title,Status,Rating,Notes,NowPlaying)
+            VALUES(?,?,?,?,?,?,?,?) 
         """
     data_tuple = (
-        nextID,parentID,gameNumber,title,status,rating,notes,nowPlaying,alpha_image_bytes
+        nextID,parentID,gameNumber,title,status,rating,notes,nowPlaying
     )
     execute_insert_query(connection,query,data_tuple)
     close_connection(connection)
@@ -325,20 +311,21 @@ def get_game_info():
     game = request.headers.get('game')
     info = retrieve_game_info(connection,system,game)
     close_connection(connection)
+    data_array = []
     if info:
         #get all data except image data and append to array for return
-        data_array = []
         length = len(info[0])-1
         for i in range(length):
             data_array.append(info[0][i])
     
     #open image data as PIL Image, and save in as a base64 string before passing to front end
     imageBase64 = ''
-    if info[0][27] != '':
-        image = Image.open(BytesIO(info[0][25]))
-        buffer = BytesIO()
-        image.save(buffer,'PNG')
-        imageBase64 = base64.b64encode(buffer.getvalue()).decode('utf-8')
+    if info:
+        if info[0][27] != '':
+            image = Image.open(BytesIO(info[0][25]))
+            buffer = BytesIO()
+            image.save(buffer,'PNG')
+            imageBase64 = base64.b64encode(buffer.getvalue()).decode('utf-8')
 
     return{'gameInfo':data_array,'image':imageBase64}
 
@@ -351,3 +338,29 @@ def get_sub_game_info():
     print(info)
     close_connection(connection)
     return{'subInfo':info}
+
+@app.route('/delete_game', methods=['GET','POST'])
+def delete_game():
+    connection = create_connection()
+    data = request.get_json()
+    gameID = data.get('game')
+    system = data.get('system')
+
+    d_query = "DELETE FROM Games WHERE Id='"+str(gameID)+"' AND System='"+system+"'"
+    execute_delete_query(connection,d_query)
+
+    return ""
+
+@app.route('/delete_sub_game', methods=['GET','POST'])
+def delete_sub_game():
+    connection = create_connection()
+    data = request.get_json()
+    gameID = data.get('game')
+    gameNum = data.get('subGame')
+    print(gameID)
+    print(gameNum)
+
+    d_query = "DELETE FROM Compilations WHERE ParentID='"+str(gameID)+"' AND GameNumber='"+str(gameNum)+"'"
+    execute_delete_query(connection,d_query)
+
+    return ""

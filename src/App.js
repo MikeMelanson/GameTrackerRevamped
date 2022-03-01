@@ -27,13 +27,13 @@ class App extends React.Component{
     this.state = {
       content: 'visible',
       refresh: false,
-      refreshNP: ''
+      gameState: ''
     }
 
     this.onEnter = this.onEnter.bind(this);
     this.onExit = this.onExit.bind(this);
     this.addSystemRefresh = this.addSystemRefresh.bind(this);
-    this.nowPlayingChange = this.nowPlayingChange.bind(this);
+    this.gameStateChange = this.gameStateChange.bind(this);
   }
   
   componentDidMount(){
@@ -58,9 +58,9 @@ class App extends React.Component{
     this.setState({refresh: name})
   }
 
-  nowPlayingChange(){
+  gameStateChange(){
     let randomString = Math.random().toString(36);
-    this.setState({refreshNP: randomString})
+    this.setState({gameState: randomString})
   }
 
   render(){
@@ -72,10 +72,10 @@ class App extends React.Component{
           <div className='main'>
             <div className='layout'>
               <div className='np_div'>
-                <NowPlaying refresh={this.state.refreshNP}/>
+                <NowPlaying refresh={this.state.gameState}/>
               </div>
               <div className='stats_div'>
-                <Statistics newGame={this.state.refreshNP}/>
+                <Statistics newGame={this.state.gameState}/>
               </div>
               <div className='info_div'>
                 <Info/>
@@ -109,9 +109,9 @@ class App extends React.Component{
                         <Route exact path="/Plan"><div className='content2'><Planner /></div></Route>
                         <Route exact path="/Mem"><div className='content2'><MemoryCard /></div></Route>
                         <Route exact path="/DS"><div className='content2'><DetailedStatistics /></div></Route>
-                        <Route exact path="/System"><div className='content2'><System/></div></Route>
+                        <Route exact path="/System"><div className='content2'><System onChange={this.gameStateChange} refresh={this.state.gameState}/></div></Route>
                         <Route exact path="/AddSys"><div className='content2'><AddSystem onAddSystem={this.addSystemRefresh}/></div></Route>
-                        <Route exact path="/AddGame"><div className='content2'><AddGame onAddGame={this.nowPlayingChange}/></div></Route>
+                        <Route exact path="/AddGame"><div className='content2'><AddGame onAddGame={this.gameStateChange}/></div></Route>
                         <Route path="/" component={Home}/>
                       </Switch>
                   </CSSTransition>

@@ -46,7 +46,7 @@ class GamesList extends React.Component{
     }
 
     componentDidUpdate(prevProps){
-        if (prevProps.filters !== this.props.filters){
+        if (prevProps.filters !== this.props.filters || prevProps.refresh !== this.props.refresh){
             this.retrieveGames(this.props.filters)
         }
     }

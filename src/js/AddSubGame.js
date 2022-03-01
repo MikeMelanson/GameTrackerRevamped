@@ -12,7 +12,6 @@ class AddSubGame extends React.Component{
             rating: 0,
             notes: '',
             nowPlaying: false,
-            image: '',
             //gamenumber should be raised to parent
             //gameNumber: 1
         }
@@ -53,21 +52,6 @@ class AddSubGame extends React.Component{
         this.props.getData(this.props.gameNumber,this.state)
     }
 
-    handleImgChange = e =>{
-        var files = e.target.files;
-        for (let i=0;i<files.length; i++){
-            let reader = new FileReader();
-            let file = files[i];
-
-            reader.onloadend = async () => {
-                await this.setState({
-                    img: reader.result
-                })
-            }
-            reader.readAsDataURL(file);
-        }
-        this.props.getData(this.props.gameNumber,this.state)
-    }
 
     render(){
         return(
@@ -91,9 +75,6 @@ class AddSubGame extends React.Component{
                     </div>
                     <div>
                         <label htmlFor='notes'>Notes:</label><input type='text' id='notes' onChange={this.handleNotesChange}></input>
-                    </div>
-                    <div>
-                        <label htmlFor='image'>Image:</label><input type='file' id='image' onChange={this.handleImgChange}></input>
                     </div>
                 </div>
             </>

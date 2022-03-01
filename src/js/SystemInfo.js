@@ -35,10 +35,21 @@ class SystemInfo extends React.Component{
         });
     }
 
+    async componentDidUpdate(prevProps){
+        if (prevProps.refresh !== this.props.refresh){
+            let systemHeader = new Headers();
+            systemHeader.append('System',this.props.info[1]);
+            await fetch('/spec_system_totals',{method: 'GET', headers:systemHeader}).then(res => res.json()).then(data => {
+                this.setState({beaten:data.beaten,completed:data.completed,unplayed:data.unplayed,unbeaten:data.unbeaten,nullg:data.nullg,unplayedPercent:data.unplayedP
+                    ,unbeatenPercent:data.unbeatenP,beatenPercent:data.beatenP,completedPercent:data.completedP,nullPercent:data.nullP,total:data.total});
+            });
+        }
+    }
+
     render(){
         var array = ['','','','','','','','','',''];
         var headings = ['Format: ','Publisher: ','Price Paid: ','Ownership: ','Number Owned: ',
-            'Number of Controllers: ','Region: ','Date Acquired: ','Date Added: ','Notes: '];
+            'Number of Controllers: ','Region: ','Notes: ','Date Acquired: ','Date Added: '];
         if (this.props.info.length > 0){
             array[0] = this.props.info[1];
             array[1] = this.props.info[2];

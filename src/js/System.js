@@ -25,22 +25,26 @@ class System extends React.Component{
             systemInfoComponent: '',
             gamesListComponent: '',
             gameInfoComponent: '',
+
+            reload: '',
         }
 
         this.getFilters = this.getFilters.bind(this);
         this.getSelectedGame = this.getSelectedGame.bind(this);
+        this.deleteGame = this.deleteGame.bind(this);
+        this.deleteSubGame = this.deleteSubGame.bind(this);
     }
 
     getFilters(data){
         //retrieve data from GameFilters child, store in state, and pass to GamesList child
         if (data === 'clear'){
             this.setState({
-                gamesListComponent: <GamesList info={this.state.systemInfo[1]} getSelectedGame={this.getSelectedGame}/>
+                gamesListComponent: <GamesList info={this.state.systemInfo[1]} getSelectedGame={this.getSelectedGame} refresh={this.props.refresh}/>
             })
         }
         else{
             this.setState({
-                gamesListComponent: <GamesList info={this.state.systemInfo[1]} filters={data} getSelectedGame={this.getSelectedGame}/>
+                gamesListComponent: <GamesList info={this.state.systemInfo[1]} filters={data} getSelectedGame={this.getSelectedGame} refresh={this.props.refresh}/>
             }) 
         }
     }
@@ -54,11 +58,14 @@ class System extends React.Component{
     }
 
     componentDidUpdate(prevProps,prevState){
-        if (prevState.systemInfo !== this.state.systemInfo){
+        if (prevState.systemInfo !== this.state.systemInfo || this.props.refresh !== prevProps.refresh){
             this.setState({
-                systemInfoComponent: <SystemInfo info={this.state.systemInfo}/>,
-                gamesListComponent: <GamesList info={this.state.systemInfo[1]} getSelectedGame={this.getSelectedGame}/>,
+                systemInfoComponent: <SystemInfo info={this.state.systemInfo} refresh={this.props.refresh}/>,
+                gamesListComponent: <GamesList info={this.state.systemInfo[1]} getSelectedGame={this.getSelectedGame} refresh={this.props.refresh}/>,
             });
+        }        
+        if (this.props.refresh !== prevProps.refresh){
+            this.fetchGameInfo(this.state.curGameInfo[1])
         }
     }
 
@@ -87,9 +94,43 @@ class System extends React.Component{
             this.setState({
                 curGameInfo: data.gameInfo,
                 gameImage: data.image,
-                gameInfoComponent: <GameInfo info={data.gameInfo}/>
+                gameInfoComponent: <GameInfo info={data.gameInfo} delete={this.deleteGame} deleteSubGame={this.deleteSubGame} refresh={this.props.refresh}/>
             });
         });
+    }
+
+    async deleteGame(game,system){
+        await fetch('/delete_game', {
+            method:'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'Access-Control-Allow-Origin': '*',
+                "Access-Control-Allow-Credentials" : true 
+            },
+            body:JSON.stringify({
+                system: system,
+                game: game
+            })}
+        )
+        this.props.onChange();
+    }
+
+    async deleteSubGame(game,subGame){
+        await fetch('/delete_sub_game', {
+            method:'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'Access-Control-Allow-Origin': '*',
+                "Access-Control-Allow-Credentials" : true 
+            },
+            body:JSON.stringify({
+                game: game,
+                subGame: subGame
+            })}
+        )
+        this.props.onChange();
     }
     
     render(){

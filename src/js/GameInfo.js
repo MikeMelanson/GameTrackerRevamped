@@ -20,10 +20,16 @@ class GameInfo extends React.Component{
         this.state = {
             subGames: [],
             curSubGame: 0,
+
+            modalIsOpen: false,
+            delSubGame: false,
         }
 
         this.changeSubGameL = this.changeSubGameL.bind(this)
         this.changeSubGameR = this.changeSubGameR.bind(this)
+        this.deleteGame = this.deleteGame.bind(this)
+        this.openModal = this.openModal.bind(this)
+        this.closeModal = this.closeModal.bind(this)
     }
 
     componentDidMount(){
@@ -39,13 +45,14 @@ class GameInfo extends React.Component{
     }
 
     componentDidUpdate(prevProps){
-        if (prevProps.info !== this.props.info){
+        if (prevProps.info !== this.props.info || prevProps.refresh !== this.props.refresh){
             if (this.props.info[21] === 1){
                 let headers = new Headers();
                 headers.append('gameID',this.props.info[0]);
                 fetch('/sub_games_info', {method: 'GET', headers:headers}).then(res => res.json()).then(data => {
                     this.setState({
-                        subGames: data.subInfo
+                        subGames: data.subInfo,
+                        curSubGame: 0,
                     });
                 });
             }
@@ -88,11 +95,42 @@ class GameInfo extends React.Component{
 
     }
 
-    deleteGame(){
+    openModal(changeState){
+        this.setState({modalIsOpen: true});
+        if (changeState){
+            this.setState({delSubGame:true})
+        }
+    }
 
+    closeModal(){
+        this.setState({modalIsOpen: false,delSubGame:false});
+    }
+
+    deleteGame(){
+        if (this.state.delSubGame){
+            this.props.deleteSubGame(this.props.info[0],this.state.subGames[this.state.curSubGame][2])
+        }
+        else{
+            this.props.delete(this.props.info[0],this.props.info[2])
+        }
+        this.setState({modalIsOpen: false,delSubGame:false});
     }
 
     render(){
+        var modal = [];
+        if (this.state.modalIsOpen){
+            var height1 = this.divElement.clientHeight;
+            modal.push(
+                <div className='modal' style={{height:height1}}>
+                    <div className='message'>Are you sure you want to delete this game?<br></br>This cannot be undone.</div>
+                    <div>
+                        <button onClick={this.deleteGame}>Yes, Delete</button>
+                        <button onClick={this.closeModal}>No, Don't Delete</button>
+                    </div>
+                </div>
+            )
+        }
+
         var array = ['','','','','','','','','','','','','','','','','',''];
         var headings = ['Publisher: ','Developer: ','Condition: ','Completeness: ','Region: ','Genre 1: ','Genre 2: ','Notes: ',
                         'Price Paid: ','Rating: ','Time Played: ','Ownership: ','Earned Achievements: ','Total Achievements: ','Number Owned: ',
@@ -131,7 +169,6 @@ class GameInfo extends React.Component{
                     spans.push(<span key={headings[i]+'Comp'} className='infoSpan'>{headings[i]} <span key={headings[i]+'CompText'} className='sinfoText'>{array[i]}</span></span>)   
                 }
             }
-            spans.push(<div key='compdiv' className='div'><div key='compdiv2' className='np_border'></div></div>)
             for (let i=8; i<17; i++){
                 if (array[i]){
                     spans2.push(<span key={headings[i]+'Comp'} className='infoSpan'>{headings[i]} <span key={headings[i]+'CompText'} className='sinfoText'>{array[i]}</span></span>)
@@ -148,7 +185,7 @@ class GameInfo extends React.Component{
                             </span>)
             }
 
-            spans2.push(<div key='compdiv3' className='div'><div key='compdiv4' className='np_border'></div></div>)
+            compSpan.push(<div key='compdiv' className='div_info'><div key='compdiv2' className='np_border'></div></div>)
             if (this.state.subGames[this.state.curSubGame][4] === 'Beaten'){
                 compImg = <img key='bImgComp' src={beatenLogo} alt='beaten' title='Beaten' className='status_icon_for_game_info'></img>
             }
@@ -165,20 +202,13 @@ class GameInfo extends React.Component{
                 compImg = <img key='nImgComp'src={nullLogo} alt='null' title='Null' className='status_icon_for_game_info'></img>
             }
 
-            var np;
-            if (this.state.subGames[this.state.curSubGame][7] === 1){
-                np = 'True'
-            }
-            else{
-                np = 'False'
-            }
             compSpan.push(
-                        <button key='prev' id='prevSubGame' onClick={this.changeSubGameL}>&#60;</button>,
-                        <span key='IMG' className='infoSpan'>{compImg}</span>,
+                        <button key='prev' className='changeSubGame' onClick={this.changeSubGameL}>&#60;</button>,
+                        <span key='IMG' className='infoSpan' id='comp_status_img'>{compImg}</span>,
                         <span key='TitleComp' className='infoSpan'>Title: <span key='TitleText' className='sinfoText'>{this.state.subGames[this.state.curSubGame][3]}</span></span>,
                         <span key='RatingComp' className='infoSpan'>Rating: <span key='RatingText' className='sinfoText'>{this.state.subGames[this.state.curSubGame][5]}</span></span>,
-                        <span key='NowPlayingComp' className='infoSpan'>Now Playing: <span key='NPText' className='sinfoText'>{np}</span></span>,
-                        <button key='next' id='nextSubGame' onClick={this.changeSubGameR}>&#62;</button>
+                        <span key='comp_buttons' className='comp_buttons'><button onClick={this.editGame}><FaEdit size={28}/></button><button onClick={() => this.openModal(true)}><FaRegTrashAlt size={28}/></button></span>,
+                        <button key='next' className='changeSubGame' onClick={this.changeSubGameR}>&#62;</button>
             )
             if (this.state.subGames[this.state.curSubGame][6]){
                 compSpan2.push(<span key='Notes2Comp' className='infoSpanNotes'>Notes: <span className='sinfoText'>{this.state.subGames[this.state.curSubGame][6]}</span></span>)
@@ -227,12 +257,13 @@ class GameInfo extends React.Component{
                 <div key='comp_spans' className='comp_spans'>{compSpan}{compSpan2}</div>]
         return (
             <>
-                <div className='holder'>
-                    <div className='title'>
+                {modal}
+                <div className='holder' ref={(divElement) => { this.divElement = divElement}}>
+                    <div className='title' >
                         {this.props.info[1]}
                         <div>{img}</div>
                         <div><button onClick={this.editGame}><FaEdit size={28}/></button></div>
-                        <div><button onClick={this.deleteGame}><FaRegTrashAlt size={28}/></button></div>
+                        <div><button onClick={() => this.openModal(false)}><FaRegTrashAlt size={28}/></button></div>
                     </div>
                     <div className='div'><div className='np_border'></div></div>
                     <div className='changingInfo'>
