@@ -51,7 +51,7 @@ class NowPlayingGame extends React.Component{
         else{
             edit = <button className='np_edit_b'><Link to={{pathname:'/EditGame',state:{info:this.state.curGameInfo}}}><FaEdit size={28}/></Link></button>
         }
-        console.log(this.state.curGameInfo)
+        
         var status;
         if (this.props.status === 'Unplayed'){
             status = <img src={unplayedLogo} alt='unplayed'></img>

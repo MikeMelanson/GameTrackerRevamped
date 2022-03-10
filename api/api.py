@@ -360,7 +360,7 @@ def get_single_sub_game_info():
     data_array = []
     if info:
         #get all data except image data and append to array for return
-        length = len(info[0])-1
+        length = len(info[0])
         for i in range(length):
             data_array.append(info[0][i])
     close_connection(connection)
