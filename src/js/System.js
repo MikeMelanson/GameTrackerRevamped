@@ -102,7 +102,7 @@ class System extends React.Component{
 
     async deleteGame(game,system){
         let headers = new Headers();
-        headers.append('gameID',this.props.info[0]);
+        headers.append('gameID',game);
         fetch('/sub_games_info', {method: 'GET', headers:headers}).then(res => res.json()).then(data => {
             this.setState({
                 subGamesInfoForDeletion: data.subInfo

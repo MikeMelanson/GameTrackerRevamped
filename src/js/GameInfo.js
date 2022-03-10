@@ -7,6 +7,7 @@ import beatenLogo from '../img/beatenBIG.png';
 import completedLogo from '../img/completedBIG.png';
 import nullLogo from '../img/nullBIG.png';
 import {FaRegTrashAlt,FaEdit} from 'react-icons/fa';
+import {Link} from 'react-router-dom'
 
 /*
 TODO
@@ -91,10 +92,6 @@ class GameInfo extends React.Component{
         win.focus();
     }
 
-    editGame(){
-
-    }
-
     openModal(changeState){
         this.setState({modalIsOpen: true});
         if (changeState){
@@ -117,7 +114,6 @@ class GameInfo extends React.Component{
     }
 
     render(){
-        console.log(this.props.info[1])
         var modal = [];
         if (this.state.modalIsOpen){
             var height1;
@@ -215,7 +211,7 @@ class GameInfo extends React.Component{
                         <span key='IMG' className='infoSpan' id='comp_status_img'>{compImg}</span>,
                         <span key='TitleComp' className='infoSpan'>Title: <span key='TitleText' className='sinfoText'>{this.state.subGames[this.state.curSubGame][3]}</span></span>,
                         <span key='RatingComp' className='infoSpan'>Rating: <span key='RatingText' className='sinfoText'>{this.state.subGames[this.state.curSubGame][5]}</span></span>,
-                        <span key='comp_buttons' className='comp_buttons'><button onClick={this.editGame}><FaEdit size={28}/></button><button onClick={() => this.openModal(true)}><FaRegTrashAlt size={28}/></button></span>,
+                        <span key='comp_buttons' className='comp_buttons'><button><Link to={{pathname:'/EditSubGame',state:{info:this.state.subGames[this.state.curSubGame]}}}><FaEdit size={28}/></Link></button><button onClick={() => this.openModal(true)}><FaRegTrashAlt size={28}/></button></span>,
                         <button key='next' className='changeSubGame' onClick={this.changeSubGameR}>&#62;</button>
             )
             if (this.state.subGames[this.state.curSubGame][6]){
@@ -263,6 +259,7 @@ class GameInfo extends React.Component{
         div = [<div key='spans' className='spans'>{spans}</div>,
                 <div key='spans2' className='spans'>{spans2}</div>,
                 <div key='comp_spans' className='comp_spans'>{compSpan}{compSpan2}</div>]
+
         if (this.props.info[1] === undefined){
             title=[]
         }
@@ -270,7 +267,7 @@ class GameInfo extends React.Component{
             title=[<div className='title' >
                     {this.props.info[1]}
                     <div>{img}</div>
-                    <div><button onClick={this.editGame}><FaEdit size={28}/></button></div>
+                    <div><button><Link to={{pathname:'/EditGame',state:{info:this.props.info}}}><FaEdit size={28}/></Link></button></div>
                     <div><button onClick={() => this.openModal(false)}><FaRegTrashAlt size={28}/></button></div>
                     </div>]
         }

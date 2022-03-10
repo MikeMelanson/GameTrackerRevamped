@@ -1,7 +1,7 @@
 import React from 'react';
 import {CSSTransition} from 'react-transition-group'
 import AddSubGame from './AddSubGame';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import "../css/addgame.css";
@@ -91,28 +91,12 @@ class AddGame extends React.Component{
         this.setState({
             publisher: e.target.value
         });
-        document.getElementById('newPublisher').value = ''
-    }
-
-    handleNewPubChange = e => {
-        this.setState({
-            publisher: e.target.value
-        });
-        document.getElementById('publisher').value = ''
     }
 
     handleDeveloperChange = e => {
         this.setState({
             developer: e.target.value
         });
-        document.getElementById('newDeveloper').value = ''
-    }
-
-    handleNewDevChange = e => {
-        this.setState({
-            developer: e.target.value
-        });
-        document.getElementById('developer').value = ''
     }
 
     handleConditionChange = e => {
@@ -486,7 +470,6 @@ class AddGame extends React.Component{
                                         {this.state.publishers}
                                     </datalist>
                                     <input  autoComplete="on" list="publisher" onChange={this.handlePublisherChange} value={this.state.publisher}/>
-                                <label htmlFor='newPublisher'>Add New Publisher:</label><input type='text' id='newPublisher' onChange={this.handleNewPubChange} value={this.state.publisher}></input>
                             </div>
                             <div>
                                 <label htmlFor='developer'>Developer:</label>
@@ -494,7 +477,6 @@ class AddGame extends React.Component{
                                             {this.state.developers}
                                         </datalist>   
                                         <input  autoComplete="on" list="developer" onChange={this.handleDeveloperChange} value={this.state.developer}/>
-                                <label htmlFor='newDeveloper'>Add New Developer:</label><input type='text' id='newDeveloper' onChange={this.handleNewDevChange} value={this.state.developer}></input>
                             </div>
                         </div>
                         <div className='outline'>
@@ -540,14 +522,16 @@ class AddGame extends React.Component{
                         </div>
                         <div className='outline'>
                             <div>
-                                <label htmlFor='genre1'>Genre 1:</label>
-                                    <select id='genre1' onChange={this.handleGenre1Change} value={this.state.genre1}>
+                                <label htmlFor='genre1'>Genre1:</label>
+                                    <datalist id='genre1'>
                                         {this.state.genres}
-                                    </select>
-                                <label htmlFor='genre2'>Genre 2:</label>
-                                    <select id='genre2' onChange={this.handleGenre2Change} value={this.state.genre2}>
+                                    </datalist>
+                                    <input  autoComplete="on" list="genre1" onChange={this.handleGenre1Change} value={this.state.genre1}/>
+                                <label htmlFor='genre2'>Genre2:</label>
+                                    <datalist id='genre2'>
                                         {this.state.genres}
-                                    </select>
+                                    </datalist>
+                                    <input  autoComplete="on" list="genre2" onChange={this.handleGenre2Change} value={this.state.genre2}/>
                             </div>
                         </div>
                         <div className='outline'>
@@ -629,14 +613,6 @@ class AddGame extends React.Component{
                             <input id='submit' type='submit'></input>
                         </div>
                     </form>
-                    <ToastContainer
-                        position="bottom-center"
-                        autoClose={2500}
-                        hideProgressBar={true}
-                        closeOnClick={true}
-                        draggable={false}
-                        theme={'dark'}
-                    />
                 </div>
             </>
         );

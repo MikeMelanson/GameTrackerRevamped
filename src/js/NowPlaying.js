@@ -31,8 +31,8 @@ class NowPlaying extends React.Component{
     render(){
         var games = [];
         for (let i=0;i< this.state.gamesList.length;i++){
-            games.push(<NowPlayingGame key={this.state.gamesList[i][0]} title={this.state.gamesList[i][0]}
-                system={this.state.gamesList[i][1]} status={this.state.gamesList[i][2]}></NowPlayingGame>);
+            games.push(<NowPlayingGame key={this.state.gamesList[i][1]} gID={this.state.gamesList[i][0]} title={this.state.gamesList[i][1]}
+                system={this.state.gamesList[i][2]} status={this.state.gamesList[i][3]} gameType={this.state.gamesList[i][4]}></NowPlayingGame>);
         }
         return (
             <>

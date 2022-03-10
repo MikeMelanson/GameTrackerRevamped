@@ -322,22 +322,50 @@ def get_game_info():
     imageBase64 = ''
     if info:
         if info[0][27] != '':
-            image = Image.open(BytesIO(info[0][25]))
+            image = Image.open(BytesIO(info[0][27]))
             buffer = BytesIO()
             image.save(buffer,'PNG')
             imageBase64 = base64.b64encode(buffer.getvalue()).decode('utf-8')
 
     return{'gameInfo':data_array,'image':imageBase64}
 
+@app.route('/game_info_ID')
+def get_game_info_ID():
+    connection = create_connection()
+    gameID = request.headers.get('gameID')
+    info = retrieve_game_info_from_ID(connection,gameID)
+    close_connection(connection)
+    data_array = []
+    if info:
+        #get all data except image data and append to array for return
+        length = len(info[0])-1
+        for i in range(length):
+            data_array.append(info[0][i])
+
+    return{'gameInfo':data_array}
+
 @app.route('/sub_games_info')
 def get_sub_game_info():
     connection = create_connection()
     gameID = request.headers.get('gameID')
     info = retrieve_sub_game_info(connection,gameID)
-    print(gameID)
-    print(info)
     close_connection(connection)
     return{'subInfo':info}
+
+@app.route('/single_sub_game_info')
+def get_single_sub_game_info():
+    connection = create_connection()
+    gameID = request.headers.get('gameID')
+    info = retrieve_single_sub_game(connection,gameID)
+    data_array = []
+    if info:
+        #get all data except image data and append to array for return
+        length = len(info[0])-1
+        for i in range(length):
+            data_array.append(info[0][i])
+    close_connection(connection)
+    return{'subGame':data_array}
+
 
 @app.route('/delete_game', methods=['GET','POST'])
 def delete_game():
@@ -362,5 +390,172 @@ def delete_sub_game():
 
     d_query = "DELETE FROM Compilations WHERE ParentID='"+str(gameID)+"' AND GameNumber='"+str(gameNum)+"'"
     execute_delete_query(connection,d_query)
+
+    return ""
+
+@app.route('/update_game', methods=['GET','POST'])
+def update_game():
+    connection = create_connection()
+    data = request.get_json()
+    gameID = data.get('ID')
+    title = data.get('title')
+    system = data.get('system')
+    status = data.get('status')
+    pricePaid = data.get('pricePaid')
+    rating = data.get('rating')
+    publisher = data.get('publisher')
+    developer = data.get('developer')
+    condition = data.get('condition')
+    completeness = data.get('completeness')
+    timePlayed = data.get('timePlayed')
+    region = data.get('region')
+    ownership = data.get('ownership') 
+    notes = data.get('notes')
+    nowPlaying = data.get('nowPlaying')
+    eAcheive = data.get('eAchieve')
+    tAchieve = data.get('tAchieve')
+    owned = data.get('owned')
+    genre1 = data.get('genre1')
+    genre2 = data.get('genre2')
+    acquiredFrom = data.get('acquiredFrom')
+    dateAcq = data.get('dateAcq')
+    link = data.get('link')
+    value = data.get('value')
+    img = data.get('img')
+    imgRemove = data.get('imgRemove')
+
+    alpha_image_bytes = ""
+
+    if not imgRemove:
+        #open a temp image for editing, add an alpha, then save to a stream for passing to db
+        if img!='' and img != None:
+            with open("../images/temp.png", 'wb') as fh:
+                fh.write(base64.b64decode(img))
+                fh.close()
+            alpha_image = Image.open("../images/temp.png")
+            alpha_image.putalpha(70)
+            stream = BytesIO()
+            alpha_image.save(stream,format="PNG")
+            alpha_image_bytes = stream.getvalue()
+            os.remove("../images/temp.png") #remove temp image when done! Very important!
+
+            query = """UPDATE Games SET Title=?,System=?,Status=?,PricePaid=?,Rating=?,Publisher=?,Developer=?,Condition=?,Completeness=?,TimePlayed=?,Region=?,Ownership=?,
+                Notes=?,NowPlaying=?,EarnedAchievements=?,TotalAchievements=?,NumberOwned=?,Genre1=?,Genre2=?,AcquiredFrom=?,DateAcquired=?,ValueLink=?,Value=?,Image=?
+                WHERE Id='"""+str(gameID)+"""'"""
+
+            d_tuple=(
+                title,
+                system,
+                status,
+                pricePaid,
+                rating,
+                publisher,
+                developer,
+                condition,
+                completeness,
+                timePlayed,
+                region,
+                ownership,
+                notes,
+                nowPlaying,
+                eAcheive,
+                tAchieve,
+                owned,
+                genre1,
+                genre2,
+                acquiredFrom,
+                dateAcq,
+                link,
+                value,
+                alpha_image_bytes
+            )
+        else:
+            query = """UPDATE Games SET Title=?,System=?,Status=?,PricePaid=?,Rating=?,Publisher=?,Developer=?,Condition=?,Completeness=?,TimePlayed=?,Region=?,Ownership=?,
+                Notes=?,NowPlaying=?,EarnedAchievements=?,TotalAchievements=?,NumberOwned=?,Genre1=?,Genre2=?,AcquiredFrom=?,DateAcquired=?,ValueLink=?,Value=?
+                WHERE Id='"""+str(gameID)+"""'"""
+
+            d_tuple=(
+                title,
+                system,
+                status,
+                pricePaid,
+                rating,
+                publisher,
+                developer,
+                condition,
+                completeness,
+                timePlayed,
+                region,
+                ownership,
+                notes,
+                nowPlaying,
+                eAcheive,
+                tAchieve,
+                owned,
+                genre1,
+                genre2,
+                acquiredFrom,
+                dateAcq,
+                link,
+                value,
+            )
+    else:
+        query = """UPDATE Games SET Title=?,System=?,Status=?,PricePaid=?,Rating=?,Publisher=?,Developer=?,Condition=?,Completeness=?,TimePlayed=?,Region=?,Ownership=?,
+                Notes=?,NowPlaying=?,EarnedAchievements=?,TotalAchievements=?,NumberOwned=?,Genre1=?,Genre2=?,AcquiredFrom=?,DateAcquired=?,ValueLink=?,Value=?,Image=?
+                WHERE Id='"""+str(gameID)+"""'"""
+
+        d_tuple=(
+            title,
+            system,
+            status,
+            pricePaid,
+            rating,
+            publisher,
+            developer,
+            condition,
+            completeness,
+            timePlayed,
+            region,
+            ownership,
+            notes,
+            nowPlaying,
+            eAcheive,
+            tAchieve,
+            owned,
+            genre1,
+            genre2,
+            acquiredFrom,
+            dateAcq,
+            link,
+            value,
+            alpha_image_bytes
+        )
+
+    execute_update_query(connection,query,d_tuple)
+
+    return ""
+
+@app.route('/update_sub_game', methods=['GET','POST'])
+def update_sub_game():
+    connection = create_connection()
+    data = request.get_json()
+    gameID = data.get('ID')
+    title = data.get('title')
+    status = data.get('status')
+    rating = data.get('rating')
+    notes = data.get('notes')
+    nowPlaying = data.get('nowPlaying')
+
+    query = """UPDATE Compilations SET Title=?,Status=?,Rating=?,Notes=?,NowPlaying=? WHERE Id='"""+str(gameID)+"""'"""
+
+    d_tuple=(
+        title,
+        status,
+        rating,
+        notes,
+        nowPlaying,
+    )
+
+    execute_update_query(connection,query,d_tuple)
 
     return ""

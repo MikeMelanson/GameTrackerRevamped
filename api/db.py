@@ -79,9 +79,9 @@ def get_games_count(conn):
 
 def get_np_games(conn):
     cur = conn.cursor()
-    cur.execute("""SELECT Title,System,Status FROM Games WHERE Wishlist=0 AND NowPlaying=1
+    cur.execute("""SELECT Id,Title,System,Status,1 as GameType FROM Games WHERE Wishlist=0 AND NowPlaying=1
                     UNION
-                    SELECT c.Title,g.System,c.Status FROM Compilations c LEFT JOIN Games g ON g.Id = c.ParentID WHERE c.NowPlaying=1
+                    SELECT c.ID,c.Title,g.System,c.Status,0 as GameType FROM Compilations c LEFT JOIN Games g ON g.Id = c.ParentID WHERE c.NowPlaying=1
                     ORDER BY System""")
     rows = cur.fetchall()
     return rows
@@ -128,9 +128,21 @@ def retrieve_game_info(conn,system,game):
     rows = cur.fetchall()
     return rows
 
+def retrieve_game_info_from_ID(conn,ID):
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM Games WHERE Id = " + ID)
+    rows = cur.fetchall()
+    return rows
+
 def retrieve_sub_game_info(conn,gameID):
     cur = conn.cursor()
     cur.execute("SELECT * FROM Compilations WHERE ParentID = " + gameID)
+    rows = cur.fetchall()
+    return rows
+
+def retrieve_single_sub_game(conn,gameID):
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM Compilations WHERE ID = " + gameID)
     rows = cur.fetchall()
     return rows
 

@@ -17,8 +17,12 @@ import Help from './js/Help';
 import Settings from './js/Settings';
 import Import from './js/Import';
 import System from './js/System';
+import EditGame from './js/EditGame';
+import EditSubGame from './js/EditSubGame';
 import {Route, Switch, withRouter} from "react-router-dom";
 import {TransitionGroup, CSSTransition} from 'react-transition-group';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 class App extends React.Component{
   constructor(props){
@@ -58,9 +62,12 @@ class App extends React.Component{
     this.setState({refresh: name})
   }
 
-  gameStateChange(){
+  gameStateChange(edit=null){
     let randomString = Math.random().toString(36);
     this.setState({gameState: randomString})
+    if (edit !== null){
+      toast("Game edited successfully!");
+    }
   }
 
   render(){
@@ -112,12 +119,22 @@ class App extends React.Component{
                         <Route exact path="/System"><div className='content2'><System onChange={this.gameStateChange} refresh={this.state.gameState}/></div></Route>
                         <Route exact path="/AddSys"><div className='content2'><AddSystem onAddSystem={this.addSystemRefresh}/></div></Route>
                         <Route exact path="/AddGame"><div className='content2'><AddGame onAddGame={this.gameStateChange}/></div></Route>
+                        <Route exact path="/EditGame"><div className='content2'><EditGame onChange={this.gameStateChange}/></div></Route>
+                        <Route exact path="/EditSubGame"><div className='content2'><EditSubGame onChange={this.gameStateChange}/></div></Route>
                         <Route path="/" component={Home}/>
                       </Switch>
                   </CSSTransition>
                 </TransitionGroup>
               )
             }/>
+            <ToastContainer
+                        position="bottom-center"
+                        autoClose={2500}
+                        hideProgressBar={true}
+                        closeOnClick={true}
+                        draggable={false}
+                        theme={'dark'}
+                    />
             </div>
           </div>
       </div>
