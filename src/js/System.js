@@ -34,6 +34,7 @@ class System extends React.Component{
         this.getSelectedGame = this.getSelectedGame.bind(this);
         this.deleteGame = this.deleteGame.bind(this);
         this.deleteSubGame = this.deleteSubGame.bind(this);
+        this.deleteSystem = this.deleteSystem.bind(this);
     }
 
     getFilters(data){
@@ -61,7 +62,7 @@ class System extends React.Component{
     componentDidUpdate(prevProps,prevState){
         if (prevState.systemInfo !== this.state.systemInfo || this.props.refresh !== prevProps.refresh){
             this.setState({
-                systemInfoComponent: <SystemInfo info={this.state.systemInfo} refresh={this.props.refresh}/>,
+                systemInfoComponent: <SystemInfo info={this.state.systemInfo} refresh={this.props.refresh} delete={this.deleteSystem}/>,
                 gamesListComponent: <GamesList info={this.state.systemInfo[1]} getSelectedGame={this.getSelectedGame} refresh={this.props.refresh}/>,
             });
         }        
@@ -143,6 +144,25 @@ class System extends React.Component{
         )
         this.props.onChange();
     }
+
+    async deleteSystem(sysID){
+        await fetch('/delete_system', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'Access-Control-Allow-Origin': '*',
+                "Access-Control-Allow-Credentials" : true 
+            },
+            body:JSON.stringify({
+                sysID: sysID
+            })}
+        )        
+        //revert to home screen after system is deleted, and update navbar
+        this.props.history.push('/Home')
+        this.props.deletion("delete","delete")
+    }
+    
     
     render(){
         var imageString = '';

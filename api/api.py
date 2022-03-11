@@ -559,3 +559,35 @@ def update_sub_game():
     execute_update_query(connection,query,d_tuple)
 
     return ""
+
+@app.route('/delete_system', methods=['GET','POST'])
+def delete_system():
+    connection = create_connection()
+    data = request.get_json()
+    sysID = data.get('sysID') #system id, used to delete the system
+    sysName = retrieve_system_info_ID(connection,sysID)[0][1] #system name, used to delete the child games
+    games = retrieve_games_from_system(connection,sysName) #retrieve all games from the system, used to find compilations
+    
+    #if game is a compilation, must delete children games first
+    #this will find parent game IDs
+    parentIDs = ''
+    for game in games:
+        if game[1] == 1:
+            if parentIDs == '':
+                parentIDs = str(game[2])
+            else:
+                parentIDs = parentIDs + ',' + str(game[2])
+
+    #delete sub games first
+    sub_game_delete = "DELETE FROM Compilations WHERE ParentID IN ("+str(parentIDs) + ")"
+    execute_delete_query(connection,sub_game_delete)
+
+    #delete regular games next
+    game_delete = "DELETE FROM Games WHERE System='"+str(sysName)+"'"
+    execute_delete_query(connection,game_delete)
+
+    #delete system last
+    sys_delete = "DELETE FROM Systems WHERE ID="+str(sysID)
+    execute_delete_query(connection,sys_delete)
+
+    return ""

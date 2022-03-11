@@ -31,6 +31,7 @@ class App extends React.Component{
     this.state = {
       content: 'visible',
       refresh: false,
+      deletion: '',
       gameState: ''
     }
 
@@ -58,8 +59,14 @@ class App extends React.Component{
   }
 
   //refresh state is passed to navbar, so when it changes, navbar is updated with new system
-  addSystemRefresh(name){
-    this.setState({refresh: name})
+  //deletion param is only used when a system is deleted
+  addSystemRefresh(name,deletion=null){
+    if (deletion !== null){
+      this.setState({refresh: name,deletion:deletion})
+    }
+    else{
+      this.setState({refresh: name, deletion:''})
+    }
   }
 
   gameStateChange(edit=null){
@@ -74,7 +81,7 @@ class App extends React.Component{
     return (
       <div className="App">
           <div className='nav'>
-            <Navbar refresh={this.state.refresh}/>
+            <Navbar refresh={this.state.refresh} deletion={this.state.deletion}/>
           </div>
           <div className='main'>
             <div className='layout'>
@@ -116,7 +123,7 @@ class App extends React.Component{
                         <Route exact path="/Plan"><div className='content2'><Planner /></div></Route>
                         <Route exact path="/Mem"><div className='content2'><MemoryCard /></div></Route>
                         <Route exact path="/DS"><div className='content2'><DetailedStatistics /></div></Route>
-                        <Route exact path="/System"><div className='content2'><System onChange={this.gameStateChange} refresh={this.state.gameState}/></div></Route>
+                        <Route exact path="/System"><div className='content2'><System onChange={this.gameStateChange} refresh={this.state.gameState} deletion={this.addSystemRefresh}/></div></Route>
                         <Route exact path="/AddSys"><div className='content2'><AddSystem onAddSystem={this.addSystemRefresh}/></div></Route>
                         <Route exact path="/AddGame"><div className='content2'><AddGame onAddGame={this.gameStateChange}/></div></Route>
                         <Route exact path="/EditGame"><div className='content2'><EditGame onChange={this.gameStateChange}/></div></Route>

@@ -2,6 +2,9 @@
     font-size: 50px;
     font-family: airstrike;
     padding: 10px;
+    display:grid;
+    grid-template-columns: 80% 10% 10%;
+    text-align: left;
 }
 .info {
     font-size: 27px;

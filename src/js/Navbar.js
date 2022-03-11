@@ -61,9 +61,25 @@ class Navbar extends React.Component{
     //Prop that is changing is name - is name of system being added
     componentDidUpdate(prevProps,prevState){
       if (prevProps.refresh !== this.props.refresh){
-        console.log("We're in")
-        this.setState({systemsList: [...prevState.systemsList, [this.props.refresh]]});
-        this.setState({systemsActive: [...prevState.systemsActive, {[this.props.refresh]:false}]});
+        //deletion prop checks if the update came from a system deletion, rather than addition
+        if (this.props.deletion !== ''){
+          //re-set the systemsList state to current systems and CLEAR systemsActive
+          fetch('/systems').then(res => res.json()).then(data => {
+            var systems = data.systems;
+            this.setState({systemsList:systems,systemsActive:[]});
+            //systemsActive has been cleared, so we can re-set it
+            var system='';
+            for (let i=0;i<systems.length;i++){
+              system=systems[i][0];
+              this.updateSystemsActive(system)
+            }
+          });
+        }
+        //regular system addition, add to current states
+        else{
+          this.setState({systemsList: [...prevState.systemsList, [this.props.refresh]]});
+          this.setState({systemsActive: [...prevState.systemsActive, {[this.props.refresh]:false}]});
+        }
       }
     }
 

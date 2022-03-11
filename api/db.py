@@ -122,6 +122,12 @@ def retrieve_system_info(conn,system):
     rows = cur.fetchall()
     return rows
 
+def retrieve_system_info_ID(conn,ID):
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM Systems WHERE ID = "  + str(ID) + " AND Wishlist=0")
+    rows = cur.fetchall()
+    return rows
+
 def retrieve_game_info(conn,system,game):
     cur = conn.cursor()
     cur.execute("SELECT * FROM Games WHERE System = '" + system + "' AND Title = '" + game + "' AND Wishlist=0")
@@ -148,7 +154,7 @@ def retrieve_single_sub_game(conn,gameID):
 
 def retrieve_games_from_system(conn,system):
     cur = conn.cursor()
-    cur.execute("SELECT Title FROM Games WHERE System = '" + system + "' AND Wishlist=0 ORDER BY Title ASC")
+    cur.execute("SELECT Title,Compilation,ID FROM Games WHERE System = '" + system + "' AND Wishlist=0 ORDER BY Title ASC")
     rows = cur.fetchall()
     return rows
 

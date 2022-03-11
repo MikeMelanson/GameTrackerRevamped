@@ -1,5 +1,5 @@
 import React from 'react';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import "../css/addsystem.css";
@@ -232,14 +232,6 @@ class AddSystem extends React.Component{
                             <input type='submit'></input>
                         </div>
                     </form>
-                    <ToastContainer
-                        position="bottom-center"
-                        autoClose={2500}
-                        hideProgressBar={true}
-                        closeOnClick={true}
-                        draggable={false}
-                        theme={'dark'}
-                    />
                 </div>
             </>
         );
